@@ -293,7 +293,16 @@ const messages = [
   'oh god &gt;_&lt;',
   '^_^',
   'and...? what else??',
-  'nocturne the epicness'
+  'nocturne the epicness',
+  "lovers DO rock",
+  "are you sick of me",
+  "drink your milk kids, gets ya nice and strong",
+  "dont do drugs kids",
+  "the const randomIndex is killing me",
+  "unpredictable defamation",
+  "communication famous dementia",
+  "i dont have dementia. i dont have dementia. i dont have dementia. i dont-",
+  "CAN I HAVE 55 BURGERS 55 FRIES 55 i forgot the rest"
 ];
 
 const randomIndex = Math.floor(Math.random() * messages.length);
