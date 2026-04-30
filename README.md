@@ -48,7 +48,6 @@ the earliest archive can be found on version `5.5`, which is exactly when auth's
 
 # starchart
 
-## internet points
 [![Stargazers over time](https://starchart.cc/auth1ery/auths-RNG.svg?variant=adaptive)](https://starchart.cc/auth1ery/auths-RNG)
 
 ---
