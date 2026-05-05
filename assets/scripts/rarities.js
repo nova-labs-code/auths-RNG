@@ -21,63 +21,281 @@ const rarities = [
       switch color: #FFC0CB
     }
   ` },
-  { name: 'finished.', chance: 1 / 100000000000000 },
-  { name: 'pseudopseudohypoparathyroidism', chance: 1 / 10000000000000 },
-  { name: '...', chance: 1 / 10000000000 },
-  { name: 'the world', chance: 1 / 8200000000 },
-  { name: 'Antimatter', chance: 1 / 5000000000 },
-  { name: 'Dissociation', chance: 1 / 2000000000 },
-  { name: 'Void', chance: 1 / 1000000000 },
-  { name: 'brother what', chance: 1 / 400000000 },
-  { name: 'Schizophrenia', chance: 1 / 300000000 },
-  { name: 'Multiverse', chance: 1 / 200000000 },
-  { name: 'CHARGED', chance: 1/100000000, style: `
-  color: #ffffff
-  loop {
-    pulse (0.05, 0.05, 0.05): #00ffff
-    pulse (0.05, 0.05, 0.05): #ff00ff
-    wait: 0.3
-  }
-` },
-  { name: 'Psychosis', chance: 1 / 50000000 },
-  { name: 'Extinction', chance: 1 / 30000000 },
-  { name: 'STOP PLAYING', chance: 1 / 10000000 },
-  { name: 'Paranoia', chance: 1 / 8000000 },
-  { name: 'Supermassive', chance: 1 / 5000000 },
-  { name: 'Delusion', chance: 1 / 3000000 },
-  { name: 'Kyawthuite', chance: 1 / 1500000 },
-  { name: 'Globular but better', chance: 1 / 1300000 },
-  { name: 'Obsession', chance: 1 / 1200000 },
-  { name: 'you shouldnt have', chance: 1 / 1156852 },
-  { name: 'francium', chance: 1 / 1100000 },
-  { name: 'Impossible...', chance: 1 / 1000000 },
-  { name: 'Trauma', chance: 1 / 900000, code: `
+  { name: 'finished.', chance: 1 / 100000000000000, style: `
+    color: #FFD700
     loop {
-      pulse (0, 0.2, 0.5): #8B0000
+      pulse (2, 3, 2): #FFFFFF
+    }
+  ` },
+  { name: 'pseudopseudohypoparathyroidism', chance: 1 / 10000000000000, style: `
+    loop {
+      color: #FF6B6B
+      wait: 0.06
+      color: #6B6BFF
+      wait: 0.06
+      color: #6BFFB0
+      wait: 0.06
+      color: #FFD96B
+      wait: 0.06
+    }
+  ` },
+  { name: '...', chance: 1 / 10000000000, style: `
+    color: #666666
+    loop {
+      pulse (1.2, 2, 1.2): #111111
+    }
+  ` },
+  { name: 'the world', chance: 1 / 8200000000, style: `
+    color: #FFD700
+    loop {
+      pulse (2, 3, 2): #4488FF
+    }
+  ` },
+  { name: 'Antimatter', chance: 1 / 5000000000, style: `
+    color: #9900FF
+    loop {
+      pulse (0.08, 0.08, 0.08): #220044
+      wait: 0.6
+    }
+  ` },
+  { name: 'Dissociation', chance: 1 / 2000000000, style: `
+    color: #BBBBBB
+    loop {
+      pulse (1.5, 2.5, 1.5): #EEEEEE
+    }
+  ` },
+  { name: 'Void', chance: 1 / 1000000000, style: `
+    color: #111111
+    loop {
+      pulse (0.8, 2, 0.8): #000000
+    }
+  ` },
+  { name: 'brother what', chance: 1 / 400000000, style: `
+    loop {
+      color: #FF0000
+      wait: 0.12
+      color: #00FF88
+      wait: 0.12
+      color: #0088FF
+      wait: 0.12
+      color: #FFFF00
+      wait: 0.12
+    }
+  ` },
+  { name: 'SCHIZOPHRENIC', chance: 1 / 300000000, style: `
+    loop {
+      color: #FF3333
+      wait: 0.07
+      color: #3333FF
+      wait: 0.07
+      color: #33FF33
+      wait: 0.07
+      color: #FF33FF
+      wait: 0.07
+      color: #FFFFFF
+      wait: 0.07
+    }
+  ` },
+  { name: 'Multiverse', chance: 1 / 200000000, style: `
+    loop {
+      transition color: #FF0000
+      wait: 0.25
+      transition color: #FF8800
+      wait: 0.25
+      transition color: #FFFF00
+      wait: 0.25
+      transition color: #00FF88
+      wait: 0.25
+      transition color: #0088FF
+      wait: 0.25
+      transition color: #AA00FF
+      wait: 0.25
+    }
+  ` },
+  { name: 'Psychosis', chance: 1 / 50000000, style: `
+    color: #FF2222
+    loop {
+      pulse (0.04, 0.06, 0.04): #FF9999
+      wait: 0.18
+    }
+  ` },
+  { name: 'Extinction', chance: 1 / 30000000, style: `
+    color: #660000
+    loop {
+      pulse (0.5, 1, 0.5): #000000
+    }
+  ` },
+  { name: 'STOP PLAYING', chance: 1 / 10000000, style: `
+    loop {
+      color: #FF0000
+      wait: 0.22
+      color: #FFFF00
+      wait: 0.22
+    }
+  ` },
+  { name: 'some sort of paranoia', chance: 1 / 8000000, style: `
+    color: #00BB00
+    loop {
+      pulse (0.3, 0.4, 0.3): #004400
+      wait: 0.15
+    }
+  ` },
+  { name: 'Supermassive', chance: 1 / 5000000, style: `
+    color: #220044
+    loop {
+      pulse (1.2, 2, 1.2): #550099
+    }
+  ` },
+  { name: 'Delusion', chance: 1 / 3000000, style: `
+    color: #DD99FF
+    loop {
+      pulse (1, 1.5, 1): #8822EE
+    }
+  ` },
+  { name: 'Kyawthuite', chance: 1 / 1500000, style: `
+    color: #C85A00
+    loop {
+      pulse (0.7, 1.2, 0.7): #FF9933
+    }
+  ` },
+  { name: 'Globular but better', chance: 1 / 1300000, style: `
+    color: #FFD700
+    loop {
+      pulse (0.4, 0.6, 0.4): #FFFACD
       wait: 0.2
     }
   ` },
-  
-  { name: 'Interstellar', chance: 1 / 800000 },
-  { name: 'Dissociative', chance: 1 / 700000 },
-  { name: 'Superluminal', chance: 1 / 600000 },
-  { name: 'Mania', chance: 1 / 500000 },
-  { name: 'Gravitational', chance: 1 / 400000 },
-  { name: 'Anxiety', chance: 1 / 300000 },
-  { name: 'Cosmic', chance: 1 / 250000 },
-  { name: 'Neurosis', chance: 1 / 200000 },
-  { name: 'Event Horizon', chance: 1 / 101234 },
-  { name: 'kill me', chance: 1 / 100000 },
-  { name: 'Breakdown', chance: 1 / 95000 },
-  { name: 'you suck bro', chance: 1 / 90000 },
-  { name: 'Supergalaxy', chance: 1 / 88000 },
-  { name: 'trust your luck', chance: 1 / 85000 },
-  { name: 'astatine', chance: 1 / 80000 },
-  { name: 'Depression', chance: 1 / 75000 },
-  { name: 'Obfuscate', chance: 1 / 70000 },
-  { name: 'Pulsar', chance: 1 / 65000 },
-  { name: 'enuresis', chance: 1 / 60000 },
-  { name: 'Panic', chance: 1 / 55000 },
+  { name: 'Obsession', chance: 1 / 1200000, style: `
+    color: #CC0033
+    loop {
+      pulse (0.25, 0.3, 0.25): #FF0055
+      wait: 0.15
+    }
+  ` },
+  { name: 'you shouldnt have', chance: 1 / 1156852, style: `
+    color: #FFD700
+    loop {
+      pulse (0.15, 0.3, 0.15): #FFFFFF
+      wait: 0.6
+    }
+  ` },
+  { name: 'francium', chance: 1 / 1100000, style: `
+    color: #39FF14
+    loop {
+      pulse (0.12, 0.18, 0.12): #007700
+      wait: 0.45
+    }
+  ` },
+  { name: 'Impossible...', chance: 1 / 1000000, style: `
+    color: #FFD700
+    loop {
+      pulse (0.6, 1, 0.6): #FFFFFF
+    }
+  ` },
+  { name: 'Interstellar', chance: 1 / 800000, style: `
+    color: #003388
+    loop {
+      pulse (1, 2, 1): #0055CC
+    }
+  ` },
+  { name: 'Dissociative', chance: 1 / 700000, style: `
+    color: #999999
+    loop {
+      pulse (1, 1.8, 1): #DDDDDD
+    }
+  ` },
+  { name: 'luminal', chance: 1 / 600000, style: `
+    color: #CCCCFF
+    loop {
+      pulse (0.04, 0.08, 0.04): #FFFFFF
+      wait: 1
+    }
+  ` },
+  { name: 'Mania', chance: 1 / 500000, style: `
+    loop {
+      color: #FF00FF
+      wait: 0.09
+      color: #FFFF00
+      wait: 0.09
+      color: #00FFFF
+      wait: 0.09
+      color: #FF8800
+      wait: 0.09
+    }
+  ` },
+  { name: 'Gravitational', chance: 1 / 400000, style: `
+    color: #000055
+    loop {
+      pulse (0.7, 1.2, 0.7): #0000BB
+    }
+  ` },
+  { name: 'anxiety...', chance: 1 / 300000, style: `
+    color: #FFCC00
+    loop {
+      pulse (0.08, 0.1, 0.08): #FF6600
+      wait: 0.12
+    }
+  ` },
+  { name: 'Cosmic', chance: 1 / 250000, style: `
+    color: #5500BB
+    loop {
+      pulse (0.9, 1.2, 0.9): #AA44FF
+    }
+  ` },
+  { name: 'Neurosis', chance: 1 / 200000, style: `
+    color: #887755
+    loop {
+      pulse (0.4, 0.6, 0.4): #CCBB88
+      wait: 0.3
+    }
+  ` },
+  { name: 'Event Horizon', chance: 1 / 101234, style: `
+    color: #330000
+    loop {
+      pulse (0.5, 0.8, 0.5): #000000
+    }
+  ` },
+  { name: 'kill me', chance: 1 / 100000, style: `
+    loop {
+      color: #FF0000
+      wait: 0.5
+      color: #000000
+      wait: 0.5
+    }
+  ` },
+  { name: 'Breakdown', chance: 1 / 95000, style: `
+    loop {
+      color: #FF3300
+      wait: 0.09
+      color: #1A0000
+      wait: 0.09
+      color: #FF6600
+      wait: 0.09
+      color: #000000
+      wait: 0.09
+    }
+  ` },
+  { name: 'just let go already', chance: 1 / 75000, style: `
+    color: #1A2A4A
+    loop {
+      pulse (1.5, 3, 1.5): #2A3A6A
+    }
+  ` },
+  { name: 'Pulsar', chance: 1 / 65000, style: `
+    color: #AAAAAA
+    loop {
+      pulse (0.04, 0.06, 0.04): #FFFFFF
+      wait: 0.7
+    }
+  ` },
+  { name: 'panic!', chance: 1 / 55000, style: `
+    loop {
+      color: #FF4400
+      wait: 0.07
+      color: #FFDD00
+      wait: 0.07
+    }
+  ` },
   { name: 'Intel', chance: 1 / 50000 },
   { name: 'Nebulous', chance: 1 / 45000 },
   { name: 'anorexia', chance: 1 / 40000 },
