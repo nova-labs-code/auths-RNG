@@ -575,12 +575,14 @@ let totalRolls = 0;
 const inventoryData = new Map();
 const achievementsUnlocked = new Set();
 
-const backgroundMusic = new Audio('assets/audio/y2mn5w.mp3');
+const backgroundMusic = new Audio();
+backgroundMusic.preload = 'none';
 backgroundMusic.loop = true;
 backgroundMusic.volume = 0.3;
 
-const lunarMusic = new Audio(' ');
-lunarMusic.volume = 0.6;
+const lunarMusic = new Audio();
+lunarMusic.preload = 'none';
+lunarMusic.volume = 0;
 
 const runId = Math.floor(Math.random() * 1e10);
 
