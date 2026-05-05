@@ -70,18 +70,7 @@ const rarities = [
       pulse (0.8, 2, 0.8): #000000
     }
   ` },
-  { name: 'brother what', chance: 1 / 400000000, style: `
-    loop {
-      color: #FF0000
-      wait: 0.12
-      color: #00FF88
-      wait: 0.12
-      color: #0088FF
-      wait: 0.12
-      color: #FFFF00
-      wait: 0.12
-    }
-  ` },
+  { name: 'brother what', chance: 1 / 400000000 },
   { name: 'SCHIZOPHRENIC', chance: 1 / 300000000, style: `
     loop {
       color: #FF3333
@@ -136,10 +125,6 @@ const rarities = [
   ` },
   { name: 'some sort of paranoia', chance: 1 / 8000000, style: `
     color: #00BB00
-    loop {
-      pulse (0.3, 0.4, 0.3): #004400
-      wait: 0.15
-    }
   ` },
   { name: 'Supermassive', chance: 1 / 5000000, style: `
     color: #220044
@@ -182,9 +167,6 @@ const rarities = [
   ` },
   { name: 'francium', chance: 1 / 1100000, style: `
     color: #39FF14
-    loop {
-      pulse (0.12, 0.18, 0.12): #007700
-      wait: 0.45
     }
   ` },
   { name: 'Impossible...', chance: 1 / 1000000, style: `
@@ -207,10 +189,6 @@ const rarities = [
   ` },
   { name: 'luminal', chance: 1 / 600000, style: `
     color: #CCCCFF
-    loop {
-      pulse (0.04, 0.08, 0.04): #FFFFFF
-      wait: 1
-    }
   ` },
   { name: 'Mania', chance: 1 / 500000, style: `
     loop {
@@ -232,10 +210,6 @@ const rarities = [
   ` },
   { name: 'anxiety...', chance: 1 / 300000, style: `
     color: #FFCC00
-    loop {
-      pulse (0.08, 0.1, 0.08): #FF6600
-      wait: 0.12
-    }
   ` },
   { name: 'Cosmic', chance: 1 / 250000, style: `
     color: #5500BB
@@ -252,9 +226,6 @@ const rarities = [
   ` },
   { name: 'Event Horizon', chance: 1 / 101234, style: `
     color: #330000
-    loop {
-      pulse (0.5, 0.8, 0.5): #000000
-    }
   ` },
   { name: 'kill me', chance: 1 / 100000, style: `
     loop {
@@ -306,7 +277,7 @@ const rarities = [
   { name: 'uh...', chance: 1 / 30000 },
   { name: 'rare rarity :3', chance: 1 / 30000, style: `
     loop {
-      pulse (0.02, 0.3, 0.4): #FFD1DC
+      color: #FFD1DC
   ` },
   { name: 'Galactic', chance: 1 / 28000 },
   { name: 'Eventide', chance: 1 / 25000 },
