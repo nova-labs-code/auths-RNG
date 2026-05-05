@@ -60,6 +60,23 @@
     });
   }
 
+  async function getAllTracksMeta() {
+  const db = await openMusicDB();
+  return new Promise((resolve, reject) => {
+    const results = [];
+    const req = db.transaction('tracks', 'readonly').objectStore('tracks').openCursor();
+    req.onsuccess = (e) => {
+      const cursor = e.target.result;
+      if (cursor) {
+        const { id, name, type, size } = cursor.value;
+        results.push({ id, name, type, size });
+        cursor.continue();
+      } else resolve(results);
+    };
+    req.onerror = () => reject(req.error);
+  });
+}
+
   async function getTrack(id) {
     const db = await openMusicDB();
     return new Promise((resolve, reject) => {
@@ -73,17 +90,17 @@
   }
 
   async function addTrack(name, buffer, type) {
-    const db = await openMusicDB();
-    return new Promise((resolve, reject) => {
-      const req = db
-        .transaction('tracks', 'readwrite')
-        .objectStore('tracks')
-        .add({ name, buffer, type });
-      req.onsuccess = () => resolve(req.result); // returns the new id
-      req.onerror = () => reject(req.error);
-    });
-  }
-
+  const db = await openMusicDB();
+  return new Promise((resolve, reject) => {
+    const req = db
+      .transaction('tracks', 'readwrite')
+      .objectStore('tracks')
+      .add({ name, buffer, type, size: buffer.byteLength });
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+  
   async function deleteTrack(id) {
     const db = await openMusicDB();
     return new Promise((resolve, reject) => {
@@ -800,31 +817,27 @@
 
   // ── Custom music upload UI ─────────────────────────────────────────────
   async function loadCustomMusicUI() {
-    const musicSel = el('musicSelect');
-    const listWrapper = el('customMusicList');
-    const listEl = el('customTracksList');
-    if (!musicSel) return;
-    try {
-      const tracks = await getAllTracks();
-
-      // Rebuild custom_* options (remove old ones first)
-      Array.from(musicSel.options).forEach((o) => {
-        if (o.value.startsWith('custom_')) o.remove();
-      });
-      tracks.forEach((track) => {
-        const opt = document.createElement('option');
-        opt.value = 'custom_' + track.id;
-        opt.textContent = track.name + ' (custom)';
-        musicSel.appendChild(opt);
-      });
-
-      if (listWrapper)
-        listWrapper.style.display = tracks.length ? 'block' : 'none';
-      if (listEl) renderCustomTracksList(tracks, listEl, musicSel);
-    } catch (e) {
-      console.error('custom music UI error:', e);
-    }
+  const musicSel = el('musicSelect');
+  const listWrapper = el('customMusicList');
+  const listEl = el('customTracksList');
+  if (!musicSel) return;
+  try {
+    const tracks = await getAllTracksMeta();
+    Array.from(musicSel.options).forEach((o) => {
+      if (o.value.startsWith('custom_')) o.remove();
+    });
+    tracks.forEach((track) => {
+      const opt = document.createElement('option');
+      opt.value = 'custom_' + track.id;
+      opt.textContent = track.name + ' (custom)';
+      musicSel.appendChild(opt);
+    });
+    if (listWrapper) listWrapper.style.display = tracks.length ? 'block' : 'none';
+    if (listEl) renderCustomTracksList(tracks, listEl, musicSel);
+  } catch (e) {
+    console.error('custom music UI error:', e);
   }
+}
 
   function renderCustomTracksList(tracks, container, musicSel) {
     container.innerHTML = '';
@@ -834,9 +847,7 @@
         'display:flex;justify-content:space-between;align-items:center;padding:6px 8px;margin-bottom:4px;background:var(--overlay-bg);border:1px solid var(--border-color);border-radius:2px;';
 
       // Size badge
-      const sizeMB = track.buffer
-        ? (track.buffer.byteLength / 1024 / 1024).toFixed(1)
-        : '?';
+      const sizeMB = track.size ? (track.size / 1024 / 1024).toFixed(1) : '?';
       const name = document.createElement('span');
       name.style.fontSize = '0.85em';
       name.textContent = `${track.name}  (${sizeMB} MB)`;
