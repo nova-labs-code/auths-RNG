@@ -24,9 +24,10 @@
 
   const musicLinks = {
     default: 'assets/audio/welcomecity.mp3',
-    levelup: 'assets/audio/wavelocity.mp3',
+    wavelocity: 'assets/audio/wavelocity.mp3',
     nocturne: 'assets/audio/nocturne.mp3',
-    moonlight: 'assets/audio/moonlight.mp3',
+    seedless: 'assets/audio/seedless.mp3',
+    fallout: 'assets/audio/fallout.mp3'
   };
 
   // ── IndexedDB helpers ──────────────────────────────────────────────────
