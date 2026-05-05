@@ -22,7 +22,14 @@ const rarities = [
   { name: 'brother what', chance: 1 / 400000000 },
   { name: 'Schizophrenia', chance: 1 / 300000000 },
   { name: 'Multiverse', chance: 1 / 200000000 },
-  { name: 'CHARGED', chance: 1 / 100000000 },
+  { name: 'CHARGED', chance: 1/100000000, style: `
+  color: #ffffff
+  loop {
+    pulse (0.05, 0.05, 0.05): #00ffff
+    pulse (0.05, 0.05, 0.05): #ff00ff
+    wait: 0.3
+  }
+` },
   { name: 'Psychosis', chance: 1 / 50000000 },
   { name: 'Extinction', chance: 1 / 30000000 },
   { name: 'STOP PLAYING', chance: 1 / 10000000 },
