@@ -17,7 +17,8 @@
     if (rollBtn.disabled) return; // roll mid-flight, leave it alone
 
     const childCount = spinner.children.length;
-    if (childCount > 2) { // more than a couple items = stale from a finished roll
+    if (childCount > 2) {
+      // more than a couple items = stale from a finished roll
       spinner.innerHTML = '';
       spinner.style.transition = 'none';
       spinner.style.transform = 'translateY(0)';
@@ -80,8 +81,11 @@
 
       // snapshot: type + seconds-remaining (1s resolution is fine for display)
       const snapshot =
-        ap.map((p) => p.type + ':' + Math.ceil((p.endTime - Date.now()) / 1000)).join(',')
-        + '|dup:' + dup;
+        ap
+          .map((p) => p.type + ':' + Math.ceil((p.endTime - Date.now()) / 1000))
+          .join(',') +
+        '|dup:' +
+        dup;
 
       if (snapshot === lastSnapshot) return;
       lastSnapshot = snapshot;
@@ -114,7 +118,10 @@
     const overlay = $('luckBoostOverlay');
     const timerEl = $('luckTimer');
     if (!overlay || overlay.style.display !== 'flex') return;
-    if (timerEl && (timerEl.textContent === '0' || timerEl.textContent === '')) {
+    if (
+      timerEl &&
+      (timerEl.textContent === '0' || timerEl.textContent === '')
+    ) {
       overlay.style.display = 'none';
     }
   }
@@ -134,7 +141,7 @@
 
       const now = Date.now();
       arr = arr.filter((n) => !(n.read && now - n.ts > STALE_MS)); // drop old read ones
-      if (arr.length > MAX) arr = arr.slice(arr.length - MAX);      // hard cap
+      if (arr.length > MAX) arr = arr.slice(arr.length - MAX); // hard cap
 
       localStorage.setItem(KEY, JSON.stringify(arr));
     } catch (_) {}
@@ -152,7 +159,11 @@
       const kb = (total / 1024).toFixed(1);
       window._cleanupLsKB = parseFloat(kb); // expose for devOverlay or console checks
       if (total > 3.5 * 1024 * 1024) {
-        console.warn('[cleanup] localStorage at ' + kb + 'KB — getting close to 5MB quota!');
+        console.warn(
+          '[cleanup] localStorage at ' +
+            kb +
+            'KB — getting close to 5MB quota!',
+        );
       }
     } catch (_) {}
   }
@@ -205,7 +216,7 @@
 
   // ── manual trigger ────────────────────────────────────────────────────
   // if you're reading this, you're cool. you now have the privilege of knowing the knowledge:
-  // call window.forceCleanup() from the eruda console or devOverlay to manually clean up 
+  // call window.forceCleanup() from the eruda console or devOverlay to manually clean up
   window.forceCleanup = function () {
     cleanSpinner();
     cleanOrphanedCanvases();
@@ -215,10 +226,12 @@
     checkLocalStorageSize();
     console.log(
       '[cleanup] manual run done!' +
-      ' LS: ' + (window._cleanupLsKB || '?') + 'KB' +
-      ' | spinner children: ' + ($('spinner')?.children.length ?? '?') +
-      ' | new-roll els: 0 (just cleared)'
+        ' LS: ' +
+        (window._cleanupLsKB || '?') +
+        'KB' +
+        ' | spinner children: ' +
+        ($('spinner')?.children.length ?? '?') +
+        ' | new-roll els: 0 (just cleared)',
     );
   };
-
 })();

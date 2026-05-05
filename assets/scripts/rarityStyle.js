@@ -141,8 +141,7 @@
         const orig = state.color || '';
 
         // fade in
-        el.style.transition =
-          cmd.fadeIn > 0 ? `color ${cmd.fadeIn}s ease` : '';
+        el.style.transition = cmd.fadeIn > 0 ? `color ${cmd.fadeIn}s ease` : '';
         el.style.color = cmd.hex;
         if (cmd.fadeIn > 0) await sleep(cmd.fadeIn * 1000);
         if (signal.aborted) return;
