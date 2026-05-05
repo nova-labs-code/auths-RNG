@@ -1,3 +1,12 @@
+// Language Cheatsheet (in case my clumsy ass forgets)
+// color: #HEX               -- set text color instantly
+// switch color: #HEX        -- same thing (alias)
+// transition color: #HEX    -- smooth 0.4s transition to color
+// pulse (fi, hold, fo): #HEX  -- fade IN (fi sec) → hold → fade OUT back to previous
+// wait: 1.5                 -- pause 1.5 seconds before next command
+// loop { ... }              -- repeat everything inside forever
+// -- this is a comment      -- ignored by parser
+
 const rarities = [
   { name: 'SUMMER', chance: 1 / 1000000000000000, style: `
     loop {
