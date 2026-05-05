@@ -125,6 +125,7 @@ const rarities = [
       pulse (0.5, 1, 0.5): #000000
     }
   ` },
+  { name: 'smoking gun', chance: 1 / 20000000 },
   { name: 'STOP PLAYING', chance: 1 / 10000000, style: `
     loop {
       color: #FF0000
