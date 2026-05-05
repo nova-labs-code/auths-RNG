@@ -51,7 +51,12 @@ const rarities = [
   { name: 'you shouldnt have', chance: 1 / 1156852 },
   { name: 'francium', chance: 1 / 1100000 },
   { name: 'Impossible...', chance: 1 / 1000000 },
-  { name: 'Trauma', chance: 1 / 900000 },
+  { name: 'Trauma', chance: 1 / 900000, code: `
+    loop {
+      pulse (0, 0.2, 0.5): #8B0000
+    }
+  ` },
+  
   { name: 'Interstellar', chance: 1 / 800000 },
   { name: 'Dissociative', chance: 1 / 700000 },
   { name: 'Superluminal', chance: 1 / 600000 },
