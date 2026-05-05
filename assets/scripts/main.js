@@ -1149,6 +1149,13 @@ function updateItem(d) {
       ? `${rarityObj.name} (1/${denom}) x${count}`
       : `${rarityObj.name} (1/${denom})`;
 
+  if (liElement._rarityStyleAC) { liElement._rarityStyleAC.abort(); liElement._rarityStyleAC = null; }
+  liElement.style.color = '';
+  liElement.style.transition = '';
+  if (rarityObj.style && window.RarityStyle) {
+    liElement._rarityStyleAC = window.RarityStyle.apply(liElement, rarityObj.style);
+  }
+
   liElement.classList.add('new-roll');
   setTimeout(() => liElement.classList.remove('new-roll'), 2000);
 
@@ -1750,6 +1757,7 @@ function showRollChoice(res, onDone) {
 }
 
 function spinAndReveal(res) {
+  if (window._spinnerResultAC) { window._spinnerResultAC.abort(); window._spinnerResultAC = null; }
   const style = window.spinnerStyleSetting || 'slot';
   const reduceMotion = document.body.classList.contains('reduce-motion');
   const effectiveStyle = reduceMotion && style === 'slot' ? 'none' : style;
@@ -1780,6 +1788,9 @@ function spinAndReveal(res) {
       awardAnomalyIfEligible(res);
       checkAchievements(res);
       updateRollsSinceRare(res);
+      if (res.style && window.RarityStyle) {
+        window._spinnerResultAC = window.RarityStyle.apply(d, res.style);
+      }
       maybeFireConfettiAndCutscene(res);
     }, delay);
     return;
@@ -1792,11 +1803,13 @@ function spinAndReveal(res) {
     items.push(rarities[Math.floor(Math.random() * rarities.length)]);
   }
   items.push(res);
-  items.forEach((o) => {
+  let _resultSpinDiv = null;
+  items.forEach((o, idx) => {
     const d = document.createElement('div');
     d.className = 'spin-item';
     d.textContent = o.name;
     spinner.appendChild(d);
+    if (idx === items.length - 1) _resultSpinDiv = d;
   });
 
   const h = 48,
@@ -1814,6 +1827,9 @@ function spinAndReveal(res) {
       awardAnomalyIfEligible(res);
       checkAchievements(res);
       updateRollsSinceRare(res);
+      if (res.style && window.RarityStyle && _resultSpinDiv) {
+        window._spinnerResultAC = window.RarityStyle.apply(_resultSpinDiv, res.style);
+      }
       maybeFireConfettiAndCutscene(res);
     },
     duration * 1000 + 1000,
