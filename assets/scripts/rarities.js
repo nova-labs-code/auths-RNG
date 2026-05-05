@@ -1,5 +1,17 @@
 const rarities = [
-  { name: 'SUMMER', chance: 1 / 1000000000000000 },
+  { name: 'SUMMER', chance: 1 / 1000000000000000, style: `
+    loop {
+      color: #FF0000
+      wait: 0.1
+      switch color: #FFA500
+      wait: 0.1
+      switch color: #FFFF00
+      wait: 0.1
+      switch color: #0000FF
+      wait: 0.1
+      switch color: #FFC0CB
+    }
+  ` },
   { name: 'finished.', chance: 1 / 100000000000000 },
   { name: 'pseudopseudohypoparathyroidism', chance: 1 / 10000000000000 },
   { name: '...', chance: 1 / 10000000000 },
@@ -483,7 +495,9 @@ const rarities = [
   { name: 'Fomalhaut', chance: 1 / 1035 },
   { name: 'Meteor', chance: 1 / 1025 },
   { name: 'Deneb', chance: 1 / 1010 },
-  { name: 'Lunar', chance: 1 / 1000 },
+  { name: 'Lunar', chance: 1 / 1000, style: `
+    color: #7340ad
+  `},
   { name: 'Regulus', chance: 1 / 990 },
   { name: 'Hopeless', chance: 1 / 975 },
   { name: 'Altair', chance: 1 / 960 },
