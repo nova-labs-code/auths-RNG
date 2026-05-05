@@ -304,7 +304,10 @@ const rarities = [
   { name: '...whaat', chance: 1 / 35000 },
   { name: 'Disorder', chance: 1 / 33000 },
   { name: 'uh...', chance: 1 / 30000 },
-  { name: 'rare rarity :3', chance: 1 / 30000 },
+  { name: 'rare rarity :3', chance: 1 / 30000, style: `
+    loop {
+      pulse (0.02, 0.3, 0.4): #FFD1DC
+  ` },
   { name: 'Galactic', chance: 1 / 28000 },
   { name: 'Eventide', chance: 1 / 25000 },
   { name: 'Phobia', chance: 1 / 23000 },
@@ -445,7 +448,9 @@ const rarities = [
   { name: 'Sodium', chance: 1 / 7425 },
   { name: 'Moonlit', chance: 1 / 7400 },
   { name: 'Magnesium', chance: 1 / 7375 },
-  { name: 'cotton', chance: 1 / 7350 },
+  { name: 'cotton', chance: 1 / 7350, style: `
+    color: #FFB6C1
+  ` },
   { name: 'Aluminum', chance: 1 / 7325 },
   { name: 'Frame', chance: 1 / 7300 },
   { name: 'Silicon', chance: 1 / 7275 },
