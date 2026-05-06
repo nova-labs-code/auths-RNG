@@ -400,7 +400,7 @@ select {
     opacity 0.2s,
     background 0.2s;
   color: var(--text-color);
-    content-visibility: auto;
+  content-visibility: auto;
   contain-intrinsic-size: auto 32px;
 }
 
@@ -1381,7 +1381,7 @@ br + .image-column {
   justify-content: space-between;
   align-items: center;
   transition: all 0.2s;
-    content-visibility: auto;
+  content-visibility: auto;
   contain-intrinsic-size: auto 44px;
 }
 
@@ -1837,7 +1837,7 @@ body.legacy-mode #legacySettingsBtn {
   padding: 12px 14px;
   margin-bottom: 10px;
   transition: opacity 0.2s;
-    content-visibility: auto;
+  content-visibility: auto;
   contain-intrinsic-size: auto 160px;
 }
 .gauntlet-tier[data-tier='global'] {
@@ -2412,7 +2412,7 @@ body.high-contrast #inventoryList li.item-rare {
   transition: background 0.15s;
   cursor: pointer;
   position: relative;
-    content-visibility: auto;
+  content-visibility: auto;
   contain-intrinsic-size: auto 52px;
 }
 
@@ -2611,7 +2611,7 @@ body.high-contrast #inventoryList li.item-rare {
   padding: 7px 10px;
   border-bottom: 1px solid var(--border-color);
   font-size: 0.78em;
-    content-visibility: auto;
+  content-visibility: auto;
   contain-intrinsic-size: auto 36px;
 }
 .mutation-history-entry:last-child {

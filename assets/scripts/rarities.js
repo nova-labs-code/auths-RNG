@@ -278,6 +278,7 @@ const rarities = [
   { name: 'rare rarity :3', chance: 1 / 30000, style: `
     loop {
       color: #FFD1DC
+  }
   ` },
   { name: 'Galactic', chance: 1 / 28000 },
   { name: 'Eventide', chance: 1 / 25000 },
