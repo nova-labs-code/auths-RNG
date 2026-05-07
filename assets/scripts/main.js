@@ -1,10 +1,3 @@
-(function () {
-  var s = document.createElement('script');
-  s.src = 'legacy-polyfills.js';
-  s.async = false;
-  document.head.appendChild(s);
-})();
-
 const rollBtn = document.getElementById('rollBtn'),
   spinner = document.getElementById('spinner'),
   inventoryList = document.getElementById('inventoryList'),
