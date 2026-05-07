@@ -2,48 +2,64 @@
 <html lang="en">
 
 <head>
-  
   <meta charset="UTF-8">
+  <link rel="stylesheet" href="styles.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"> <!-- a relic of the past...............-->
+  <link rel="preload" as="style" href="styles.css">
   <title>auth's RNG</title>
-  <meta name="description" content="a simple web based RNG game!">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+  <meta name="description" content="a free browser RNG game with incremental progression and rare collectible rolls">
+  <meta name="keywords" content="rng game, browser game, gacha game, idle game, incremental game, rare items, gacha, webgame, opensource, open-source, addicting, incremental, idle, rng, auth's RNG, auths rng, auth's rng, auths RNG">
+  <meta name="robots" content="index, follow">
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="auth's RNG">
   <meta property="og:title" content="auth's RNG">
-  <meta property="og:description" content="a web-based, incremental RNG game!">
-  <meta property="og:image" content="assets/images/authsRNG.png">
+  <meta property="og:description" content="an addicting, web-based, RNG/incremental gacha game!">
+  <meta property="og:image" content="https://authsrng.xyz/assets/images/authsRNG.png">
   <meta property="og:url" content="https://authsrng.xyz/">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="auth's RNG">
-  <meta name="twitter:description" content="a web-based, incremental RNG game!">
-  <meta name="twitter:image" content="assets/images/authsRNG.png">
+  <meta name="twitter:description" content="an addicting, web-based, RNG/incremental gacha game!">
+  <meta name="twitter:image" content="https://authsrng.xyz/assets/images/authsRNG.png">
   <meta name="twitter:url" content="https://authsrng.xyz/">
 
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="application-name" content="auth's RNG">
+  <meta name="apple-mobile-web-app-title" content="auth's RNG">
   <meta name="theme-color" content="#0e0e0e">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="https://authsrng.xyz/assets/images/authsRNG.png">
 
-  <link rel="icon" sizes="192x192" href="assets/images/authsRNG.png">
+  <link rel="icon" sizes="192x192" href="https://authsrng.xyz/assets/images/authsRNG.png">
   <link rel="manifest" href="manifest.json">
 
   <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=()">
   <meta name="format-detection" content="telephone=no, email=no, address=no">
   <meta name="google" content="notranslate">
 
+  <!-- for future contributors, and a note to myself: the duplicate preload is for safety, sometimes native doesnt work so we do the normal way-->
+  <link rel="preload" as="image" href="/assets/images/authsRNG.png">
+  <link rel="preload" as="image" href="https://authsrng.xyz/assets/images/authsRNG.png">
+
+  <meta name="color-scheme" content="dark">
+  <link rel="canonical" href="https://authsrng.xyz/">
+  <meta name="creator" content="auth">
+
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "VideoGame",
     "name": "auth's RNG",
-    "description": "a web-based, incremental RNG game!",
-    "image": "assets/images/authsRNG.png",
+    "description": "an addicting, web-based, RNG/incremental gacha game!",
+    "image": "https://authsrng.xyz/assets/images/authsRNG.png",
     "url": "https://authsrng.xyz/",
     "applicationCategory": "Game",
+    "genre": ["Incremental", "Idle", "Casual"],
     "operatingSystem": "All",
     "author": {
       "@type": "Person",
@@ -57,10 +73,10 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/rellax/1.12.1/rellax.min.js" defer></script>
 
   <!-- IF YOU REMOVE ANY OF THESE META TAGS, I WILL KILL YOU!!!!! -->
-  <!-- DOING SO RUINS SOME FEATURES AND RUINS COMPATIBILITY!!!!!!!!!!! -->
+  <!-- DOING SO RUINS SOME FEATURES, OPTIMIZATIONS, AND HURTS SEO LIKE HELLLLLLLLLLLL!!!!!!!!!!! -->
   <!-- DONT EVER DO IT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-
-<link rel="stylesheet" href="styles.css">
+  <!-- GOT IT??????????? -->
+  <!-- good boyyyyyyy- -->
 
 </head>
 
