@@ -139,11 +139,14 @@ el.textContent="";
 </script>
 
 <script>
-// ccu heartbeat
+// ccu
 const _sid = Math.random().toString(36).slice(2);
 const _hb = () => fetch("https://authsrng.xyz/api/ccu?sid=" + _sid, { method: "POST" });
-_hb();
-setInterval(_hb, 60_000);
+
+if (location.hostname !== "nightly.authsrng.xyz") {
+  _hb();
+  setInterval(_hb, 60_000);
+}
 </script>
 
   <img src="https://librecounter.org/counter.svg" referrerPolicy="unsafe-url" width="0" loading="lazy"/>
