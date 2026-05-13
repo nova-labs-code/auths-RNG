@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  const API = 'https://authsrng.xyz/api/backup';
+  const API = 'https://backup.authsrng.xyz/api/backup';
 
   const SAVE_KEYS = [
     'rarityInventory',
