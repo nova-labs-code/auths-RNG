@@ -1566,11 +1566,6 @@ if (savedActive) {
   } catch {}
 }
 
-updatePotionUI();
-recalcLuckMultiplier();
-updatePointsDisplay();
-updateShopUI();
-
 function resetInventory() {
   if (
     confirm(
@@ -1947,6 +1942,10 @@ resetBtn.addEventListener('click', resetInventory);
 
 loadAllData();
 updateTotalRolls();
+updatePotionUI();
+recalcLuckMultiplier();
+updatePointsDisplay();
+updateShopUI();
 const ls = localStorage.getItem(LUCK_KEY);
 if (ls) {
   try {
