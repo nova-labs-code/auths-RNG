@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  const API = 'https://backup.authsrng.xyz/api/leaderboard';
+  const API = 'https://leaderboard.authsrng.xyz/api/leaderboard';
   const SUBMIT_INTERVAL = 15 * 60 * 1000;
 
   function getUid() {
