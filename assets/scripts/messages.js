@@ -325,7 +325,12 @@ const messages = [
   'gthgrew2erfgtbtrfefrgb',
   'ghngeefrgtbrfefrg',
   'rfgthhgtregthngtrfefgt',
-  'fvgfdfcvdfvdfv'
+  'fvgfdfcvdfvdfv',
+  'This Is A Useless Message',
+  'I LOVE GAMBLING OH GOD',
+  'dont trust them.. please...',
+  'the messages up here are randomized by the way',
+  'congrats! you have stumbled into the Indie Web Rabbit Hole TM!'
 ];
 
 const randomIndex = Math.floor(Math.random() * messages.length);
