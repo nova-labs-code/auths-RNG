@@ -149,60 +149,70 @@
     }, SUBMIT_INTERVAL);
   }
 
-  function buildUI() {
-    const section = document.getElementById('leaderboardSection');
-    if (!section) return;
+function buildUI() {
+  const section = document.getElementById('leaderboardSection');
+  if (!section) return;
 
-    if (!isEnabled()) {
+  const rolls = parseInt(localStorage.getItem('totalRolls') || '0');
+
+  if (!isEnabled()) {
+    if (rolls < 1100) {
       section.innerHTML = `
-        <button id="enableLbBtn" class="small" style="width:100%;margin-top:4px;">join leaderboard</button>
-        <small class="helper" style="margin-top:6px;">
-          opt-in — your stats shown publicly. requires a permanent username. 
-          <a href="leaderboard.html" style="opacity:0.6;">view leaderboard</a>
+        <small class="helper" style="margin-top:6px;display:block;">
+          reach 1,100 rolls to unlock the leaderboard.
+          <span style="opacity:0.5;">(you have ${rolls})</span>
         </small>`;
-      document
-        .getElementById('enableLbBtn')
-        .addEventListener('click', async () => {
-          const username = await setupUsername();
-          if (!username) {
-            setStatus('', '');
-            return;
-          }
-          localStorage.setItem('lbEnabled', 'true');
-          buildUI();
-          startAuto();
-          await submit(false);
-        });
       return;
     }
 
-    const username = getUsername();
     section.innerHTML = `
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-        <span style="font-size:0.85em;opacity:0.8;">leaderboard: <span style="color:#88dd88;">on</span> — <span style="opacity:0.6;">${username}</span></span>
-        <button id="disableLbBtn" class="small" style="opacity:0.5;">opt out</button>
-      </div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
-        <button id="lbSubmitNowBtn" class="small">update now</button>
-        <a href="leaderboard.html" class="small" style="display:inline-block;padding:4px 10px;border:1px solid var(--border-color, #333);text-decoration:none;color:inherit;">view leaderboard →</a>
-      </div>
-      <div id="lbStatus" style="font-size:0.8em;min-height:1.2em;"></div>`;
+      <button id="enableLbBtn" class="small" style="width:100%;margin-top:4px;">join leaderboard</button>
+      <small class="helper" style="margin-top:6px;display:block;">
+        opt-in — your stats shown publicly. requires a permanent username.
+        <a href="leaderboard.html" style="opacity:0.6;">view leaderboard</a>
+      </small>`;
 
-    document
-      .getElementById('disableLbBtn')
-      .addEventListener('click', async () => {
-        if (!confirm('opt out and delete your leaderboard entry permanently?'))
-          return;
-        await deleteEntry();
-        localStorage.removeItem('lbEnabled');
-        clearInterval(autoTimer);
-        buildUI();
-      });
+    document.getElementById('enableLbBtn').addEventListener('click', async () => {
+      const username = await setupUsername();
+      if (!username) { setStatus('', ''); return; }
+      localStorage.setItem('lbEnabled', 'true');
+      buildUI();
+      startAuto();
+      await submit(false);
+    });
 
-    document
-      .getElementById('lbSubmitNowBtn')
-      .addEventListener('click', () => submit(false));
+    return;
   }
+
+  const username = getUsername();
+
+  section.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <span style="font-size:0.85em;opacity:0.8;">
+        leaderboard: <span style="color:#88dd88;">on</span>
+        <span style="opacity:0.4;"> — ${username}</span>
+      </span>
+      <button id="disableLbBtn" class="small" style="opacity:0.5;">opt out</button>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
+      <button id="lbSubmitNowBtn" class="small">update now</button>
+      <a href="leaderboard.html" class="small"
+         style="display:inline-block;padding:4px 10px;border:1px solid var(--border-color,#333);text-decoration:none;color:inherit;">
+        view leaderboard →
+      </a>
+    </div>
+    <div id="lbStatus" style="font-size:0.8em;min-height:1.2em;"></div>`;
+
+  document.getElementById('disableLbBtn').addEventListener('click', async () => {
+    if (!confirm('opt out and delete your leaderboard entry permanently?')) return;
+    await deleteEntry();
+    localStorage.removeItem('lbEnabled');
+    clearInterval(autoTimer);
+    buildUI();
+  });
+
+  document.getElementById('lbSubmitNowBtn').addEventListener('click', () => submit(false));
+}
 
   function init() {
     buildUI();
