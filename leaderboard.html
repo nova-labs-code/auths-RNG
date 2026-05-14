@@ -9,11 +9,9 @@
   <style>
     :root {
       --bg: #0e0e0e;
-      --surface: #141414;
-      --surface2: #1a1a1a;
-      --border: #2a2a2a;
-      --text: #e0e0e0;
+      --text: #dcdcdc;
       --muted: #666;
+      --border: #2a2a2a;
       --accent: #88dd88;
       --rare: #f0c070;
       --danger: #ff8888;
@@ -27,62 +25,37 @@
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 14px;
+      font-family: monospace;
+      font-size: 17px;
+      line-height: 1.7;
       min-height: 100vh;
-      padding: 0;
+      padding: 28px;
     }
 
-    a { color: var(--text); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-
-    /* ── header ── */
-    .header {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 16px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 10px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
     }
 
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
+    a { color: var(--text); text-decoration: none; border-bottom: 1px dotted #444; }
+    a:hover { opacity: 0.7; }
 
-    .back-link {
-      opacity: 0.5;
-      font-size: 0.85em;
-      transition: opacity 0.15s;
-    }
-    .back-link:hover { opacity: 1; text-decoration: none; }
-
-    .header h1 {
-      font-size: 1.1em;
+    h1 {
+      font-size: 1.4rem;
       font-weight: normal;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
+      margin: 0 0 0.4em 0;
+      text-transform: lowercase;
     }
 
-    .header-meta {
+    .meta {
+      font-size: 0.85em;
+      color: var(--muted);
+      margin-bottom: 1.6em;
       display: flex;
       align-items: center;
       gap: 14px;
-      font-size: 0.78em;
-      color: var(--muted);
       flex-wrap: wrap;
-    }
-
-    .refresh-bar {
-      display: flex;
-      align-items: center;
-      gap: 8px;
     }
 
     .refresh-dot {
@@ -90,6 +63,7 @@
       height: 7px;
       border-radius: 50%;
       background: var(--accent);
+      display: inline-block;
       animation: pulse 2s infinite;
     }
 
@@ -98,168 +72,103 @@
       50% { opacity: 0.3; }
     }
 
-    /* ── controls ── */
-    .controls {
-      padding: 12px 20px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-      background: var(--surface);
-    }
-
-    .player-count {
-      font-size: 0.8em;
-      color: var(--muted);
-    }
-
-    .sort-label {
-      font-size: 0.78em;
-      color: var(--muted);
-      margin-left: auto;
-    }
-
-    /* ── table ── */
-    .table-wrap {
-      overflow-x: auto;
-      padding: 0 20px 40px;
-    }
+    .player-count { color: var(--muted); font-size: 0.88em; }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 12px;
-      min-width: 600px;
+      margin-bottom: 2em;
     }
 
     thead th {
       text-align: left;
-      padding: 10px 12px;
-      font-size: 0.78em;
+      padding: 6px 10px 6px 0;
+      font-size: 0.8em;
       color: var(--muted);
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px dotted #333;
       cursor: pointer;
       user-select: none;
       white-space: nowrap;
-      transition: color 0.15s;
       letter-spacing: 0.04em;
     }
-
     thead th:hover { color: var(--text); }
     thead th.sorted { color: var(--accent); }
-    thead th .sort-arrow { margin-left: 4px; opacity: 0.6; }
 
-    tbody tr {
-      border-bottom: 1px solid var(--border);
-      transition: background 0.1s;
-    }
-
-    tbody tr:hover { background: var(--surface2); }
+    tbody tr { border-bottom: 1px dotted #222; }
+    tbody tr:hover { background: #141414; }
 
     td {
-      padding: 10px 12px;
+      padding: 8px 10px 8px 0;
       font-size: 0.88em;
       white-space: nowrap;
+      vertical-align: middle;
     }
 
-    .rank-cell {
-      width: 46px;
-      color: var(--muted);
-      font-size: 0.8em;
-    }
-
-    .rank-1 { color: var(--rank1); font-weight: bold; }
+    .rank-cell { color: var(--muted); font-size: 0.8em; width: 32px; }
+    .rank-1 { color: var(--rank1); }
     .rank-2 { color: var(--rank2); }
     .rank-3 { color: var(--rank3); }
 
-    .username-cell {
-      font-weight: normal;
-      max-width: 160px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+    .username-cell { max-width: 150px; overflow: hidden; text-overflow: ellipsis; }
 
-    .rarest-cell {
-      color: var(--rare);
-      font-size: 0.82em;
-    }
-
-    .rarest-denom {
-      display: block;
-      color: var(--muted);
-      font-size: 0.85em;
-    }
+    .rarest-cell { color: var(--rare); font-size: 0.82em; }
+    .rarest-denom { color: var(--muted); font-size: 0.85em; margin-left: 4px; }
 
     .time-cell { color: var(--muted); }
+    .updated-cell { color: #444; font-size: 0.8em; }
 
-    /* ── states ── */
     .state-box {
-      text-align: center;
-      padding: 60px 20px;
       color: var(--muted);
       font-size: 0.9em;
+      padding: 2em 0;
     }
 
-    .state-box .icon { font-size: 2em; margin-bottom: 12px; display: block; }
-
-    /* ── error ── */
     .error-box {
-      background: var(--surface);
-      border: 1px solid #402020;
       color: var(--danger);
-      padding: 12px 16px;
-      margin: 20px;
       font-size: 0.85em;
+      margin-bottom: 1em;
+      border-left: 2px solid #402020;
+      padding-left: 12px;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 2em;
+      padding: 8px 16px;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-bottom: 1px solid #2a2a2a;
       border-radius: 2px;
+      font-size: 0.9em;
+    }
+    .back-link:hover { background: #222; opacity: 1; }
+
+    p.small {
+      font-size: 0.85em;
+      opacity: 0.65;
+      margin-bottom: 0.5em;
     }
 
-    /* ── footer ── */
-    .footer {
-      padding: 16px 20px;
-      border-top: 1px solid var(--border);
-      font-size: 0.75em;
-      color: var(--muted);
-      text-align: center;
-    }
-
-    /* ── mobile ── */
     @media (max-width: 500px) {
-      .header { padding: 12px 14px; }
-      .controls { padding: 10px 14px; }
-      .table-wrap { padding: 0 0 40px; }
-      td, thead th { padding: 8px 10px; }
+      body { padding: 16px; }
+      td, thead th { padding: 6px 8px 6px 0; font-size: 0.8em; }
     }
   </style>
 </head>
 <body>
+<div class="container">
 
-<div class="header">
-  <div class="header-left">
-    <a href="index.html" class="back-link">← back</a>
-    <h1>leaderboard</h1>
-  </div>
-  <div class="header-meta">
-    <div class="refresh-bar">
-      <div class="refresh-dot" id="refreshDot"></div>
-      <span id="refreshStatus">loading...</span>
-    </div>
+  <h1>leaderboard</h1>
+
+  <div class="meta">
+    <span><span class="refresh-dot" id="refreshDot"></span> <span id="refreshStatus">loading...</span></span>
     <span id="nextRefreshLabel"></span>
+    <span id="playerCount" class="player-count"></span>
   </div>
-</div>
 
-<div class="controls">
-  <span class="player-count" id="playerCount"></span>
-  <span class="sort-label">click column headers to sort</span>
-</div>
+  <div id="errorBox" class="error-box" style="display:none;"></div>
 
-<div id="errorBox" class="error-box" style="display:none;"></div>
-
-<div class="table-wrap">
-  <div id="stateBox" class="state-box">
-    <span class="icon">⏳</span>
-    fetching leaderboard...
-  </div>
+  <div id="stateBox" class="state-box">fetching leaderboard...</div>
 
   <table id="lbTable" style="display:none;">
     <thead>
@@ -276,11 +185,10 @@
     </thead>
     <tbody id="lbBody"></tbody>
   </table>
-</div>
 
-<div class="footer">
-  leaderboard updates every 15 minutes &nbsp;·&nbsp; opt-in from the settings page &nbsp;·&nbsp;
-  <a href="index.html">play auth's RNG!!!!!</a>
+  <p class="small">leaderboard updates every 15 minutes &nbsp;·&nbsp; opt-in from the settings page</p>
+  <a href="index.html" class="back-link">← back to game</a>
+
 </div>
 
 <script>
@@ -291,12 +199,10 @@ const REFRESH_INTERVAL = 15 * 60 * 1000;
 
 let allEntries = [];
 let sortCol = 'rolls';
-let sortDir = -1; // -1 = desc, 1 = asc
+let sortDir = -1;
 let refreshTimer = null;
 let countdownTimer = null;
 let nextRefreshAt = 0;
-
-// ── formatting ──────────────────────────────────────────────
 
 function abbr(n) {
   n = Number(n) || 0;
@@ -331,48 +237,10 @@ function fmtCountdown(ms) {
 }
 
 function rankLabel(i) {
-  if (i === 0) return '🥇';
-  if (i === 1) return '🥈';
-  if (i === 2) return '🥉';
+  if (i === 0) return '#1';
+  if (i === 1) return '#2';
+  if (i === 2) return '#3';
   return String(i + 1);
-}
-
-// ── renderrrrrrrrrrrrrrrrrrrrrrrrrrrr ───────────────────────────────────────────────────
-
-function renderTable() {
-  const sorted = [...allEntries].sort((a, b) => {
-    let av = a[sortCol], bv = b[sortCol];
-    if (sortCol === 'username') {
-      av = (av || '').toLowerCase();
-      bv = (bv || '').toLowerCase();
-      return sortDir * av.localeCompare(bv);
-    }
-    return sortDir * ((Number(bv) || 0) - (Number(av) || 0));
-  });
-
-  const tbody = document.getElementById('lbBody');
-  if (!sorted.length) {
-    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:#555;">no entries yet — be the first!</td></tr>';
-    return;
-  }
-
-  tbody.innerHTML = sorted.map((e, i) => {
-    const rankClass = i < 3 ? ' rank-' + (i + 1) : '';
-    const rarest = e.rarestDenom > 0
-      ? `<span>${escHtml(e.rarestName || '?')}</span><span class="rarest-denom">1/${abbr(e.rarestDenom)}</span>`
-      : `<span style="color:#444;">none</span>`;
-
-    return `<tr>
-      <td class="rank-cell${rankClass}">${rankLabel(i)}</td>
-      <td class="username-cell">${escHtml(e.username || '?')}</td>
-      <td>${abbr(e.rolls)}</td>
-      <td>${abbr(e.rarities)}</td>
-      <td class="rarest-cell">${rarest}</td>
-      <td class="time-cell">${fmtTime(e.playtime)}</td>
-      <td>${abbr(e.points)}</td>
-      <td style="color:#444;font-size:0.8em;">${fmtAgo(e.updatedAt)}</td>
-    </tr>`;
-  }).join('');
 }
 
 function escHtml(s) {
@@ -383,7 +251,40 @@ function escHtml(s) {
     .replace(/"/g, '&quot;');
 }
 
-// ── fetch ────────────────────────────────────────────────────
+function renderTable() {
+  const sorted = [...allEntries].sort((a, b) => {
+    let av = a[sortCol], bv = b[sortCol];
+    if (sortCol === 'username') {
+      av = (av || '').toLowerCase(); bv = (bv || '').toLowerCase();
+      return sortDir * av.localeCompare(bv);
+    }
+    return sortDir * ((Number(bv) || 0) - (Number(av) || 0));
+  });
+
+  const tbody = document.getElementById('lbBody');
+  if (!sorted.length) {
+    tbody.innerHTML = '<tr><td colspan="8" style="color:#555;padding:24px 0;">no entries yet — be the first!</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = sorted.map((e, i) => {
+    const rankClass = i < 3 ? ' rank-' + (i + 1) : '';
+    const rarest = e.rarestDenom > 0
+      ? `${escHtml(e.rarestName || '?')}<span class="rarest-denom">1/${abbr(e.rarestDenom)}</span>`
+      : `<span style="color:#444;">none</span>`;
+
+    return `<tr>
+      <td class="rank-cell${rankClass}">${rankLabel(i)}</td>
+      <td class="username-cell">${escHtml(e.username || '?')}</td>
+      <td>${abbr(e.rolls)}</td>
+      <td>${abbr(e.rarities)}</td>
+      <td class="rarest-cell">${rarest}</td>
+      <td class="time-cell">${fmtTime(e.playtime)}</td>
+      <td>${abbr(e.points)}</td>
+      <td class="updated-cell">${fmtAgo(e.updatedAt)}</td>
+    </tr>`;
+  }).join('');
+}
 
 async function fetchLeaderboard() {
   const dot = document.getElementById('refreshDot');
@@ -402,7 +303,6 @@ async function fetchLeaderboard() {
     const data = await r.json();
 
     allEntries = data.entries || [];
-
     document.getElementById('playerCount').textContent =
       allEntries.length + ' player' + (allEntries.length !== 1 ? 's' : '') + ' on the board';
 
@@ -414,20 +314,16 @@ async function fetchLeaderboard() {
     status.textContent = 'live · data from ' + cachedAt;
     dot.style.background = 'var(--accent)';
 
-    // schedule next fetch aligned to cache TTL
     const cacheAge = data.cachedAt ? Date.now() - data.cachedAt : 0;
     const waitMs = Math.max(30_000, REFRESH_INTERVAL - cacheAge);
     scheduleNext(waitMs);
-
   } catch (e) {
     dot.style.background = 'var(--danger)';
     status.textContent = 'error';
     errorBox.textContent = 'failed to load leaderboard: ' + e.message;
     errorBox.style.display = 'block';
-    if (!allEntries.length) {
-      stateBox.innerHTML = '<span class="icon">😿</span>couldn\'t load leaderboard.<br><small style="opacity:0.5;">' + e.message + '</small>';
-    }
-    scheduleNext(60_000); // retry in 1m on error
+    if (!allEntries.length) stateBox.textContent = "couldn't load leaderboard. " + e.message;
+    scheduleNext(60_000);
   }
 }
 
@@ -445,17 +341,11 @@ function scheduleNext(ms) {
   }, 1000);
 }
 
-// ── sort headers ─────────────────────────────────────────────
-
 document.querySelectorAll('thead th[data-col]').forEach(th => {
   th.addEventListener('click', () => {
     const col = th.dataset.col;
-    if (sortCol === col) {
-      sortDir *= -1;
-    } else {
-      sortCol = col;
-      sortDir = col === 'username' ? 1 : -1;
-    }
+    if (sortCol === col) { sortDir *= -1; }
+    else { sortCol = col; sortDir = col === 'username' ? 1 : -1; }
 
     document.querySelectorAll('thead th').forEach(h => {
       h.classList.remove('sorted');
@@ -468,13 +358,11 @@ document.querySelectorAll('thead th[data-col]').forEach(th => {
     arrow.className = 'sort-arrow';
     arrow.textContent = sortDir === -1 ? ' ↓' : ' ↑';
     th.appendChild(arrow);
-
     renderTable();
   });
 });
 
 fetchLeaderboard();
 </script>
-
 </body>
 </html>
