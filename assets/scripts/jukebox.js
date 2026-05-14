@@ -269,6 +269,7 @@
   function togglePlay() {
     const m = document.getElementById('muteMusic');
     if (!m) return;
+    // a shrimp could theoretically pilot a fucking mech if given enough funding
     m.checked = !m.checked;
     saveSettings();
   }
