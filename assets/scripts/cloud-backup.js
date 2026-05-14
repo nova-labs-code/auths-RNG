@@ -99,7 +99,7 @@ Click OK to accept and enable cloud backups.`;
   }
 
   function getAutoInterval() {
-    return localStorage.getItem('cloudBackupInterval') || '15m';
+    return localStorage.getItem('cloudBackupInterval') || '30m';
   }
 
   function setStatus(msg, color) {
@@ -211,7 +211,10 @@ Click OK to accept and enable cloud backups.`;
     clearInterval(autoTimer);
     autoTimer = null;
     if (!isEnabled()) return;
-    const ms = getAutoInterval() === '2h' ? 2 * 60 * 60 * 1000 : 15 * 60 * 1000;
+    const iv = getAutoInterval();
+    const ms = iv === '1h' ? 60 * 60 * 1000
+             : iv === '3h' ? 3 * 60 * 60 * 1000
+             : 30 * 60 * 1000; // default 30m
     autoTimer = setInterval(() => {
       if (!document.hidden) doBackup(true);
     }, ms);
@@ -256,8 +259,9 @@ Click OK to accept and enable cloud backups.`;
     <div id="cloudLastBackup" style="font-size:0.8em;opacity:0.5;margin-bottom:10px;">${lastStr}</div>
     <label style="display:block;font-size:0.85em;margin-bottom:4px;">auto-backup interval:</label>
     <select id="cloudIntervalSelect" style="width:100%;margin-bottom:10px;">
-      <option value="15m"${iv === '15m' ? ' selected' : ''}>every 15 minutes</option>
-      <option value="2h"${iv === '2h' ? ' selected' : ''}>every 2 hours</option>
+      <option value="30m"${iv === '30m' ? ' selected' : ''}>every 30 minutes</option>
+      <option value="1h"${iv === '1h' ? ' selected' : ''}>every 1 hour</option>
+      <option value="3h"${iv === '3h' ? ' selected' : ''}>every 3 hours</option>
     </select>
     <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
       <button id="cloudBackupNowBtn" class="small">backup now</button>
