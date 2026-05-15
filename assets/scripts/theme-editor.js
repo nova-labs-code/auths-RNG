@@ -344,7 +344,7 @@ async function applyBgStyle(settings, fallbackColor) {
       accentColor: v.accentColor,
       confettiThreshold: s.confettiThreshold,
       rareThreshold: s.rareThreshold,
-      cutsceneThreshold: s.cutsceneThreshold,
+      cutsceneThreshold: s.cutsceneThreshold, // the comma is HERE guys stop fucking giving me this syntax error you doucebag
       bgType: s.bgType,
       bgGradientFrom: s.bgGradientFrom,
       bgGradientTo: s.bgGradientTo,
