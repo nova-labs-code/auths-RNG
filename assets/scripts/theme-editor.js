@@ -73,6 +73,48 @@
     return r ? { r: parseInt(r[1], 16), g: parseInt(r[2], 16), b: parseInt(r[3], 16) } : null;
   }
 
+  const IDB_NAME = 'authsrng-theme';
+  const IDB_STORE = 'assets';
+
+  function openIDB() {
+    return new Promise((res, rej) => {
+      const req = indexedDB.open(IDB_NAME, 1);
+      req.onupgradeneeded = e => e.target.result.createObjectStore(IDB_STORE);
+      req.onsuccess = e => res(e.target.result);
+      req.onerror = () => rej(req.error);
+    });
+  }
+
+  async function idbSet(key, val) {
+    const db = await openIDB();
+    return new Promise((res, rej) => {
+      const tx = db.transaction(IDB_STORE, 'readwrite');
+      tx.objectStore(IDB_STORE).put(val, key);
+      tx.oncomplete = res;
+      tx.onerror = () => rej(tx.error);
+    });
+  }
+
+  async function idbGet(key) {
+    const db = await openIDB();
+    return new Promise((res, rej) => {
+      const tx = db.transaction(IDB_STORE, 'readonly');
+      const req = tx.objectStore(IDB_STORE).get(key);
+      req.onsuccess = () => res(req.result ?? null);
+      req.onerror = () => rej(req.error);
+    });
+  }
+
+  async function idbDel(key) {
+    const db = await openIDB();
+    return new Promise((res, rej) => {
+      const tx = db.transaction(IDB_STORE, 'readwrite');
+      tx.objectStore(IDB_STORE).delete(key);
+      tx.oncomplete = res;
+      tx.onerror = () => rej(tx.error);
+    });
+  }
+
   function el(id) { return document.getElementById(id); }
 
   function getUserPresets() {
@@ -129,7 +171,12 @@
             chaos: el('te-chaosMode').checked,
             confettiThreshold: parseInt(el('te-confettiThreshold').value, 10) || 0,
             rareThreshold: parseInt(el('te-rareThreshold').value, 10) || 1000,
-            cutsceneThreshold: parseInt(el('te-cutsceneThreshold').value, 10) || 0
+            cutsceneThreshold: parseInt(el('te-cutsceneThreshold').value, 10) || 0,
+            bgType: el('te-bgType').value,
+            bgGradientFrom: el('te-bgGradientFrom').value,
+            bgGradientTo: el('te-bgGradientTo').value,
+            bgGradientAngle: parseInt(el('te-bgGradientAngle').value, 10),
+            bgGradientType: el('te-bgGradientType').value,
         }
     };
 }
@@ -162,6 +209,13 @@
     if (el('te-season')) el('te-season').value = s.season || 'none';
     if (el('te-particleDensity')) el('te-particleDensity').value = s.particleDensity || 'medium';
 
+    if (el('te-bgType')) el('te-bgType').value = s.bgType || 'color';
+    if (el('te-bgGradientFrom')) el('te-bgGradientFrom').value = s.bgGradientFrom || '#0e0e0e';
+    if (el('te-bgGradientTo')) el('te-bgGradientTo').value = s.bgGradientTo || '#1a1a2e';
+    if (el('te-bgGradientAngle')) { el('te-bgGradientAngle').value = s.bgGradientAngle ?? 135; el('te-bgGradientAngleVal').textContent = s.bgGradientAngle ?? 135; }
+    if (el('te-bgGradientType')) el('te-bgGradientType').value = s.bgGradientType || 'linear';
+    syncBgTypeUI();
+
     const checks = {
       'te-compactMode': s.compactMode,
       'te-hideCursor': s.hideCursor,
@@ -187,45 +241,78 @@
     if (el('te-blurBorderOpacity')) { el('te-blurBorderOpacity').value = s.blurBorderOpacity ?? 8; el('te-blurBorderOpacityVal').textContent = s.blurBorderOpacity ?? 8; }
   }
 
-  function applyCSSVars(vars, borderWidth, settings) {
-    const root = document.documentElement;
-    const bw = (borderWidth ?? 1) + 'px';
-    const map = {
-        '--bg-color': vars.bgColor,
-        '--text-color': vars.textColor,
-        '--panel-bg': vars.panelBg,
-        '--overlay-bg': vars.overlayBg,
-        '--border-color': vars.borderColor,
-        '--button-bg': vars.buttonBg,
-        '--button-hover': vars.buttonBg,
-        '--button-text': vars.textColor,
-        '--input-bg': vars.buttonBg,
-        '--link-border': vars.borderColor,
-        '--accent-color': vars.accentColor,
-        '--achievement-bg': vars.achievementBg,
-        '--achievement-border': vars.achievementBorder
-    };
-    for (const [k, v] of Object.entries(map)) {
-        if (v) root.style.setProperty(k, v);
-    }
-    document.querySelectorAll('.shop-item-cost, .potion-cost').forEach(n => {
-        n.style.color = vars.pointsColor || '';
-    });
-    document.querySelectorAll('button, .shop-item, #inventoryList, .page-dots, #notifPanel, .well-container').forEach(n => {
-        n.style.borderWidth = bw;
-    });
+ function applyCSSVars(vars, borderWidth, settings) {
+  const root = document.documentElement;
+  const bw = (borderWidth ?? 1) + 'px';
+  const map = {
+    '--bg-color': vars.bgColor,
+    '--text-color': vars.textColor,
+    '--panel-bg': vars.panelBg,
+    '--overlay-bg': vars.overlayBg,
+    '--border-color': vars.borderColor,
+    '--button-bg': vars.buttonBg,
+    '--button-hover': vars.buttonBg,
+    '--button-text': vars.textColor,
+    '--input-bg': vars.buttonBg,
+    '--link-border': vars.borderColor,
+    '--accent-color': vars.accentColor,
+    '--achievement-bg': vars.achievementBg,
+    '--achievement-border': vars.achievementBorder
+  };
+  for (const [k, v] of Object.entries(map)) {
+    if (v) root.style.setProperty(k, v);
+  }
+  document.querySelectorAll('.shop-item-cost, .potion-cost').forEach(n => {
+    n.style.color = vars.pointsColor || '';
+  });
+  document.querySelectorAll('button, .shop-item, #inventoryList, .page-dots, #notifPanel, .well-container').forEach(n => {
+    n.style.borderWidth = bw;
+  });
+  if (vars.panelBg) {
+    const rgb = hexToRgb(vars.panelBg);
+    if (rgb) root.style.setProperty('--panel-bg-rgb', `${rgb.r},${rgb.g},${rgb.b}`);
+  }
+  if (settings) {
+    root.style.setProperty('--blur-intensity', (settings.blurIntensity ?? 10) + 'px');
+    root.style.setProperty('--blur-saturate', (settings.blurSaturate ?? 140) + '%');
+    root.style.setProperty('--blur-panel-opacity', ((settings.blurPanelOpacity ?? 55) / 100).toFixed(2));
+    root.style.setProperty('--blur-border-opacity', ((settings.blurBorderOpacity ?? 8) / 100).toFixed(2));
+    applyBgStyle(settings, vars.bgColor);
+  }
+}
 
-    if (vars.panelBg) {
-        const rgb = hexToRgb(vars.panelBg);
-        if (rgb) root.style.setProperty('--panel-bg-rgb', `${rgb.r},${rgb.g},${rgb.b}`);
-    }
+async function applyBgStyle(settings, fallbackColor) {
+  const type = settings.bgType || 'color';
+  const body = document.body;
+  body.style.backgroundImage = '';
+  body.style.backgroundSize = '';
+  body.style.backgroundPosition = '';
+  body.style.backgroundRepeat = '';
+  body.style.backgroundAttachment = '';
 
-    if (settings) {
-        root.style.setProperty('--blur-intensity', (settings.blurIntensity ?? 10) + 'px');
-        root.style.setProperty('--blur-saturate', (settings.blurSaturate ?? 140) + '%');
-        root.style.setProperty('--blur-panel-opacity', ((settings.blurPanelOpacity ?? 55) / 100).toFixed(2));
-        root.style.setProperty('--blur-border-opacity', ((settings.blurBorderOpacity ?? 8) / 100).toFixed(2));
+  if (type === 'gradient') {
+    const from = settings.bgGradientFrom || fallbackColor || '#0e0e0e';
+    const to = settings.bgGradientTo || '#1a1a2e';
+    const angle = settings.bgGradientAngle ?? 135;
+    const gtype = settings.bgGradientType || 'linear';
+    if (gtype === 'radial') {
+      body.style.backgroundImage = `radial-gradient(ellipse at center, ${from}, ${to})`;
+    } else {
+      body.style.backgroundImage = `linear-gradient(${angle}deg, ${from}, ${to})`;
     }
+  } else if (type === 'image') {
+    try {
+      const blob = await idbGet('bg-image');
+      if (blob) {
+        const url = URL.createObjectURL(blob);
+        body.style.backgroundImage = `url(${url})`;
+        body.style.backgroundSize = 'cover';
+        body.style.backgroundPosition = 'center';
+        body.style.backgroundRepeat = 'no-repeat';
+        body.style.backgroundAttachment = 'fixed';
+      }
+    } catch (_) {}
+  }
 }
 
   function buildSettingsPatch(editorData) {
@@ -364,7 +451,8 @@
         'te-blurSaturate','te-blurPanelOpacity','te-blurBorderOpacity',
         'te-compactMode','te-hideCursor','te-hideLuckBreakdown','te-reduceMotion',
         'te-highContrast','te-largeTargets','te-rgbBg','te-wackyText','te-chaosMode',
-        'te-confettiThreshold','te-rareThreshold','te-cutsceneThreshold'
+        'te-confettiThreshold','te-rareThreshold','te-cutsceneThreshold','te-bgType',
+        'te-bgGradientFrom','te-bgGradientTo','te-bgGradientAngle','te-bgGradientType'
     ];
     ids.forEach(id => {
         const n = el(id);
@@ -377,12 +465,44 @@
             if (id === 'te-blurSaturate') el('te-blurSaturateVal').textContent = n.value;
             if (id === 'te-blurPanelOpacity') el('te-blurPanelOpacityVal').textContent = n.value;
             if (id === 'te-blurBorderOpacity') el('te-blurBorderOpacityVal').textContent = n.value;
+            if (id === 'te-bgGradientAngle') el('te-bgGradientAngleVal').textContent = n.value;
             livePreview();
         });
         n.addEventListener('change', livePreview);
     });
+
+    const bgTypeEl = el('te-bgType');
+    if (bgTypeEl) bgTypeEl.addEventListener('change', syncBgTypeUI);
 }
   
+function syncBgTypeUI() {
+  const type = el('te-bgType') ? el('te-bgType').value : 'color';
+  const gradientControls = el('te-gradientControls');
+  const imageControls = el('te-imageControls');
+  if (gradientControls) gradientControls.style.display = type === 'gradient' ? 'block' : 'none';
+  if (imageControls) imageControls.style.display = type === 'image' ? 'block' : 'none';
+}
+
+async function refreshBgImagePreview() {
+  const preview = el('te-bgImagePreview');
+  const removeBtn = el('te-bgImageRemove');
+  if (!preview) return;
+  try {
+    const blob = await idbGet('bg-image');
+    if (blob) {
+      const url = URL.createObjectURL(blob);
+      preview.src = url;
+      preview.style.display = 'block';
+      if (removeBtn) removeBtn.style.display = 'inline-block';
+    } else {
+      preview.style.display = 'none';
+      if (removeBtn) removeBtn.style.display = 'none';
+    }
+  } catch (_) {
+    preview.style.display = 'none';
+  }
+}
+
   function init() {
     const openBtn = el('openThemeEditorBtn');
     const overlay = el('themeEditorOverlay');
@@ -410,6 +530,9 @@
       } else {
         writeEditor(BUILT_IN_PRESETS[0]);
       }
+
+      syncBgTypeUI();
+      refreshBgImagePreview();
 
       renderPresets();
       overlay.style.display = 'block';
@@ -475,6 +598,28 @@
     });
 
     bindEditorInputs();
+
+    const bgUpload = el('te-bgImageUpload');
+      if (bgUpload) {
+        bgUpload.addEventListener('change', async () => {
+          const file = bgUpload.files[0];
+          if (!file) return;
+          if (file.size > 10 * 1024 * 1024) { alert('image too large (max 10MB)'); return; }
+          await idbSet('bg-image', file);
+          bgUpload.value = '';
+          await refreshBgImagePreview();
+          livePreview();
+        });
+      }
+
+      const bgRemove = el('te-bgImageRemove');
+      if (bgRemove) {
+        bgRemove.addEventListener('click', async () => {
+          await idbDel('bg-image');
+          await refreshBgImagePreview();
+          livePreview();
+        });
+      }
 
     let activeData;
     try { activeData = JSON.parse(localStorage.getItem(ACTIVE_KEY) || 'null'); } catch (_) { activeData = null; }
