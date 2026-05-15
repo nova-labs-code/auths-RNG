@@ -460,228 +460,68 @@
   }
 
   // ── applyVisuals ──────────────────────────────────────────────────────
-  // Everything except music. Safe to call on every input event.
-  function applyVisuals(settings) {
-    document.body.classList.toggle('legacy-mode', !!settings.legacyMode);
+function applyVisuals(settings) {
+  document.body.classList.toggle('legacy-mode', !!settings.legacyMode);
 
+  if (!localStorage.getItem('themeEditorActive')) {
     if (settings.theme === 'white') {
       document.body.setAttribute('data-theme', 'white');
       document.body.style.removeProperty('--bg-color');
     } else if (settings.theme === 'custom') {
       document.body.removeAttribute('data-theme');
-      document.body.style.setProperty(
-        '--bg-color',
-        settings.customHex || '#0e0e0e',
-      );
-      document.body.style.setProperty(
-        '--text-color',
-        settings.customTextHex || '#dcdcdc',
-      );
+      document.body.style.setProperty('--bg-color', settings.customHex || '#0e0e0e');
+      document.body.style.setProperty('--text-color', settings.customTextHex || '#dcdcdc');
     } else {
       document.body.removeAttribute('data-theme');
       document.body.style.removeProperty('--bg-color');
     }
-
-    window.rawNumbers = !!settings.rawNumbers;
-
-    document.body.style.fontSize = (settings.textSize || 16) + 'px';
-
-    const fontMap = {
-      serif: 'serif',
-      mono: 'monospace',
-      dyslexic: "'OpenDyslexic', sans-serif",
-    };
-    document.body.style.fontFamily = fontMap[settings.font] || 'monospace';
-
-    clearInterval(rgbInterval);
-    rgbInterval = null;
-    if (settings.rgb || settings.chaos) {
-      rgbInterval = setInterval(() => {
-        const h = Math.floor(Math.random() * 360);
-        const l = settings.theme === 'white' ? 90 : 15;
-        document.body.style.backgroundColor = `hsl(${h},70%,${l}%)`;
-        applyBackgroundPattern(settings.bgPattern || 'none');
-      }, 150);
-    } else {
-      document.body.style.backgroundColor = '';
-    }
-
-    clearInterval(wackyInterval);
-    wackyInterval = null;
-    if (settings.wacky || settings.chaos) {
-      wackyInterval = setInterval(() => {
-        document.body.style.fontSize =
-          Math.floor(Math.random() * 10) + 16 + 'px';
-      }, 200);
-    }
-
-    applyBackgroundPattern(settings.bgPattern || 'none');
-    applyCustomRollText(settings.customRollText || '');
-    startDevOverlay(settings);
-    startSeasonalParticles(
-      settings.season || 'none',
-      settings.particleDensity || 'medium',
-    );
-
-    document.body.dataset.invStyle = settings.inventoryStyle || 'compact';
-    document.body.classList.toggle('blur-panels', !!settings.blurPanels);
-    document.body.classList.toggle('compact-mode', !!settings.compactMode);
-    document.body.classList.toggle('reduce-motion', !!settings.reduceMotion);
-    document.body.classList.toggle('high-contrast', !!settings.highContrast);
-    document.body.classList.toggle('large-targets', !!settings.largeTargets);
-    document.body.classList.toggle('hide-cursor', !!settings.hideCursor);
-
-    const rollBtnEl = el('rollBtn');
-    if (rollBtnEl) {
-      const sizeMap = {
-        small: '0.85em',
-        normal: '1.1em',
-        large: '1.4em',
-        huge: '1.8em',
-      };
-      rollBtnEl.style.fontSize = sizeMap[settings.rollBtnSize] || '1.1em';
-    }
-
-    document.body.style.setProperty(
-      '--accent-color',
-      settings.accentColor || '#dcdcdc',
-    );
-
-    const breakdownEl = el('luckBreakdown');
-    if (breakdownEl)
-      breakdownEl.style.display = settings.hideLuckBreakdown ? 'none' : '';
-
-    // Expose globals for main.js — these are safe to update live
-    window.rollSoundSetting = settings.rollSound || 'none';
-    window.rareThreshold = settings.rareThreshold || 1000;
-    window.confettiThreshold = settings.confettiThreshold || 0;
-    window.autoSellThreshold = settings.autoSellThreshold || 0;
-    window.cutsceneThreshold = settings.cutsceneThreshold || 0;
-    window.spinnerStyleSetting = settings.spinnerStyle || 'slot';
-
-    const rsrEl = el('rollsSinceRare');
-    if (rsrEl) rsrEl.style.display = settings.rareThreshold > 0 ? '' : 'none';
-
-    if (window.refreshAllDisplays) window.refreshAllDisplays();
   }
+
+  window.rawNumbers = !!settings.rawNumbers;
+
+  clearInterval(rgbInterval);
+  rgbInterval = null;
+  clearInterval(wackyInterval);
+  wackyInterval = null;
+
+  startDevOverlay(settings);
+
+  window.rollSoundSetting = settings.rollSound || 'none';
+  window.rareThreshold = settings.rareThreshold || 1000;
+  window.autoSellThreshold = settings.autoSellThreshold || 0;
+
+  const rsrEl = el('rollsSinceRare');
+  if (rsrEl) rsrEl.style.display = settings.rareThreshold > 0 ? '' : 'none';
+
+  if (window.refreshAllDisplays) window.refreshAllDisplays();
+}
 
   // ── syncUIToSettings ──────────────────────────────────────────────────
-  function syncUIToSettings(settings) {
-    const selects = {
-      themeSelect: settings.theme || 'black',
-      musicSelect: settings.music || 'default',
-      fontSelect: settings.font || 'default',
-      seasonSelect: settings.season || 'none',
-      particleDensity: settings.particleDensity || 'medium',
-      bgPattern: settings.bgPattern || 'none',
-      inventoryStyle: settings.inventoryStyle || 'compact',
-      spinnerStyle: settings.spinnerStyle || 'slot',
-      rollBtnSize: settings.rollBtnSize || 'normal',
-      rollSound: settings.rollSound || 'none',
-    };
-    for (const [id, val] of Object.entries(selects)) {
-      const n = el(id);
-      if (n) n.value = val;
-    }
-
-    const checks = {
-      rgbBg: !!settings.rgb,
-      wackyText: !!settings.wacky,
-      chaosMode: !!settings.chaos,
-      muteMusic: !!settings.muted,
-      devOverlay: !!settings.dev,
-      legacyMode: !!settings.legacyMode,
-      blurPanels: !!settings.blurPanels,
-      hideCursor: !!settings.hideCursor,
-      hideLuckBreakdown: !!settings.hideLuckBreakdown,
-      compactMode: !!settings.compactMode,
-      reduceMotion: !!settings.reduceMotion,
-      highContrast: !!settings.highContrast,
-      largeTargets: !!settings.largeTargets,
-      rawNumbers: !!settings.rawNumbers,
-    };
-    for (const [id, checked] of Object.entries(checks)) {
-      const n = el(id);
-      if (n) n.checked = checked;
-    }
-
-    const ccNode = el('customColor');
-    const ctNode = el('customTextColor');
-    const ctLabel = el('customTextColorLabel');
-    const isCustom = settings.theme === 'custom';
-    if (ccNode) {
-      ccNode.value = settings.customHex || '#0e0e0e';
-      ccNode.style.display = isCustom ? 'block' : 'none';
-    }
-    if (ctNode) {
-      ctNode.value = settings.customTextHex || '#dcdcdc';
-      ctNode.style.display = isCustom ? 'block' : 'none';
-    }
-    if (ctLabel) ctLabel.style.display = isCustom ? 'block' : 'none';
-
-    const vals = {
-      textSize: settings.textSize || 16,
-      customRollText: settings.customRollText || '',
-      accentColor: settings.accentColor || '#dcdcdc',
-      rareThreshold: settings.rareThreshold || 1000,
-      confettiThreshold: settings.confettiThreshold || 0,
-      autoSellThreshold: settings.autoSellThreshold || 0,
-      cutsceneThreshold: settings.cutsceneThreshold || 0,
-    };
-    for (const [id, val] of Object.entries(vals)) {
-      const n = el(id);
-      if (n) n.value = val;
-    }
-  }
+function syncUIToSettings(settings) {
+  if (el('musicSelect')) el('musicSelect').value = settings.music || 'default';
+  if (el('muteMusic')) el('muteMusic').checked = !!settings.muted;
+  if (el('devOverlay')) el('devOverlay').checked = !!settings.dev;
+  if (el('legacyMode')) el('legacyMode').checked = !!settings.legacyMode;
+  if (el('rawNumbers')) el('rawNumbers').checked = !!settings.rawNumbers;
+  if (el('rollSound')) el('rollSound').value = settings.rollSound || 'none';
+  if (el('rareThreshold')) el('rareThreshold').value = settings.rareThreshold || 1000;
+  if (el('autoSellThreshold')) el('autoSellThreshold').value = settings.autoSellThreshold || 0;
+}
+  // blah!
 
   // ── getCurrentSettings ────────────────────────────────────────────────
-  function getCurrentSettings() {
-    return {
-      theme: (el('themeSelect') || {}).value || 'black',
-      customHex: (el('customColor') || {}).value || '#0e0e0e',
-      textSize: parseInt((el('textSize') || {}).value || 16, 10),
-      rgb: !!(el('rgbBg') || {}).checked,
-      wacky: !!(el('wackyText') || {}).checked,
-      chaos: !!(el('chaosMode') || {}).checked,
-      music: (el('musicSelect') || {}).value || 'default',
-      font: (el('fontSelect') || {}).value || 'default',
-      season: (el('seasonSelect') || {}).value || 'none',
-      dev: !!(el('devOverlay') || {}).checked,
-      muted: !!(el('muteMusic') || {}).checked,
-      particleDensity: (el('particleDensity') || {}).value || 'medium',
-      bgPattern: (el('bgPattern') || {}).value || 'none',
-      customRollText: (el('customRollText') || {}).value || '',
-      legacyMode: !!(el('legacyMode') || {}).checked,
-      inventoryStyle: (el('inventoryStyle') || {}).value || 'compact',
-      spinnerStyle: (el('spinnerStyle') || {}).value || 'slot',
-      rollBtnSize: (el('rollBtnSize') || {}).value || 'normal',
-      accentColor: (el('accentColor') || {}).value || '#dcdcdc',
-      blurPanels: !!(el('blurPanels') || {}).checked,
-      hideCursor: !!(el('hideCursor') || {}).checked,
-      hideLuckBreakdown: !!(el('hideLuckBreakdown') || {}).checked,
-      compactMode: !!(el('compactMode') || {}).checked,
-      reduceMotion: !!(el('reduceMotion') || {}).checked,
-      highContrast: !!(el('highContrast') || {}).checked,
-      largeTargets: !!(el('largeTargets') || {}).checked,
-      rawNumbers: !!(el('rawNumbers') || {}).checked,
-      customTextHex: (el('customTextColor') || {}).value || '#dcdcdc',
-      rollSound: (el('rollSound') || {}).value || 'none',
-      rareThreshold: parseInt((el('rareThreshold') || {}).value || 1000, 10),
-      confettiThreshold: parseInt(
-        (el('confettiThreshold') || {}).value || 0,
-        10,
-      ),
-      autoSellThreshold: parseInt(
-        (el('autoSellThreshold') || {}).value || 0,
-        10,
-      ),
-      cutsceneThreshold: parseInt(
-        (el('cutsceneThreshold') || {}).value || 0,
-        10,
-      ),
-    };
-  }
-
+function getCurrentSettings() {
+  return {
+    music: (el('musicSelect') || {}).value || 'default',
+    muted: !!(el('muteMusic') || {}).checked,
+    dev: !!(el('devOverlay') || {}).checked,
+    legacyMode: !!(el('legacyMode') || {}).checked,
+    rawNumbers: !!(el('rawNumbers') || {}).checked,
+    rollSound: (el('rollSound') || {}).value || 'none',
+    rareThreshold: parseInt((el('rareThreshold') || {}).value || 1000, 10),
+    autoSellThreshold: parseInt((el('autoSellThreshold') || {}).value || 0, 10),
+  };
+}
   // ── onChange — fires on every UI interaction ──────────────────────────
   // Only applies visuals (safe). Music is NOT touched until save. We will not make the stupid fucking bug once again.
   function onChange() {
@@ -690,72 +530,23 @@
   }
 
   // ── Event binding ─────────────────────────────────────────────────────
-  function bindSettings() {
-    const selectIds = [
-      'themeSelect',
-      'musicSelect',
-      'fontSelect',
-      'seasonSelect',
-      'particleDensity',
-      'bgPattern',
-      'devOverlay',
-      'muteMusic',
-      'legacyMode',
-      'inventoryStyle',
-      'spinnerStyle',
-      'rollBtnSize',
-      'rollSound',
-    ];
-    const checkboxIds = [
-      'rgbBg',
-      'wackyText',
-      'chaosMode',
-      'blurPanels',
-      'hideCursor',
-      'hideLuckBreakdown',
-      'compactMode',
-      'reduceMotion',
-      'highContrast',
-      'largeTargets',
-      'rawNumbers',
-    ];
-    const inputIds = [
-      'textSize',
-      'customColor',
-      'customRollText',
-      'accentColor',
-      'rareThreshold',
-      'confettiThreshold',
-      'autoSellThreshold',
-      'cutsceneThreshold',
-      'customTextColor',
-    ];
+function bindSettings() {
+  const ids = ['muteMusic', 'legacyMode', 'rawNumbers', 'devOverlay'];
+  ids.forEach(id => {
+    const n = el(id);
+    if (n) n.addEventListener('change', onChange);
+  });
 
-    selectIds.forEach((id) => {
-      const n = el(id);
-      if (n) n.addEventListener('change', onChange);
-    });
-    checkboxIds.forEach((id) => {
-      const n = el(id);
-      if (n) n.addEventListener('change', onChange);
-    });
-    inputIds.forEach((id) => {
-      const n = el(id);
-      if (n) n.addEventListener('input', onChange);
-    });
+  ['musicSelect', 'rollSound'].forEach(id => {
+    const n = el(id);
+    if (n) n.addEventListener('change', onChange);
+  });
 
-    const themeNode = el('themeSelect');
-    if (themeNode)
-      themeNode.addEventListener('change', () => {
-        const isCustom = themeNode.value === 'custom';
-        const cc = el('customColor');
-        const ct = el('customTextColor');
-        const ctLabel = el('customTextColorLabel');
-        if (cc) cc.style.display = isCustom ? 'block' : 'none';
-        if (ct) ct.style.display = isCustom ? 'block' : 'none';
-        if (ctLabel) ctLabel.style.display = isCustom ? 'block' : 'none';
-      });
-  }
+  ['rareThreshold', 'autoSellThreshold'].forEach(id => {
+    const n = el(id);
+    if (n) n.addEventListener('input', onChange);
+  });
+}
 
   // ── Web Audio API (custom music) ──────────────────────────────────────
   // Now takes an ArrayBuffer (from IDB) + MIME type instead of a base64 data URL.
