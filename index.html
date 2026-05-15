@@ -523,42 +523,8 @@ if (navigator.userAgent.includes("Screenjesus")) {
 <div class="page" id="page-6">
   <h2 style="margin-top: 0; margin-bottom: 20px;">settings</h2>
   
-  <div style="width: 100%; max-width: 400px; font-size: 0.9em; padding: 0 20px;">
-    <label style="display: block; margin-top: 12px;">theme:</label>
-    <select id="themeSelect" style="width: 100%; margin-top: 4px;">
-      <option value="black">black (default)</option>
-      <option value="white">white</option>
-      <option value="custom">custom</option>
-    </select>
-    <input type="color" id="customColor" style="display:none; width: 100%; margin-top: 8px;">
-    <small class="helper" id="customTextColorLabel" style="display:none; margin-top:6px;">text color</small>
-    <input type="color" id="customTextColor" style="display:none; width: 100%; margin-top: 4px;">
-
-    <label style="display: block; margin-top: 16px;">text size:</label>
-    <input type="range" id="textSize" min="12" max="28" value="16" style="width: 100%; margin-top: 4px;">
-
-    <label style="display: block; margin-top: 12px;"><input type="checkbox" id="rgbBg"> RGB background</label>
-    <label style="display: block; margin-top: 8px;"><input type="checkbox" id="wackyText"> wacky text size</label>
-    <label style="display: block; margin-top: 8px;"><input type="checkbox" id="chaosMode"> ADHD mode</label>
-
-    <hr class="sep" style="margin: 20px 0;">
-
-    <label style="display: block; margin-top: 12px;">font:</label>
-    <select id="fontSelect" style="width: 100%; margin-top: 4px;">
-      <option value="default">default</option>
-      <option value="serif">serif</option>
-      <option value="mono">monospace</option>
-      <option value="dyslexic">OpenDyslexic</option>
-    </select>
-
-    <label style="display: block; margin-top: 16px;">seasonal particles:</label>
-    <select id="seasonSelect" style="width: 100%; margin-top: 4px;">
-      <option value="none">none</option>
-      <option value="winter">winter ❄️</option>
-      <option value="spring">spring 🌸</option>
-      <option value="summer">summer ☀️</option>
-      <option value="fall">fall 🍁</option>
-    </select>
+  <button id="openThemeEditorBtn" style="width:100%;margin-top:12px;padding:10px;">open theme editor</button>
+  <div id="activeThemeName" style="font-size:0.8em;opacity:0.5;margin-top:6px;text-align:center;">current: default</div>
     
     <hr class="sep" style="margin: 20px 0;">
     
@@ -593,66 +559,6 @@ if (navigator.userAgent.includes("Screenjesus")) {
 
     <hr class="sep" style="margin: 20px 0;">
 
-    <label style="display: block; margin-top: 12px;">particle density:</label>
-    <select id="particleDensity" style="width: 100%; margin-top: 4px;">
-      <option value="low">low (50 particles)</option>
-      <option value="medium">medium (200 particles)</option>
-      <option value="high">high (400 particles)</option>
-    </select>
-
-    <label style="display: block; margin-top: 16px;">background pattern:</label>
-    <select id="bgPattern" style="width: 100%; margin-top: 4px;">
-      <option value="none">none (solid)</option>
-      <option value="dots">dots</option>
-      <option value="grid">grid</option>
-      <option value="waves">waves</option>
-      <option value="diagonal">diagonal lines</option>
-    </select>
-
-    <label style="display: block; margin-top: 16px;">custom roll button text:</label>
-    <input type="text" id="customRollText" placeholder="roll" maxlength="30" style="width: 100%; margin-top: 4px; padding: 8px;">
-
-    <hr class="sep" style="margin: 20px 0;">
-
-<label style="display: block; margin-top: 12px;">inventory style:</label>
-<select id="inventoryStyle" style="width: 100%; margin-top: 4px;">
-  <option value="compact">compact (default)</option>
-  <option value="comfy">comfy</option>
-  <option value="card">card grid</option>
-</select>
-
-<label style="display: block; margin-top: 12px;">spinner style:</label>
-<select id="spinnerStyle" style="width: 100%; margin-top: 4px;">
-  <option value="slot">slot machine (default)</option>
-  <option value="fade">fade in place</option>
-  <option value="none">no animation</option>
-</select>
-
-<label style="display: block; margin-top: 12px;">roll button size:</label>
-<select id="rollBtnSize" style="width: 100%; margin-top: 4px;">
-  <option value="normal">normal (default)</option>
-  <option value="small">small</option>
-  <option value="large">large</option>
-  <option value="huge">huge</option>
-</select>
-
-<label style="display: block; margin-top: 12px;">accent color:</label>
-<input type="color" id="accentColor" value="#dcdcdc" style="width: 100%; margin-top: 4px; height: 36px;">
-<small class="helper">used for rare item highlights and borders</small>
-
-<label style="display: block; margin-top: 10px;"><input type="checkbox" id="blurPanels"> frosted glass panels</label>
-<label style="display: block; margin-top: 8px;"><input type="checkbox" id="hideCursor"> hide custom cursor</label>
-<label style="display: block; margin-top: 8px;"><input type="checkbox" id="hideLuckBreakdown"> hide luck breakdown text</label>
-<label style="display: block; margin-top: 8px;"><input type="checkbox" id="compactMode"> compact mode</label>
-
-<hr class="sep" style="margin: 20px 0;">
-
-<label style="display: block; margin-top: 8px;"><input type="checkbox" id="reduceMotion"> reduce motion</label>
-<label style="display: block; margin-top: 8px;"><input type="checkbox" id="highContrast"> high contrast</label>
-<label style="display: block; margin-top: 8px;"><input type="checkbox" id="largeTargets"> larger click targets</label>
-
-<hr class="sep" style="margin: 20px 0;">
-
 <label style="display: block; margin-top: 12px;">roll sound:</label>
 <select id="rollSound" style="width: 100%; margin-top: 4px;">
   <option value="none">none (default)</option>
@@ -665,17 +571,9 @@ if (navigator.userAgent.includes("Screenjesus")) {
 <input type="number" id="rareThreshold" min="0" value="1000" style="width: 100%; margin-top: 4px; padding: 8px;">
 <small class="helper">defines what counts as "rare" — used for highlights, confetti, and the rolls-since-rare counter</small>
 
-<label style="display: block; margin-top: 16px;">confetti threshold (1/X and rarer, 0 = off):</label>
-<input type="number" id="confettiThreshold" min="0" value="0" style="width: 100%; margin-top: 4px; padding: 8px;">
-<small class="helper">show confetti when you roll something rarer than 1/X</small>
-
 <label style="display: block; margin-top: 16px;">auto-sell threshold (sell rarities below 1/X, 0 = off):</label>
 <input type="number" id="autoSellThreshold" min="0" value="0" style="width: 100%; margin-top: 4px; padding: 8px;">
 <small class="helper">automatically sells any rarity with denominator below this value for points</small>
-
-<label style="display: block; margin-top: 16px;">cutscene threshold (only play cutscenes at 1/X and rarer, 0 = all):</label>
-<input type="number" id="cutsceneThreshold" min="0" value="0" style="width: 100%; margin-top: 4px; padding: 8px;">
-<small class="helper">rarities below this won't play their cutscene even if one exists</small>
 
 <hr class="sep" style="margin: 20px 0;">
 
@@ -838,6 +736,7 @@ if (navigator.userAgent.includes("Screenjesus")) {
 <script src="assets/scripts/main.js" defer></script>
 <script src="assets/scripts/cloud-backup.js" defer></script>
 <script src="assets/scripts/leaderboard-submit.js" defer></script>
+<script src="assets/scripts/theme-editor.js" defer></script>
 <script src="assets/scripts/cleanup.js" defer></script>
 
   <!-- Notification Center -->
@@ -1500,6 +1399,168 @@ function handleSwipe() {
 })();
 </script>
 
+<div id="themeEditorOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:20000;overflow-y:auto;">
+  <div id="themeEditorPanel" style="max-width:680px;margin:0 auto;padding:24px 20px 80px;">
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;position:sticky;top:0;background:var(--bg-color);padding:12px 0;border-bottom:1px solid var(--border-color);z-index:1;">
+      <span style="font-size:1.1em;">theme editor</span>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <span id="themeEditorActiveLabel" style="font-size:0.8em;opacity:0.5;"></span>
+        <button id="themeEditorClose" class="small">close</button>
+      </div>
+    </div>
+
+    <div style="margin-bottom:24px;">
+      <div style="font-size:0.75em;opacity:0.4;letter-spacing:0.06em;margin-bottom:10px;">presets</div>
+      <div id="presetGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;"></div>
+      <div style="display:flex;gap:6px;margin-top:10px;">
+        <button id="saveThemeBtn" class="small">save as preset</button>
+        <button id="importThemeBtn" class="small">import json</button>
+        <button id="exportThemeBtn" class="small">export json</button>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+
+      <div>
+        <div style="font-size:0.75em;opacity:0.4;letter-spacing:0.06em;margin-bottom:12px;">colors</div>
+
+        <label style="display:block;margin-bottom:4px;font-size:0.85em;opacity:0.7;">background</label>
+        <input type="color" id="te-bgColor" value="#0e0e0e" style="width:100%;height:32px;margin-bottom:10px;">
+
+        <label style="display:block;margin-bottom:4px;font-size:0.85em;opacity:0.7;">text</label>
+        <input type="color" id="te-textColor" value="#dcdcdc" style="width:100%;height:32px;margin-bottom:10px;">
+
+        <label style="display:block;margin-bottom:4px;font-size:0.85em;opacity:0.7;">panel</label>
+        <input type="color" id="te-panelBg" value="#111111" style="width:100%;height:32px;margin-bottom:10px;">
+
+        <label style="display:block;margin-bottom:4px;font-size:0.85em;opacity:0.7;">overlay</label>
+        <input type="color" id="te-overlayBg" value="#0a0a0a" style="width:100%;height:32px;margin-bottom:10px;">
+
+        <label style="display:block;margin-bottom:4px;font-size:0.85em;opacity:0.7;">border</label>
+        <input type="color" id="te-borderColor" value="#2a2a2a" style="width:100%;height:32px;margin-bottom:10px;">
+
+        <label style="display:block;margin-bottom:4px;font-size:0.85em;opacity:0.7;">button background</label>
+        <input type="color" id="te-buttonBg" value="#1a1a1a" style="width:100%;height:32px;margin-bottom:10px;">
+
+        <label style="display:block;margin-bottom:4px;font-size:0.85em;opacity:0.7;">accent / rare highlight</label>
+        <input type="color" id="te-accentColor" value="#dcdcdc" style="width:100%;height:32px;margin-bottom:10px;">
+
+        <label style="display:block;margin-bottom:4px;font-size:0.85em;opacity:0.7;">points color</label>
+        <input type="color" id="te-pointsColor" value="#ffb86b" style="width:100%;height:32px;margin-bottom:10px;">
+
+        <label style="display:block;margin-bottom:4px;font-size:0.85em;opacity:0.7;">achievement background</label>
+        <input type="color" id="te-achievementBg" value="#1a2a1a" style="width:100%;height:32px;margin-bottom:10px;">
+
+        <label style="display:block;margin-bottom:4px;font-size:0.85em;opacity:0.7;">achievement border</label>
+        <input type="color" id="te-achievementBorder" value="#2a4a2a" style="width:100%;height:32px;margin-bottom:10px;">
+      </div>
+
+      <div>
+        <div style="font-size:0.75em;opacity:0.4;letter-spacing:0.06em;margin-bottom:12px;">shape & layout</div>
+
+        <label style="display:block;margin-bottom:4px;font-size:0.85em;opacity:0.7;">border radius: <span id="te-radiusVal">2</span>px</label>
+        <input type="range" id="te-radius" min="0" max="24" value="2" style="width:100%;margin-bottom:4px;">
+        <div style="display:flex;justify-content:space-between;font-size:0.75em;opacity:0.4;margin-bottom:12px;"><span>square</span><span>pill</span></div>
+
+        <label style="display:block;margin-bottom:4px;font-size:0.85em;opacity:0.7;">border width: <span id="te-borderWidthVal">1</span>px</label>
+        <input type="range" id="te-borderWidth" min="0" max="4" value="1" style="width:100%;margin-bottom:12px;">
+
+        <label style="display:block;margin-bottom:4px;font-size:0.85em;opacity:0.7;">text size: <span id="te-textSizeVal">16</span>px</label>
+        <input type="range" id="te-textSize" min="12" max="28" value="16" style="width:100%;margin-bottom:12px;">
+
+        <label style="display:block;margin-bottom:10px;font-size:0.85em;opacity:0.7;">font</label>
+        <select id="te-font" style="width:100%;margin-bottom:12px;">
+          <option value="default">default (monospace)</option>
+          <option value="serif">serif</option>
+          <option value="mono">monospace</option>
+          <option value="dyslexic">opendyslexic</option>
+        </select>
+
+        <label style="display:block;margin-bottom:10px;font-size:0.85em;opacity:0.7;">inventory style</label>
+        <select id="te-inventoryStyle" style="width:100%;margin-bottom:12px;">
+          <option value="compact">compact</option>
+          <option value="comfy">comfy</option>
+          <option value="card">card grid</option>
+        </select>
+
+        <label style="display:block;margin-bottom:10px;font-size:0.85em;opacity:0.7;">spinner style</label>
+        <select id="te-spinnerStyle" style="width:100%;margin-bottom:12px;">
+          <option value="slot">slot machine</option>
+          <option value="fade">fade</option>
+          <option value="none">none</option>
+        </select>
+
+        <label style="display:block;margin-bottom:10px;font-size:0.85em;opacity:0.7;">roll button size</label>
+        <select id="te-rollBtnSize" style="width:100%;margin-bottom:12px;">
+          <option value="normal">normal</option>
+          <option value="small">small</option>
+          <option value="large">large</option>
+          <option value="huge">huge</option>
+        </select>
+
+        <label style="display:block;margin-bottom:4px;font-size:0.85em;opacity:0.7;">custom roll button text</label>
+        <input type="text" id="te-customRollText" placeholder="roll" maxlength="30" style="width:100%;padding:6px 8px;margin-bottom:12px;">
+
+        <div style="font-size:0.75em;opacity:0.4;letter-spacing:0.06em;margin:16px 0 12px;">background</div>
+
+        <label style="display:block;margin-bottom:10px;font-size:0.85em;opacity:0.7;">background pattern</label>
+        <select id="te-bgPattern" style="width:100%;margin-bottom:12px;">
+          <option value="none">none</option>
+          <option value="dots">dots</option>
+          <option value="grid">grid</option>
+          <option value="waves">waves</option>
+          <option value="diagonal">diagonal lines</option>
+        </select>
+
+        <label style="display:block;margin-bottom:10px;font-size:0.85em;opacity:0.7;">seasonal particles</label>
+        <select id="te-season" style="width:100%;margin-bottom:12px;">
+          <option value="none">none</option>
+          <option value="winter">winter</option>
+          <option value="spring">spring</option>
+          <option value="summer">summer</option>
+          <option value="fall">fall</option>
+        </select>
+
+        <label style="display:block;margin-bottom:10px;font-size:0.85em;opacity:0.7;">particle density</label>
+        <select id="te-particleDensity" style="width:100%;margin-bottom:12px;">
+          <option value="low">low (50)</option>
+          <option value="medium">medium (200)</option>
+          <option value="high">high (400)</option>
+        </select>
+
+        <div style="font-size:0.75em;opacity:0.4;letter-spacing:0.06em;margin:16px 0 12px;">effects & accessibility</div>
+
+        <label style="display:block;margin-top:6px;font-size:0.85em;opacity:0.7;"><input type="checkbox" id="te-blurPanels"> frosted glass panels</label>
+        <label style="display:block;margin-top:6px;font-size:0.85em;opacity:0.7;"><input type="checkbox" id="te-compactMode"> compact mode</label>
+        <label style="display:block;margin-top:6px;font-size:0.85em;opacity:0.7;"><input type="checkbox" id="te-hideCursor"> hide custom cursor</label>
+        <label style="display:block;margin-top:6px;font-size:0.85em;opacity:0.7;"><input type="checkbox" id="te-hideLuckBreakdown"> hide luck breakdown</label>
+        <label style="display:block;margin-top:6px;font-size:0.85em;opacity:0.7;"><input type="checkbox" id="te-reduceMotion"> reduce motion</label>
+        <label style="display:block;margin-top:6px;font-size:0.85em;opacity:0.7;"><input type="checkbox" id="te-highContrast"> high contrast</label>
+        <label style="display:block;margin-top:6px;font-size:0.85em;opacity:0.7;"><input type="checkbox" id="te-largeTargets"> larger click targets</label>
+        <label style="display:block;margin-top:6px;font-size:0.85em;opacity:0.7;"><input type="checkbox" id="te-rgbBg"> rgb background</label>
+        <label style="display:block;margin-top:6px;font-size:0.85em;opacity:0.7;"><input type="checkbox" id="te-wackyText"> wacky text size</label>
+        <label style="display:block;margin-top:6px;font-size:0.85em;opacity:0.7;"><input type="checkbox" id="te-chaosMode"> adhd mode</label>
+
+        <div style="font-size:0.75em;opacity:0.4;letter-spacing:0.06em;margin:16px 0 12px;">thresholds</div>
+        <label style="display:block;margin-bottom:4px;font-size:0.85em;opacity:0.7;">confetti threshold (1/x, 0=off)</label>
+        <input type="number" id="te-confettiThreshold" min="0" value="0" style="width:100%;padding:6px 8px;margin-bottom:10px;">
+        <label style="display:block;margin-bottom:4px;font-size:0.85em;opacity:0.7;">rare highlight threshold (1/x)</label>
+        <input type="number" id="te-rareThreshold" min="0" value="1000" style="width:100%;padding:6px 8px;margin-bottom:10px;">
+        <label style="display:block;margin-bottom:4px;font-size:0.85em;opacity:0.7;">cutscene threshold (1/x, 0=all)</label>
+        <input type="number" id="te-cutsceneThreshold" min="0" value="0" style="width:100%;padding:6px 8px;margin-bottom:10px;">
+      </div>
+
+    </div>
+
+    <div style="position:sticky;bottom:0;background:var(--bg-color);border-top:1px solid var(--border-color);padding:14px 0;margin-top:24px;display:flex;gap:8px;">
+      <button id="te-apply" style="flex:1;padding:10px;">apply & save</button>
+      <button id="te-discard" class="small" style="opacity:0.6;">discard</button>
+    </div>
+
+  </div>
+</div>
+            
 </body>
 
 </html>
