@@ -24,6 +24,7 @@ the creature
   --link-border: #444;
   --achievement-bg: #1a2a1a;
   --achievement-border: #2a4a2a;
+  --border-radius: 2px;
 }
 
 [data-theme='white'] {
