@@ -68,6 +68,11 @@
   const STORAGE_KEY = 'themeEditorPresets';
   const ACTIVE_KEY = 'themeEditorActive';
 
+  function hexToRgb(hex) {
+    const r = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return r ? { r: parseInt(r[1], 16), g: parseInt(r[2], 16), b: parseInt(r[3], 16) } : null;
+  }
+
   function el(id) { return document.getElementById(id); }
 
   function getUserPresets() {
@@ -84,47 +89,51 @@
 
   function readEditor() {
     return {
-      vars: {
-        bgColor: el('te-bgColor').value,
-        textColor: el('te-textColor').value,
-        panelBg: el('te-panelBg').value,
-        overlayBg: el('te-overlayBg').value,
-        borderColor: el('te-borderColor').value,
-        buttonBg: el('te-buttonBg').value,
-        accentColor: el('te-accentColor').value,
-        pointsColor: el('te-pointsColor').value,
-        achievementBg: el('te-achievementBg').value,
-        achievementBorder: el('te-achievementBorder').value
-      },
-      settings: {
-        radius: parseInt(el('te-radius').value, 10),
-        borderWidth: parseInt(el('te-borderWidth').value, 10),
-        textSize: parseInt(el('te-textSize').value, 10),
-        font: el('te-font').value,
-        inventoryStyle: el('te-inventoryStyle').value,
-        spinnerStyle: el('te-spinnerStyle').value,
-        rollBtnSize: el('te-rollBtnSize').value,
-        customRollText: el('te-customRollText').value,
-        bgPattern: el('te-bgPattern').value,
-        season: el('te-season').value,
-        particleDensity: el('te-particleDensity').value,
-        blurPanels: el('te-blurPanels').checked,
-        compactMode: el('te-compactMode').checked,
-        hideCursor: el('te-hideCursor').checked,
-        hideLuckBreakdown: el('te-hideLuckBreakdown').checked,
-        reduceMotion: el('te-reduceMotion').checked,
-        highContrast: el('te-highContrast').checked,
-        largeTargets: el('te-largeTargets').checked,
-        rgb: el('te-rgbBg').checked,
-        wacky: el('te-wackyText').checked,
-        chaos: el('te-chaosMode').checked,
-        confettiThreshold: parseInt(el('te-confettiThreshold').value, 10) || 0,
-        rareThreshold: parseInt(el('te-rareThreshold').value, 10) || 1000,
-        cutsceneThreshold: parseInt(el('te-cutsceneThreshold').value, 10) || 0
-      }
+        vars: {
+            bgColor: el('te-bgColor').value,
+            textColor: el('te-textColor').value,
+            panelBg: el('te-panelBg').value,
+            overlayBg: el('te-overlayBg').value,
+            borderColor: el('te-borderColor').value,
+            buttonBg: el('te-buttonBg').value,
+            accentColor: el('te-accentColor').value,
+            pointsColor: el('te-pointsColor').value,
+            achievementBg: el('te-achievementBg').value,
+            achievementBorder: el('te-achievementBorder').value
+        },
+        settings: {
+            radius: parseInt(el('te-radius').value, 10),
+            borderWidth: parseInt(el('te-borderWidth').value, 10),
+            textSize: parseInt(el('te-textSize').value, 10),
+            font: el('te-font').value,
+            inventoryStyle: el('te-inventoryStyle').value,
+            spinnerStyle: el('te-spinnerStyle').value,
+            rollBtnSize: el('te-rollBtnSize').value,
+            customRollText: el('te-customRollText').value,
+            bgPattern: el('te-bgPattern').value,
+            season: el('te-season').value,
+            particleDensity: el('te-particleDensity').value,
+            blurPanels: el('te-blurPanels').checked,
+            blurIntensity: parseInt(el('te-blurIntensity').value, 10),
+            blurSaturate: parseInt(el('te-blurSaturate').value, 10),
+            blurPanelOpacity: parseInt(el('te-blurPanelOpacity').value, 10),
+            blurBorderOpacity: parseInt(el('te-blurBorderOpacity').value, 10),
+            compactMode: el('te-compactMode').checked,
+            hideCursor: el('te-hideCursor').checked,
+            hideLuckBreakdown: el('te-hideLuckBreakdown').checked,
+            reduceMotion: el('te-reduceMotion').checked,
+            highContrast: el('te-highContrast').checked,
+            largeTargets: el('te-largeTargets').checked,
+            rgb: el('te-rgbBg').checked,
+            wacky: el('te-wackyText').checked,
+            chaos: el('te-chaosMode').checked,
+            confettiThreshold: parseInt(el('te-confettiThreshold').value, 10) || 0,
+            rareThreshold: parseInt(el('te-rareThreshold').value, 10) || 1000,
+            cutsceneThreshold: parseInt(el('te-cutsceneThreshold').value, 10) || 0
+        }
     };
-  }
-
+}
+  
   function writeEditor(preset) {
     const v = preset.vars || {};
     const s = preset.settings || {};
@@ -154,7 +163,6 @@
     if (el('te-particleDensity')) el('te-particleDensity').value = s.particleDensity || 'medium';
 
     const checks = {
-      'te-blurPanels': s.blurPanels || ex.blurPanels,
       'te-compactMode': s.compactMode,
       'te-hideCursor': s.hideCursor,
       'te-hideLuckBreakdown': s.hideLuckBreakdown,
@@ -172,36 +180,53 @@
     if (el('te-confettiThreshold')) el('te-confettiThreshold').value = s.confettiThreshold ?? 0;
     if (el('te-rareThreshold')) el('te-rareThreshold').value = s.rareThreshold ?? 1000;
     if (el('te-cutsceneThreshold')) el('te-cutsceneThreshold').value = s.cutsceneThreshold ?? 0;
+    if (el('te-blurPanels')) el('te-blurPanels').checked = !!(s.blurPanels || ex.blurPanels);
+    if (el('te-blurIntensity')) { el('te-blurIntensity').value = s.blurIntensity ?? 10; el('te-blurIntensityVal').textContent = s.blurIntensity ?? 10; }
+    if (el('te-blurSaturate')) { el('te-blurSaturate').value = s.blurSaturate ?? 140; el('te-blurSaturateVal').textContent = s.blurSaturate ?? 140; }
+    if (el('te-blurPanelOpacity')) { el('te-blurPanelOpacity').value = s.blurPanelOpacity ?? 55; el('te-blurPanelOpacityVal').textContent = s.blurPanelOpacity ?? 55; }
+    if (el('te-blurBorderOpacity')) { el('te-blurBorderOpacity').value = s.blurBorderOpacity ?? 8; el('te-blurBorderOpacityVal').textContent = s.blurBorderOpacity ?? 8; }
   }
 
-  function applyCSSVars(vars, borderWidth) {
+  function applyCSSVars(vars, borderWidth, settings) {
     const root = document.documentElement;
     const bw = (borderWidth ?? 1) + 'px';
     const map = {
-      '--bg-color': vars.bgColor,
-      '--text-color': vars.textColor,
-      '--panel-bg': vars.panelBg,
-      '--overlay-bg': vars.overlayBg,
-      '--border-color': vars.borderColor,
-      '--button-bg': vars.buttonBg,
-      '--button-hover': vars.buttonBg,
-      '--button-text': vars.textColor,
-      '--input-bg': vars.buttonBg,
-      '--link-border': vars.borderColor,
-      '--accent-color': vars.accentColor,
-      '--achievement-bg': vars.achievementBg,
-      '--achievement-border': vars.achievementBorder
+        '--bg-color': vars.bgColor,
+        '--text-color': vars.textColor,
+        '--panel-bg': vars.panelBg,
+        '--overlay-bg': vars.overlayBg,
+        '--border-color': vars.borderColor,
+        '--button-bg': vars.buttonBg,
+        '--button-hover': vars.buttonBg,
+        '--button-text': vars.textColor,
+        '--input-bg': vars.buttonBg,
+        '--link-border': vars.borderColor,
+        '--accent-color': vars.accentColor,
+        '--achievement-bg': vars.achievementBg,
+        '--achievement-border': vars.achievementBorder
     };
     for (const [k, v] of Object.entries(map)) {
-      if (v) root.style.setProperty(k, v);
+        if (v) root.style.setProperty(k, v);
     }
     document.querySelectorAll('.shop-item-cost, .potion-cost').forEach(n => {
-      n.style.color = vars.pointsColor || '';
+        n.style.color = vars.pointsColor || '';
     });
     document.querySelectorAll('button, .shop-item, #inventoryList, .page-dots, #notifPanel, .well-container').forEach(n => {
-      n.style.borderWidth = bw;
+        n.style.borderWidth = bw;
     });
-  }
+
+    if (vars.panelBg) {
+        const rgb = hexToRgb(vars.panelBg);
+        if (rgb) root.style.setProperty('--panel-bg-rgb', `${rgb.r},${rgb.g},${rgb.b}`);
+    }
+
+    if (settings) {
+        root.style.setProperty('--blur-intensity', (settings.blurIntensity ?? 10) + 'px');
+        root.style.setProperty('--blur-saturate', (settings.blurSaturate ?? 140) + '%');
+        root.style.setProperty('--blur-panel-opacity', ((settings.blurPanelOpacity ?? 55) / 100).toFixed(2));
+        root.style.setProperty('--blur-border-opacity', ((settings.blurBorderOpacity ?? 8) / 100).toFixed(2));
+    }
+}
 
   function buildSettingsPatch(editorData) {
     const s = editorData.settings;
@@ -240,7 +265,7 @@
     const v = editorData.vars;
     const s = editorData.settings;
 
-    applyCSSVars(v, s.borderWidth);
+    applyCSSVars(v, s.borderWidth, s);
 
     const cssRadius = (s.radius ?? 2) + 'px';
     document.documentElement.style.setProperty('--border-radius', cssRadius);
@@ -321,38 +346,43 @@
 
   function livePreview() {
     const d = readEditor();
-    applyCSSVars(d.vars, d.settings.borderWidth);
+    applyCSSVars(d.vars, d.settings.borderWidth, d.settings);
     const cssRadius = (d.settings.radius ?? 2) + 'px';
     document.documentElement.style.setProperty('--border-radius', cssRadius);
     document.querySelectorAll('button, .shop-item, #inventoryList, .page-dots, .modal-content, .well-container, .gauntlet-tier, .potion-item').forEach(n => {
-      n.style.borderRadius = cssRadius;
+        n.style.borderRadius = cssRadius;
     });
   }
 
   function bindEditorInputs() {
     const ids = [
-      'te-bgColor','te-textColor','te-panelBg','te-overlayBg','te-borderColor',
-      'te-buttonBg','te-accentColor','te-pointsColor','te-achievementBg','te-achievementBorder',
-      'te-radius','te-borderWidth','te-textSize','te-font','te-inventoryStyle',
-      'te-spinnerStyle','te-rollBtnSize','te-customRollText','te-bgPattern',
-      'te-season','te-particleDensity','te-blurPanels','te-compactMode',
-      'te-hideCursor','te-hideLuckBreakdown','te-reduceMotion','te-highContrast',
-      'te-largeTargets','te-rgbBg','te-wackyText','te-chaosMode',
-      'te-confettiThreshold','te-rareThreshold','te-cutsceneThreshold'
+        'te-bgColor','te-textColor','te-panelBg','te-overlayBg','te-borderColor',
+        'te-buttonBg','te-accentColor','te-pointsColor','te-achievementBg','te-achievementBorder',
+        'te-radius','te-borderWidth','te-textSize','te-font','te-inventoryStyle',
+        'te-spinnerStyle','te-rollBtnSize','te-customRollText','te-bgPattern',
+        'te-season','te-particleDensity','te-blurPanels','te-blurIntensity',
+        'te-blurSaturate','te-blurPanelOpacity','te-blurBorderOpacity',
+        'te-compactMode','te-hideCursor','te-hideLuckBreakdown','te-reduceMotion',
+        'te-highContrast','te-largeTargets','te-rgbBg','te-wackyText','te-chaosMode',
+        'te-confettiThreshold','te-rareThreshold','te-cutsceneThreshold'
     ];
     ids.forEach(id => {
-      const n = el(id);
-      if (!n) return;
-      n.addEventListener('input', () => {
-        if (id === 'te-radius') el('te-radiusVal').textContent = n.value;
-        if (id === 'te-borderWidth') el('te-borderWidthVal').textContent = n.value;
-        if (id === 'te-textSize') el('te-textSizeVal').textContent = n.value;
-        livePreview();
-      });
-      n.addEventListener('change', livePreview);
+        const n = el(id);
+        if (!n) return;
+        n.addEventListener('input', () => {
+            if (id === 'te-radius') el('te-radiusVal').textContent = n.value;
+            if (id === 'te-borderWidth') el('te-borderWidthVal').textContent = n.value;
+            if (id === 'te-textSize') el('te-textSizeVal').textContent = n.value;
+            if (id === 'te-blurIntensity') el('te-blurIntensityVal').textContent = n.value;
+            if (id === 'te-blurSaturate') el('te-blurSaturateVal').textContent = n.value;
+            if (id === 'te-blurPanelOpacity') el('te-blurPanelOpacityVal').textContent = n.value;
+            if (id === 'te-blurBorderOpacity') el('te-blurBorderOpacityVal').textContent = n.value;
+            livePreview();
+        });
+        n.addEventListener('change', livePreview);
     });
-  }
-
+}
+  
   function init() {
     const openBtn = el('openThemeEditorBtn');
     const overlay = el('themeEditorOverlay');
