@@ -71,7 +71,7 @@
   // we wrap it to bail out early when the visible state is identical.
   function patchPotionDisplay() {
     const orig = window.updateActivePotionsDisplay;
-    if (typeof orig !== 'function') return; // main.js not loaded yet, retry later
+    if (typeof orig !== 'function') return false; // signal failure
 
     let lastSnapshot = null;
 
@@ -79,7 +79,6 @@
       const ap = window.activePotions || [];
       const dup = window.duplicateRollsLeft || 0;
 
-      // snapshot: type + seconds-remaining (1s resolution is fine for display)
       const snapshot =
         ap
           .map((p) => p.type + ':' + Math.ceil((p.endTime - Date.now()) / 1000))
@@ -91,6 +90,8 @@
       lastSnapshot = snapshot;
       orig.apply(this, arguments);
     };
+
+    return true; // signal success so the retry doesn't fire
   }
 
   // ── page container height drift ────────────────────────────────────

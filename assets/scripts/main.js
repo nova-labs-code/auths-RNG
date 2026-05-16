@@ -334,6 +334,13 @@ function updateShopUI() {
   const dupeCost =
     800 + (shopUpgrades.duplicate || 0) * (shopUpgrades.duplicate || 0) * 400;
 
+  const magnetCostEl = document.getElementById('magnetCost');
+  const printerCostEl = document.getElementById('printerCost');
+  const dupeCostEl = document.getElementById('dupeCost');
+  if (magnetCostEl) magnetCostEl.textContent = formatNum(magnetCost);
+  if (printerCostEl) printerCostEl.textContent = formatNum(printerCost);
+  if (dupeCostEl) dupeCostEl.textContent = formatNum(dupeCost);
+
   const magnetBtn = document.getElementById('buyMagnetBtn');
   const printerBtn = document.getElementById('buyPrinterBtn');
   const dupeBtn = document.getElementById('buyDupeBtn');
@@ -575,7 +582,7 @@ backgroundMusic.volume = 0.3;
 
 const lunarMusic = new Audio();
 lunarMusic.preload = 'none';
-lunarMusic.volume = 0;
+lunarMusic.volume = 0; // ITS INTENTIONALLY 0. DONT MAKE A FIX TO THIS. when we got time we remove the lunar music code because now we have cutscenes that we can instead use. too redundant
 
 const runId = Math.floor(Math.random() * 1e10);
 
@@ -1130,11 +1137,29 @@ document.getElementById('buyPointBtn').addEventListener('click', () => {
 });
 
 // Point printer passive generation
+let _lastShopUIPoints = -1;
+
 setInterval(() => {
   if (shopUpgrades.printer > 0) {
     points += shopUpgrades.printer;
     updatePointsDisplay();
-    updateShopUI();
+
+    // Only rebuild the full shop UI when crossing an upgrade cost threshold
+    const luckCost = Math.floor(
+      25 + shopUpgrades.luck * shopUpgrades.luck * 15,
+    );
+    const speedCost = Math.floor(
+      50 + shopUpgrades.speed * shopUpgrades.speed * 55,
+    );
+    const pointCost = Math.floor(
+      100 + shopUpgrades.pointMult * shopUpgrades.pointMult * 35,
+    );
+    const thresholds = [luckCost, speedCost, pointCost];
+    const crossed = thresholds.some(
+      (t) => points >= t !== _lastShopUIPoints >= t,
+    );
+    if (crossed || _lastShopUIPoints < 0) updateShopUI();
+    _lastShopUIPoints = points;
   }
 }, 1000);
 
@@ -1175,6 +1200,7 @@ function updateItem(d) {
   if (liElement._sellHandler) {
     liElement.removeEventListener('dblclick', liElement._sellHandler);
   }
+
   liElement._sellHandler = function sellHandler() {
     const currentData = inventoryData.get(rarityObj.name);
     if (!currentData) return;
@@ -1189,13 +1215,14 @@ function updateItem(d) {
     }
 
     const pointsEarned = calculateRarityPoints(rarityObj) * availableToSell;
+    const countAtSellTime = currentData.count; // capture NOW, not at confirm time
 
     showConfirmModal(
       'sell rarity?',
       `sell ${availableToSell}x ${rarityObj.name} for ${formatNum(pointsEarned)} points? (you keep the rarity)`,
       () => {
         points += pointsEarned;
-        soldOutRarities.set(key, { count: currentData.count });
+        soldOutRarities.set(key, { count: countAtSellTime }); // use captured count
         updatePointsDisplay();
         updateShopUI();
         saveAllData();
@@ -1863,14 +1890,14 @@ function maybeFireConfettiAndCutscene(res) {
     if (res.name === 'Lunar') {
       if (!isMuted) {
         lunarMusic.currentTime = 0;
-        lunarMusic.play();
+        lunarMusic.play().catch(() => {});
       }
       backgroundMusic.pause();
     } else {
       lunarMusic.pause();
-      if (!isMuted) backgroundMusic.play();
+      if (!isMuted) backgroundMusic.play().catch(() => {});
     }
-    saveAllData();
+    debouncedSave();
   };
 
   if (cutsceneAllowed) {
@@ -1879,6 +1906,12 @@ function maybeFireConfettiAndCutscene(res) {
     afterReveal();
     rollBtn.disabled = false;
   }
+}
+
+let _saveTimer = null;
+function debouncedSave(delay = 2000) {
+  clearTimeout(_saveTimer);
+  _saveTimer = setTimeout(saveAllData, delay);
 }
 
 const sortSelect = document.getElementById('sortSelect');
@@ -1913,10 +1946,16 @@ rollBtn.addEventListener('click', () => {
 
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) return;
-  // check if luck boost expired while tab was hidden
+
   if (luckBoostActive && Date.now() >= luckBoostEndTime) {
     endLuckBoost();
   }
+
+  if (activePotions.length > 0) {
+    recalcPotionLuck();
+    updateActivePotionsDisplay();
+  }
+
   if (!isCutscenePlaying && rollBtn.disabled) {
     spinner.style.transition = 'none';
     spinner.style.transform = 'translateY(0)';
