@@ -144,6 +144,59 @@
       </div>
 
       <div class="faq-item">
+        <div class="question">how does the rng system actually work?</div>
+        <div class="answer">
+          auth's RNG uses a weighted probability system. each rarity has a base chance (like 1/100), and on each roll, the game picks a rarity from that weighted pool, modified by your luck multiplier, pity counter, dry runs, and other factors.
+          <div class="example">
+            the game uses a 256-bit xoshiro256ss pseudorandom number generator seeded at startup.<br/><br/>
+            your effective odds = (base chance) x (luck multiplier) x (pity boost) x (dry run boost) x (daily variance x streak bonus)<br/><br/>
+            example: a 1/100 rarity with 2x luck becomes 1/50 odds.
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="question">what is pity?</div>
+        <div class="answer">
+          pity is a safety net. if you go too long without rolling a specific rarity, the game automatically boosts your chances for it to prevent absurdly long dry spells.<br/><br/>
+          <strong>soft pity:</strong> at 65% of the maximum threshold, your odds start scaling up smoothly over the remaining rolls, reaching up to 10x boost at the cap.<br/>
+          <strong>hard pity:</strong> if you hit hard pity (roughly 1.5x the statistical expectation), you're guaranteed to get that rarity on the next eligible roll.<br/><br/>
+          pity only applies to noticeably rare stuff (roughly 1/100 or rarer). common rarities don't have pity.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="question">what is a dry run boost?</div>
+        <div class="answer">
+          if you roll for a specific rarity many times without getting it, the game applies an automatic luck boost just for that rarity. this bonus increases by 4% per roll after you've failed 5+ times, capping at 55% (or higher for extremely rare rarities).
+          <div class="example">
+            you want "paradox" (1/2000) but haven't rolled it in 50 tries.<br/>
+            dry run boost kicks in after 5 misses: (50 - 5) x 4% = 1.8x multiplier just for paradox.<br/>
+            the moment you get paradox, the counter resets to 0.
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="question">what is hot pulse?</div>
+        <div class="answer">
+          hot pulse is a 4-roll bonus window that activates after you roll a very rare rarity (tier 3+). during this window, all your odds get a flat +18% boost on top of your other multipliers.
+          <div class="example">
+            you roll "eclipse".<br/>
+            for the next 4 rolls, you're in hot pulse. better luck on everything.<br/>
+            after 4 rolls, the bonus wears off.
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="question">what is daily variance?</div>
+        <div class="answer">
+          every day, your luck gets a small random offset (plus or minus 6%) based on the current UTC day. it's purely cosmetic fun -- sometimes tuesday is your lucky day, sometimes it isn't. resets at midnight UTC.
+        </div>
+      </div>
+
+      <div class="faq-item">
         <div class="question">why is there a big counter on the screen?</div>
         <div class="answer">
           every 100 rolls, you get x4 luck for a minute. its nothing to worry
@@ -161,6 +214,22 @@
         </div>
       </div>
 
+      <div class="faq-item">
+        <div class="question">what is the notification center?</div>
+        <div class="answer">
+          the bell icon in the corner opens your notification center. it logs everything that happens during your session: anomalies earned, potions activated, gauntlet rewards claimed, items sold, and more. unread notifications show a badge on the bell. you can mark individual ones as read, delete them one at a time, or clear everything at once. notifications are saved across sessions so you won't lose them on reload.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="question">what are keybinds?</div>
+        <div class="answer">
+          A and Left Arrow to move pages to the left. D and Right Arrow to move
+          pages to the right. Space or + to roll. W to click (just hover your mouse onto something and
+          press W).
+        </div>
+      </div>
+
       <h2>shop system</h2>
 
       <div class="faq-item">
@@ -170,7 +239,7 @@
           you keep the rarity, but it gets marked as sold. the rarer it is, the
           more points you get!
           <div class="example">
-            formula: rarity number ÷ 3 (rounded up)<br />
+            formula: rarity number / 3 (rounded up)<br />
             example: a 1/90 rarity gives you 30 points<br />
             if you have duplicates, you sell all unsold copies at once for more
             points
@@ -192,18 +261,18 @@
         <div class="answer">
           <strong>luck boost:</strong> increases your luck multiplier by 1.1x
           per level (stacks multiplicatively). max level 100. costs 50 points +
-          (level × 25). <br /><br />
+          (level x 25). <br /><br />
           <strong>roll speed:</strong> decreases roll animation time by 0.2
           seconds per level. max level 3 (minimum 0.25s roll time). costs 100
-          points + (level × 50). <br /><br />
+          points + (level x 50). <br /><br />
           <strong>point multiplier:</strong> decreases the divisor used to
-          calculate points by 0.2 per level. starts at ÷3, eventually becomes ÷1
+          calculate points by 0.2 per level. starts at /3, eventually becomes /1
           (meaning you get full rarity value as points). max level 10. costs 150
-          points + (level × 75).
+          points + (level x 75).
           <div class="example">
-            legendary 1/90 with no upgrades: 90 ÷ 3 = 30 points<br />
-            with 5 point multiplier upgrades: 90 ÷ 2 = 45 points<br />
-            at max level: 90 ÷ 1 = 90 points!
+            legendary 1/90 with no upgrades: 90 / 3 = 30 points<br />
+            with 5 point multiplier upgrades: 90 / 2 = 45 points<br />
+            at max level: 90 / 1 = 90 points!
           </div>
           <br /><br />
           <strong>rarity magnet:</strong> each level you get a 1.1x luck boost
@@ -223,13 +292,20 @@
         </div>
       </div>
 
+      <div class="faq-item">
+        <div class="question">what is the auto-sell threshold?</div>
+        <div class="answer">
+          in settings, you can set an auto-sell threshold. any rarity with a denominator below your set value will automatically be sold for points the moment you roll it. for example, setting it to 50 means anything rarer than 1/50 gets sold instantly. set it to 0 to disable. useful for passive point farming when auto-rolling.
+        </div>
+      </div>
+
       <h2>mutations</h2>
 
       <div class="faq-item">
         <div class="question">what are mutations?</div>
         <div class="answer">
           mutations let you combine two rarities you already own to produce a
-          new one. the result is unpredictable — it can be rarer than both
+          new one. the result is unpredictable -- it can be rarer than both
           inputs or more common than both. you unlock mutations by completing
           the eon gauntlet.
         </div>
@@ -240,7 +316,7 @@
         <div class="answer">
           go to the mutations tab, pick two different rarities from your
           inventory using the two dropdowns, and press mutate. after a result
-          appears you'll be asked whether to keep, sell, or pass on it — same as
+          appears you'll be asked whether to keep, sell, or pass on it -- same as
           any other roll. there's a 30 second cooldown between mutations.
         </div>
       </div>
@@ -251,11 +327,11 @@
           base odds are approximately <strong>35% better</strong> and
           <strong>65% worse</strong>. two things improve your chances:
           <div class="example">
-            rarity bonus: the rarer your worse input, the better your odds.<br />
+            rarity bonus: the rarer your worse input, the better your odds.<br/>
             inputs at the very top of the rarity list can push good-chance up to
-            ~60%.<br /><br />
+            ~60%.<br/><br/>
             pair bias: each specific combination of two rarities has a fixed
-            hidden bias of up to ±8%. the same pair always skews the same way,
+            hidden bias of up to +/-8%. the same pair always skews the same way,
             so experimenting and keeping a log helps.
           </div>
           good results are capped at 75% no matter what modifiers apply.
@@ -270,7 +346,7 @@
           input.<br /><br />
           a bad result won't produce anything rarer than the top 6 excluded
           rarities (SUMMER, finished., etc.), and a good result won't produce
-          one of those either — they are completely off the mutation table.
+          one of those either -- they are completely off the mutation table.
         </div>
       </div>
 
@@ -279,10 +355,10 @@
         <div class="answer">
           only if you choose to keep or sell it. after a mutation resolves, a
           modal appears with three options:<br /><br />
-          <strong>keep</strong> — adds it to your inventory normally.<br />
-          <strong>sell</strong> — converts it to points immediately using the
-          standard formula (rarity number ÷ current point divisor).<br />
-          <strong>pass</strong> — discards the result entirely. nothing is added
+          <strong>keep</strong> -- adds it to your inventory normally.<br />
+          <strong>sell</strong> -- converts it to points immediately using the
+          standard formula (rarity number / current point divisor).<br />
+          <strong>pass</strong> -- discards the result entirely. nothing is added
           and no points are earned.
         </div>
       </div>
@@ -371,52 +447,107 @@
       </div>
 
       <div class="faq-item">
-        <div class="question">what are the keybinds?</div>
+        <div class="question">what is the rarity index?</div>
         <div class="answer">
-          A and Left Arrow to move pages to left. D and Right Arrow to move
-          pages to right. W to click (just hover your mouse onto something and
-          press W)
+          the rarity index (opened via the "view index" button in your inventory) shows you every rarity in the game sorted from rarest to most common. rarities you've collected show their name, denominator, and how many copies you own. ones you haven't found yet show as "???" so you don't get spoiled. you can search through your collected rarities by name. your collection progress is shown as X/total at the top.
         </div>
       </div>
 
-      <h2>ranked mode</h2>
+      <h2>cloud backups</h2>
 
       <div class="faq-item">
-        <div class="question">what is ranked mode?</div>
+        <div class="question">what are cloud backups?</div>
         <div class="answer">
-          ranked mode is a way to challenge your friends with pure raw luck! you
-          type out your friend's user id and your friend types out your user id,
-          then you guys battle.
+          cloud backups let you store your save data on auth's RNG's own server so you don't lose progress if you clear your browser, switch devices, or something goes wrong. it's completely opt-in, you have to enable it in settings.
         </div>
       </div>
 
       <div class="faq-item">
-        <div class="question">do i get anything if i win</div>
+        <div class="question">what data gets stored?</div>
         <div class="answer">
-          you get 1 win and get placed on the leaderboard. the leaderboard is
-          for people with the most wins
+          your inventory, roll count, achievements, anomalies, shop upgrades, potions, playtime, gauntlet data, streak info, and a few other game state keys. no account, email, or personal info is ever collected. you're identified only by a randomly generated id stored in your browser.
         </div>
       </div>
 
       <div class="faq-item">
-        <div class="question">do i lose anything if i lose</div>
-        <div class="answer">...no</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="question">
-          i thought cloudflare pages was a static web host? how did you even
-          manage to add servers?
-        </div>
+        <div class="question">what is the backup key?</div>
         <div class="answer">
-          i made a service called "haze" as the advanced backend for auth's RNG.
-          i then just made the link a constant to fetch from.
+          your backup key is the random uuid stored in your browser's localStorage under "cloudBackupUid". it's the only thing linking you to your cloud data. if you clear localStorage without saving this key somewhere, you will lose access to your cloud backup. you can copy it from the settings page.
         </div>
       </div>
 
       <div class="faq-item">
-        <div class="question">why the ranked system?</div>
-        <div class="answer">fun i guess</div>
+        <div class="question">how often does it back up?</div>
+        <div class="answer">
+          you can set it to every 30 minutes, every hour, or every 3 hours. it also only backs up when the tab is active, so sleeping the tab won't trigger it. you can also hit "backup now" to force one immediately.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="question">can i delete my cloud backup?</div>
+        <div class="answer">
+          yes. there's a "delete backup" button in the cloud backup section of settings. this permanently removes your data from the server. disabling backups does not delete the existing cloud data, only the delete button does.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="question">is my data private?</div>
+        <div class="answer">
+          yes. your save data is never sold, shared, or distributed to anyone. the server is maintained by auth (the developer). backups are provided as-is with no uptime guarantee, so keep local backups too using the save transfer feature just in case.
+        </div>
+      </div>
+
+      <h2>leaderboard</h2>
+
+      <div class="faq-item">
+        <div class="question">what is the leaderboard?</div>
+        <div class="answer">
+          the leaderboard ranks players by stats like total rolls, playtime, points, and rarest rarity collected. it's entirely opt-in. you need at least 1,100 rolls before you can join, and you have to pick a permanent username.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="question">can i change my username?</div>
+        <div class="answer">
+          no. the username you pick when joining is permanent and cannot be changed. pick wisely.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="question">how does it know my stats?</div>
+        <div class="answer">
+          the game reads your stats from localStorage and submits them to the leaderboard server automatically every 15 minutes while you're playing. you can also hit "update now" in settings to force a submission. it shares the same random uid as cloud backups so you only have one identity across both systems.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="question">what stats get submitted to the leaderboard?</div>
+        <div class="answer">
+          total rolls, total rarities collected, your rarest rarity (name and denominator), total playtime in seconds, and your current point total. nothing else is sent. no personal info, no settings data, just the core game stats.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="question">can i opt out after joining?</div>
+        <div class="answer">
+          yes. there's an "opt out" button in settings that permanently deletes your leaderboard entry. you can't re-join with the same username after that.
+        </div>
+      </div>
+
+      <h2>save and settings transfer</h2>
+
+      <div class="faq-item">
+        <div class="question">how does save transfer work?</div>
+        <div class="answer">
+          the save transfer feature in settings bundles your save data into an encoded string you can copy or download as a file. the encoding includes a checksum so tampered data gets rejected on import. you can use this to move saves between browsers or devices without needing cloud backups.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="question">how does settings transfer work?</div>
+        <div class="answer">
+          same idea as save transfer but only for your userSettings key (theme, music preferences, etc.). it's a separate export so you don't have to pull your whole save just to copy your settings to another browser.
+        </div>
       </div>
 
       <h2>troubleshooting</h2>
@@ -468,14 +599,6 @@
       </div>
 
       <div class="faq-item">
-        <div class="question">why isnt ranked mode working?</div>
-        <div class="answer">
-          it may be a CSP or CORS issue, check the console and open an issue in
-          the github repository or post in the nerimity or discord server!
-        </div>
-      </div>
-
-      <div class="faq-item">
         <div class="question">
           my save transfer isn't working, what do i do?
         </div>
@@ -498,8 +621,7 @@
           it. you might not see anything happen after typing it, that's
           completely normal.<br /><br />
 
-          ⚠️ <strong>important:</strong> now that you've enabled pasting, PLEASE
-          BE AWARE! if anyone ever tells you to paste something into your
+          warning: now that you've enabled pasting, please be aware! if anyone ever tells you to paste something into your
           browser console (a stranger online, a fake "support" person, anyone),
           you should probably not do it unless you deeply trust them and have
           personally read through the code first. pasting unknown code into your
@@ -570,7 +692,7 @@ location.reload();</code></pre>
         </div>
       </div>
 
-      <a href="/" class="back-link">← back to game</a>
+      <a href="/" class="back-link">back to game</a>
     </div>
   </body>
 </html>
