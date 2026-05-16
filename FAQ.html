@@ -126,12 +126,116 @@
       <h1>frequently asked questions</h1>
       <p>this also serves as a tutorial for auth's RNG :)</p>
       <br />
-      <script
-        async
-        src="https://cse.google.com/cse.js?cx=e0002c8d28f9746ac"
-      ></script>
-      <div class="gcse-search"></div>
-      <small>search what you need help with (beta)</small>
+      <div id="faq-search-wrap" style="margin-bottom:1.5em;">
+        <input
+          id="faq-search"
+          type="search"
+          placeholder="search..."
+          autocomplete="off"
+          spellcheck="false"
+          style="width:100%;box-sizing:border-box;background:#111;border:1px solid #2a2a2a;border-radius:3px;color:#dcdcdc;font-family:monospace;font-size:0.95em;padding:10px 12px;outline:none;transition:border-color 0.15s;"
+        />
+        <div id="faq-search-count" style="font-size:0.78em;opacity:0.4;margin-top:6px;min-height:1.2em;"></div>
+      </div>
+
+      <style>
+        #faq-search:focus { border-color: #555; }
+        .faq-item.search-hidden { display: none; }
+        .faq-section-header.search-hidden { display: none; }
+        mark { background: #3a3000; color: #ffdb6b; border-radius: 2px; padding: 0 2px; }
+      </style>
+
+      <script>
+        (function () {
+          function ready(fn) {
+            if (document.readyState !== 'loading') fn();
+            else document.addEventListener('DOMContentLoaded', fn);
+          }
+
+          ready(function () {
+            var input = document.getElementById('faq-search');
+            var countEl = document.getElementById('faq-search-count');
+            var items = Array.from(document.querySelectorAll('.faq-item'));
+            var headers = Array.from(document.querySelectorAll('h2'));
+
+            var originals = items.map(function (el) {
+              return {
+                el: el,
+                q: el.querySelector('.question'),
+                a: el.querySelector('.answer'),
+                qText: el.querySelector('.question').innerHTML,
+                aText: el.querySelector('.answer').innerHTML,
+              };
+            });
+
+            function escape(str) {
+              return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            }
+
+            function highlight(html, re) {
+              return html.replace(re, '<mark>$&</mark>');
+            }
+
+            function stripTags(str) {
+              return str.replace(/<[^>]*>/g, '');
+            }
+
+            function run() {
+              var raw = input.value.trim();
+
+              if (!raw) {
+                originals.forEach(function (o) {
+                  o.q.innerHTML = o.qText;
+                  o.a.innerHTML = o.aText;
+                  o.el.classList.remove('search-hidden');
+                });
+                headers.forEach(function (h) { h.classList.remove('search-hidden'); });
+                countEl.textContent = '';
+                return;
+              }
+
+              var re = new RegExp(escape(raw), 'gi');
+              var matched = 0;
+
+              originals.forEach(function (o) {
+                var qPlain = stripTags(o.qText);
+                var aPlain = stripTags(o.aText);
+                var hits = qPlain.match(re) || aPlain.match(re);
+
+                if (hits) {
+                  matched++;
+                  o.q.innerHTML = highlight(o.qText, re);
+                  o.a.innerHTML = highlight(o.aText, re);
+                  o.el.classList.remove('search-hidden');
+                } else {
+                  o.q.innerHTML = o.qText;
+                  o.a.innerHTML = o.aText;
+                  o.el.classList.add('search-hidden');
+                }
+              });
+
+              headers.forEach(function (h) {
+                var next = h.nextElementSibling;
+                var hasVisible = false;
+                while (next && next.tagName !== 'H2') {
+                  if (next.classList.contains('faq-item') && !next.classList.contains('search-hidden')) {
+                    hasVisible = true;
+                    break;
+                  }
+                  next = next.nextElementSibling;
+                }
+                h.classList.toggle('search-hidden', !hasVisible);
+              });
+
+              countEl.textContent = matched === 0
+                ? 'no results'
+                : matched === 1 ? '1 result' : matched + ' results';
+            }
+
+            input.addEventListener('input', run);
+          });
+        })();
+      </script>
 
       <h2>basics</h2>
 
