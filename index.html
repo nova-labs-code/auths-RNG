@@ -616,6 +616,12 @@ if (navigator.userAgent.includes("Screenjesus")) {
 </div>
 
 <div class="page" id="page-7">
+  <h2 style="margin-top: 0;">starmap</h2>
+  <p style="font-size: 0.8em; opacity: 0.5; margin: -6px 0 16px;">crystallize runs into permanent constellations · generate void shards · spend in the void market</p>
+  <div id="starmapContainer" style="width:100%;max-width:540px;"></div>
+</div>
+
+<div class="page" id="page-8">
   <h2 style="margin-top: 0;">links and more</h2>
   
   <!--
@@ -720,9 +726,10 @@ if (navigator.userAgent.includes("Screenjesus")) {
   <div class="page-dot" data-page="1"></div>
   <div class="page-dot" data-page="2"></div>
   <div class="page-dot" data-page="3"></div>
-    <div class="page-dot" data-page="4"></div>
-<div class="page-dot" data-page="5"></div>
+  <div class="page-dot" data-page="4"></div>
+  <div class="page-dot" data-page="5"></div>
   <div class="page-dot" data-page="6"></div>
+  <div class="page-dot" data-page="7"></div>
 
 </div>
 
@@ -954,7 +961,7 @@ if (navigator.userAgent.includes("Screenjesus")) {
   const swipeIndicator = document.querySelector('.swipe-indicator');
   
   let currentPage = 0;
-  const totalPages = 7;
+  const totalPages = 8;
   
   // ???????????????????????????????????/
 let visitCount = parseInt(localStorage.getItem('pageVisitCount') || '0');
@@ -1312,7 +1319,7 @@ function handleSwipe() {
 </script>
 
 <script src="assets/scripts/gauntlets.js" defer></script>
-
+<script src="assets/scripts/starmap.js" defer></script>
 <script src="assets/scripts/mutations.js" defer></script>
 
 <script> // TAGS </script>

@@ -523,7 +523,11 @@ let globalLuckMultiplier = 1;
 function recalcLuckMultiplier() {
   shopLuckMultiplier = 1 + shopUpgrades.luck * 0.1;
   const anomalyMult = 1 + anomaliesUsed * 0.5;
-  globalLuckMultiplier = shopLuckMultiplier * anomalyMult;
+  const starmapMult =
+    typeof window.getStarmapLuckBonus === 'function'
+      ? window.getStarmapLuckBonus()
+      : 1;
+  globalLuckMultiplier = shopLuckMultiplier * anomalyMult * starmapMult;
   if (luckBoostActive) globalLuckMultiplier *= 4;
   globalLuckMultiplier *= potionLuckMultiplier;
   updateLuckDisplay();
@@ -532,43 +536,43 @@ function recalcLuckMultiplier() {
 function updateLuckDisplay() {
   const luckEl = document.getElementById('luckMultiplier');
   const breakdownEl = document.getElementById('luckBreakdown');
-
   if (!luckEl || !breakdownEl) return;
 
   luckEl.textContent = `luck multiplier: ${formatMult(globalLuckMultiplier)}x`;
 
   const parts = [];
-
   if (anomaliesUsed > 0) {
     const anomalyMult = 1 + anomaliesUsed * 0.5;
     parts.push(
       `anomalies: ${formatMult(anomalyMult)}x (${anomaliesUsed} consumed)`,
     );
   }
-
-  if (shopUpgrades.luck > 0) {
+  if (shopUpgrades.luck > 0)
     parts.push(
-      `shop upgrade: ${formatMult(shopLuckMultiplier)}x (level ${shopUpgrades.luck})`,
+      `shop: ${formatMult(shopLuckMultiplier)}x (level ${shopUpgrades.luck})`,
     );
-  }
-
-  if (luckBoostActive) {
-    parts.push(`temporary boost: 4.0x (active)`);
-  }
-
-  if (potionLuckMultiplier > 1) {
+  if (luckBoostActive) parts.push(`boost: 4.0x (active)`);
+  if (potionLuckMultiplier > 1)
     parts.push(`potions: ${formatMult(potionLuckMultiplier)}x`);
-  }
-
-  if (duplicateRollsLeft > 0) {
+  if (duplicateRollsLeft > 0)
     parts.push(`duplicate: ${duplicateRollsLeft} rolls left`);
-  }
 
-  if (parts.length === 0) {
-    breakdownEl.textContent = 'base luck (no modifiers active)';
-  } else {
-    breakdownEl.textContent = parts.join(' • ');
-  }
+  // starmap bonus
+  const starmapMult =
+    typeof window.getStarmapLuckBonus === 'function'
+      ? window.getStarmapLuckBonus()
+      : 1;
+  if (starmapMult > 1)
+    parts.push(
+      `starmap: +${formatMult(starmapMult - 1)}x (${
+        JSON.parse(localStorage.getItem('starmapData') || '{}').constellations
+          ?.length || 0
+      } constellations)`,
+    );
+
+  breakdownEl.textContent = parts.length
+    ? parts.join(' • ')
+    : 'base luck (no modifiers active)';
 }
 
 let luckBoostActive = false;
@@ -1037,6 +1041,7 @@ function updateTotalRolls() {
 }
 
 function addToInventory(o) {
+  rarityTimestamps.set(o.name, Date.now());
   if (inventoryData.has(o.name)) {
     const d = inventoryData.get(o.name);
     d.count++;
@@ -1618,6 +1623,22 @@ if (savedTimestamps) {
 }
 window.rarityTimestamps = rarityTimestamps;
 
+// Called by starmap.js after crystallizing — clears inventory, keeps everything else
+window.doCrystallizeReset = function () {
+  inventoryData.clear();
+  inventoryList.innerHTML = '';
+  updateCollectedCounter();
+  rarityTimestamps = new Map();
+  window.rarityTimestamps = rarityTimestamps;
+  localStorage.setItem(RARITY_TIMESTAMPS_KEY, JSON.stringify([]));
+  saveAllData();
+};
+
+// Called by starmap.js when luck changes
+window.applyStarmapLuck = function () {
+  recalcLuckMultiplier();
+};
+
 async function resetInventory() {
   const confirmed = await window.showConfirm(
     'are you comfortably sure that you will delete your sweet sweet data???',
@@ -1643,6 +1664,8 @@ async function resetInventory() {
   localStorage.removeItem('gauntletData');
   localStorage.removeItem('_beacon_v2');
   localStorage.removeItem('mutationsUnlocked');
+  localStorage.removeItem('starmapData');
+  localStorage.removeItem('starmapUnlocked');
   localStorage.removeItem(NOTIF_KEY);
   localStorage.removeItem(RARITY_TIMESTAMPS_KEY);
   rarityTimestamps = new Map();

@@ -299,7 +299,7 @@
     },
     {
       id: 'eclipse_gate',
-      name: 'eclipse gate',
+      name: 'eclipse',
       emoji: '🌒',
       minRolls: 400000,
       rarities: ['Impossible...', 'Obsession', 'Kyawthuite', 'Supermassive'],
@@ -323,7 +323,7 @@
       rewards: [
         { type: 'points', amount: 500000000, label: '500,000,000 pts' },
         { type: 'anomaly', amount: 250000, label: '250,000 anomalies' },
-        { type: 'luck', mult: 30, dur: 1200, label: '20m 30x luck' },
+        { type: 'unlock_starmap', label: 'unlock starmap ✦' },
       ],
     },
     {
@@ -482,6 +482,10 @@
       updatePointsDisplay();
       saveAllData();
       showAnomalyPopup('+' + rew.amount.toLocaleString() + ' pts 🎉');
+    } else if (rew.type === 'unlock_starmap') {
+      localStorage.setItem('starmapUnlocked', '1');
+      showAnomalyPopup('✦ starmap unlocked!');
+      if (typeof renderStarmap === 'function') renderStarmap();
     } else if (rew.type === 'anomaly') {
       anomalies += rew.amount;
       updateAnomalyUI();

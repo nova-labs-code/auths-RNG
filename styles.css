@@ -1931,9 +1931,15 @@ body.legacy-mode #legacySettingsBtn {
   border-color: #220022;
 }
 @keyframes oblivion-pulse {
-  0%   { color: #cc00ff; }
-  50%  { color: #ff00aa; }
-  100% { color: #cc00ff; }
+  0% {
+    color: #cc00ff;
+  }
+  50% {
+    color: #ff00aa;
+  }
+  100% {
+    color: #cc00ff;
+  }
 }
 .gauntlet-tier[data-tier='oblivion'] .gauntlet-tier-name {
   animation: oblivion-pulse 3s ease-in-out infinite;
@@ -1945,10 +1951,22 @@ body.legacy-mode #legacySettingsBtn {
   box-shadow: 0 0 12px rgba(255, 220, 50, 0.06);
 }
 @keyframes transcendence-glow {
-  0%   { color: #ffe566; text-shadow: 0 0 8px rgba(255,220,50,0.4); }
-  33%  { color: #ffffff; text-shadow: 0 0 14px rgba(255,255,255,0.5); }
-  66%  { color: #ffaa33; text-shadow: 0 0 8px rgba(255,160,30,0.4); }
-  100% { color: #ffe566; text-shadow: 0 0 8px rgba(255,220,50,0.4); }
+  0% {
+    color: #ffe566;
+    text-shadow: 0 0 8px rgba(255, 220, 50, 0.4);
+  }
+  33% {
+    color: #ffffff;
+    text-shadow: 0 0 14px rgba(255, 255, 255, 0.5);
+  }
+  66% {
+    color: #ffaa33;
+    text-shadow: 0 0 8px rgba(255, 160, 30, 0.4);
+  }
+  100% {
+    color: #ffe566;
+    text-shadow: 0 0 8px rgba(255, 220, 50, 0.4);
+  }
 }
 .gauntlet-tier[data-tier='transcendence'] .gauntlet-tier-name {
   animation: transcendence-glow 4s ease-in-out infinite;
@@ -2151,17 +2169,27 @@ body.blur-panels .active-potions-display,
 body.blur-panels .index-content,
 body.blur-panels .modal-content,
 body.blur-panels .well-container {
-    backdrop-filter: blur(var(--blur-intensity, 10px)) saturate(var(--blur-saturate, 140%));
-    -webkit-backdrop-filter: blur(var(--blur-intensity, 10px)) saturate(var(--blur-saturate, 140%));
-    background: rgba(var(--panel-bg-rgb, 17,17,17), var(--blur-panel-opacity, 0.55)) !important;
-    border-color: rgba(255,255,255, var(--blur-border-opacity, 0.08)) !important;
+  backdrop-filter: blur(var(--blur-intensity, 10px))
+    saturate(var(--blur-saturate, 140%));
+  -webkit-backdrop-filter: blur(var(--blur-intensity, 10px))
+    saturate(var(--blur-saturate, 140%));
+  background: rgba(
+    var(--panel-bg-rgb, 17, 17, 17),
+    var(--blur-panel-opacity, 0.55)
+  ) !important;
+  border-color: rgba(
+    255,
+    255,
+    255,
+    var(--blur-border-opacity, 0.08)
+  ) !important;
 }
 
 body.blur-panels {
-    --blur-intensity: 10px;
-    --blur-saturate: 140%;
-    --blur-panel-opacity: 0.55;
-    --blur-border-opacity: 0.08;
+  --blur-intensity: 10px;
+  --blur-saturate: 140%;
+  --blur-panel-opacity: 0.55;
+  --blur-border-opacity: 0.08;
 }
 
 /* ── compact mode ── */
@@ -2724,3 +2752,211 @@ body.high-contrast #inventoryList li.item-rare {
 }
 
 /* ouuuuuuuuuuu */
+
+/* ── starmap ──────────────────────────────────────────────────────────── */
+.starmap-locked {
+  text-align: center;
+  padding: 60px 20px;
+  opacity: 0.4;
+}
+.starmap-locked-icon {
+  font-size: 3em;
+  margin-bottom: 12px;
+}
+.starmap-locked-text {
+  font-size: 1.1em;
+  margin-bottom: 6px;
+}
+.starmap-locked-sub {
+  font-size: 0.8em;
+  opacity: 0.6;
+}
+
+.starmap-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  width: 100%;
+  margin-bottom: 16px;
+}
+.starmap-stat {
+  background: var(--overlay-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 3px;
+  padding: 10px 12px;
+  text-align: center;
+}
+.starmap-stat-label {
+  font-size: 0.7em;
+  opacity: 0.45;
+  text-transform: lowercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+.starmap-stat-value {
+  font-size: 1em;
+  color: var(--text-color);
+}
+
+.starmap-crystallize-section {
+  width: 100%;
+  background: var(--overlay-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 3px;
+  padding: 16px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+.starmap-crystallize-desc {
+  font-size: 0.85em;
+  opacity: 0.7;
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+.starmap-crystallize-note {
+  display: block;
+  font-size: 0.88em;
+  opacity: 0.5;
+  margin-top: 4px;
+}
+.starmap-crystallize-btn {
+  width: 100%;
+  padding: 12px;
+  font-size: 1em;
+  border-color: rgba(150, 130, 255, 0.3);
+  color: #b8a8ff;
+}
+.starmap-crystallize-btn:not(:disabled):hover {
+  border-color: rgba(150, 130, 255, 0.6);
+  background: rgba(100, 80, 200, 0.08);
+}
+.starmap-crystallize-hint {
+  font-size: 0.72em;
+  opacity: 0.35;
+  margin-top: 8px;
+}
+
+.starmap-section {
+  width: 100%;
+  margin-bottom: 24px;
+}
+.starmap-section-label {
+  font-size: 0.72em;
+  opacity: 0.38;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 10px;
+}
+.starmap-empty {
+  font-size: 0.82em;
+  opacity: 0.3;
+  text-align: center;
+  padding: 20px 0;
+  font-style: italic;
+}
+
+.starmap-constellation-card {
+  background: var(--overlay-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 3px;
+  padding: 12px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+.constellation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.constellation-name {
+  font-size: 0.88em;
+  color: #b8a8ff;
+}
+.constellation-date {
+  font-size: 0.72em;
+  opacity: 0.35;
+}
+.constellation-canvas {
+  width: 100%;
+  height: 110px;
+  border-radius: 2px;
+  display: block;
+  margin-bottom: 8px;
+}
+.constellation-stats {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 0.72em;
+  opacity: 0.45;
+}
+.constellation-stats span {
+  white-space: nowrap;
+}
+
+.starmap-market-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--overlay-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 3px;
+  padding: 12px;
+  margin-bottom: 8px;
+  gap: 12px;
+}
+.market-item-info {
+  flex: 1;
+  min-width: 0;
+}
+.market-item-name {
+  font-size: 0.9em;
+  margin-bottom: 3px;
+  color: var(--text-color);
+}
+.market-item-desc {
+  font-size: 0.75em;
+  opacity: 0.5;
+  line-height: 1.4;
+}
+.market-item-stack {
+  font-size: 0.7em;
+  opacity: 0.4;
+  margin-top: 3px;
+}
+.market-item-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.market-item-cost {
+  font-size: 0.8em;
+  color: #b8a8ff;
+  white-space: nowrap;
+}
+.market-buy-btn {
+  white-space: nowrap;
+}
+
+body.blur-panels .starmap-constellation-card,
+body.blur-panels .starmap-crystallize-section,
+body.blur-panels .starmap-stat,
+body.blur-panels .starmap-market-item {
+  backdrop-filter: blur(var(--blur-intensity, 10px))
+    saturate(var(--blur-saturate, 140%));
+  -webkit-backdrop-filter: blur(var(--blur-intensity, 10px))
+    saturate(var(--blur-saturate, 140%));
+  background: rgba(
+    var(--panel-bg-rgb, 17, 17, 17),
+    var(--blur-panel-opacity, 0.55)
+  ) !important;
+  border-color: rgba(
+    255,
+    255,
+    255,
+    var(--blur-border-opacity, 0.08)
+  ) !important;
+}
