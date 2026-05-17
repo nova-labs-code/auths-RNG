@@ -162,7 +162,9 @@
       </div>
     `;
     document.body.appendChild(bar);
-    el('settingsSaveBtn').addEventListener('click', saveChanges);
+    el('settingsSaveBtn').addEventListener('click', () =>
+      saveChanges().catch(console.error),
+    );
     el('settingsDiscardBtn').addEventListener('click', discardChanges);
   }
 
@@ -182,10 +184,10 @@
     }
   }
 
-  function saveChanges() {
+  async function saveChanges() {
     const current = getCurrentSettings();
     applyVisuals(current);
-    applyMusic(current); // ← music only touches audio on explicit save
+    await applyMusic(current);
     syncUIToSettings(current);
     savedSettings = current;
     try {
@@ -625,6 +627,7 @@
   window.customAudioSource = null;
   window.customAudioGain = null;
 
+  // In playCustomAudio, add resume() before decoding:
   window.playCustomAudio = function (arrayBuffer, mimeType, volume, loop) {
     return new Promise((resolve, reject) => {
       try {
@@ -639,28 +642,35 @@
             window.AudioContext || window.webkitAudioContext
           )();
 
-        // IDB hands us the same ArrayBuffer every time — slice a copy so
-        // decodeAudioData can detach it safely without corrupting the stored record.
-        const bufferCopy = arrayBuffer.slice(0);
+        // Resume suspended context (required after browser autoplay policy kicks in)
+        const ctx = window.audioContext;
+        const proceed = () => {
+          const bufferCopy = arrayBuffer.slice(0);
+          ctx.decodeAudioData(
+            bufferCopy,
+            (decoded) => {
+              const src = ctx.createBufferSource();
+              src.buffer = decoded;
+              src.loop = loop;
+              if (!window.customAudioGain) {
+                window.customAudioGain = ctx.createGain();
+                window.customAudioGain.connect(ctx.destination);
+              }
+              window.customAudioGain.gain.value = volume;
+              src.connect(window.customAudioGain);
+              src.start(0);
+              window.customAudioSource = src;
+              resolve();
+            },
+            reject,
+          );
+        };
 
-        window.audioContext.decodeAudioData(
-          bufferCopy,
-          (decoded) => {
-            const src = window.audioContext.createBufferSource();
-            src.buffer = decoded;
-            src.loop = loop;
-            if (!window.customAudioGain) {
-              window.customAudioGain = window.audioContext.createGain();
-              window.customAudioGain.connect(window.audioContext.destination);
-            }
-            window.customAudioGain.gain.value = volume;
-            src.connect(window.customAudioGain);
-            src.start(0);
-            window.customAudioSource = src;
-            resolve();
-          },
-          reject,
-        );
+        if (ctx.state === 'suspended') {
+          ctx.resume().then(proceed).catch(reject);
+        } else {
+          proceed();
+        }
       } catch (e) {
         reject(e);
       }
@@ -724,7 +734,7 @@
         } catch (e) {
           console.error('failed to delete track:', e);
         }
-        if (_activeMusicKey === deletedKey) _activeMusicKey = null;
+        _activeMusicKey = null; // always reset, not just when active track was deleted
         if (musicSel && musicSel.value === deletedKey) {
           musicSel.value = 'default';
           onChange();
@@ -762,6 +772,7 @@
         try {
           const trackName = file.name.replace(/\.[^/.]+$/, '');
           await addTrack(trackName, ev.target.result, file.type);
+          _activeMusicKey = null; // force applyMusic to re-evaluate on next save
           await loadCustomMusicUI();
           upload.value = '';
           window.showAlert('track uploaded!');

@@ -469,8 +469,16 @@ function updateActivePotionsDisplay() {
 
 // Update potion timers
 setInterval(() => {
-  if (activePotions.length > 0) {
-    recalcPotionLuck();
+  // Always run recalc/display regardless of current array length,
+  // so the final expiry tick actually clears things
+  const hadPotions = activePotions.length > 0;
+  recalcPotionLuck();
+  updateActivePotionsDisplay();
+
+  // If all potions just expired, make sure luck is reset and display updated
+  if (hadPotions && activePotions.length === 0 && duplicateRollsLeft === 0) {
+    potionLuckMultiplier = 1;
+    recalcLuckMultiplier();
     updateActivePotionsDisplay();
   }
 }, 1000);
@@ -2214,6 +2222,7 @@ dailyBtn.addEventListener('click', async () => {
 });
 
 updateDailyUI();
+updateWeeklyUI();
 
 const genBtn = document.getElementById('generateRunCard');
 if (genBtn) genBtn.addEventListener('click', generateRunCard);
