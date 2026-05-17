@@ -200,7 +200,7 @@
       id: 'hard',
       name: 'hard',
       emoji: '🔴',
-      minRolls: 1000,
+      minRolls: 1500,
       rarities: ['Eclipse', 'Wildfire', 'Despair', 'Paradox', 'Lunarity'],
       rewards: [
         { type: 'points', amount: 25000, label: '25,000 pts' },
@@ -212,7 +212,7 @@
       id: 'insane',
       name: 'insane',
       emoji: '💀',
-      minRolls: 2000,
+      minRolls: 3000,
       rarities: ['Breakdown', 'Depression', 'Supergalaxy', 'Pulsar'],
       rewards: [
         { type: 'points', amount: 100000, label: '100,000 pts' },
@@ -224,8 +224,8 @@
       id: 'godlike',
       name: 'godlike',
       emoji: '✨',
-      minRolls: 4000,
-      rarities: ['Psychosis', 'CHARGED', 'Schizophrenia'],
+      minRolls: 6000,
+      rarities: ['Psychosis', 'CHARGED', 'SCHIZOPHRENIC'],
       rewards: [
         { type: 'points', amount: 500000, label: '500,000 pts' },
         { type: 'anomaly', amount: 1000, label: '1,000 anomalies' },
@@ -236,7 +236,7 @@
       id: 'inferno',
       name: 'inferno',
       emoji: '🔥',
-      minRolls: 7000,
+      minRolls: 10000,
       rarities: ['Galactic', 'rare rarity :3', 'Disorder'],
       rewards: [
         { type: 'points', amount: 1000000, label: '1,000,000 pts' },
@@ -248,7 +248,7 @@
       id: 'snowy',
       name: 'snowy',
       emoji: '❄️',
-      minRolls: 15000,
+      minRolls: 20000,
       rarities: ['Cosmic', 'Neurosis', 'Trauma', 'Mania'],
       rewards: [
         { type: 'points', amount: 1200000, label: '1,200,000 pts' },
@@ -260,12 +260,82 @@
       id: 'eon',
       name: 'eon',
       emoji: '🌌',
-      minRolls: 30000,
+      minRolls: 40000,
       rarities: ['Interstellar', 'Delusion', 'Psychosis', 'STOP PLAYING'],
       rewards: [
         { type: 'anomaly', amount: 10000, label: '10,000 anomalies' },
         { type: 'luck', mult: 8, dur: 480, label: '8m 8x luck' },
         { type: 'unlock_mutations', label: 'unlock mutations! 🧬' },
+      ],
+    },
+    {
+      id: 'void',
+      name: 'void',
+      emoji: '🌑',
+      minRolls: 80000,
+      rarities: ['Nebulous', 'panic!', 'just let go already', 'kill me'],
+      rewards: [
+        { type: 'points', amount: 5000000, label: '5,000,000 pts' },
+        { type: 'anomaly', amount: 8000, label: '8,000 anomalies' },
+        { type: 'luck', mult: 10, dur: 600, label: '10m 10x luck' },
+      ],
+    },
+    {
+      id: 'abyss',
+      name: 'abyss',
+      emoji: '🕳️',
+      minRolls: 175000,
+      rarities: [
+        'Event Horizon',
+        'anxiety...',
+        'Gravitational',
+        'Dissociative',
+      ],
+      rewards: [
+        { type: 'points', amount: 20000000, label: '20,000,000 pts' },
+        { type: 'anomaly', amount: 25000, label: '25,000 anomalies' },
+        { type: 'luck', mult: 15, dur: 720, label: '12m 15x luck' },
+      ],
+    },
+    {
+      id: 'eclipse_gate',
+      name: 'eclipse gate',
+      emoji: '🌒',
+      minRolls: 400000,
+      rarities: ['Impossible...', 'Obsession', 'Kyawthuite', 'Supermassive'],
+      rewards: [
+        { type: 'points', amount: 100000000, label: '100,000,000 pts' },
+        { type: 'anomaly', amount: 75000, label: '75,000 anomalies' },
+        { type: 'luck', mult: 20, dur: 900, label: '15m 20x luck' },
+      ],
+    },
+    {
+      id: 'oblivion',
+      name: 'oblivion',
+      emoji: '💫',
+      minRolls: 900000,
+      rarities: [
+        'some sort of paranoia',
+        'smoking gun',
+        'Extinction',
+        'Multiverse',
+      ],
+      rewards: [
+        { type: 'points', amount: 500000000, label: '500,000,000 pts' },
+        { type: 'anomaly', amount: 250000, label: '250,000 anomalies' },
+        { type: 'luck', mult: 30, dur: 1200, label: '20m 30x luck' },
+      ],
+    },
+    {
+      id: 'transcendence',
+      name: 'transcendence',
+      emoji: '☀️',
+      minRolls: 2500000,
+      rarities: ['Void', 'Dissociation', 'Antimatter', 'the world'],
+      rewards: [
+        { type: 'points', amount: 1000000000, label: '1,000,000,000 pts' },
+        { type: 'anomaly', amount: 1000000, label: '1,000,000 anomalies' },
+        { type: 'luck', mult: 50, dur: 1800, label: '30m 50x luck' },
       ],
     },
   ];
@@ -282,6 +352,11 @@
     'inferno',
     'snowy',
     'eon',
+    'void',
+    'abyss',
+    'eclipse_gate',
+    'oblivion',
+    'transcendence',
   ].forEach((id) => {
     if (typeof potionData !== 'undefined') {
       potionData['_g_' + id] = {
@@ -363,9 +438,24 @@
   function isLocked(t) {
     return (typeof totalRolls !== 'undefined' ? totalRolls : 0) < t.minRolls;
   }
-  function isComplete(t) {
+  function isComplete(t, d) {
     if (typeof inventoryData === 'undefined') return false;
-    return getTierRarities(t).every((n) => inventoryData.has(n));
+
+    const lastClaimTime = t.isGlobal
+      ? (d.global?.lastClaimTime ?? 0)
+      : (d[t.id]?.lastClaimTime ?? 0);
+
+    return getTierRarities(t).every((n) => {
+      if (!inventoryData.has(n)) return false;
+      // first-ever claim: existing inventory counts (safe migration for old saves)
+      if (lastClaimTime === 0) return true;
+      // otherwise the rarity must have been rolled AFTER the last claim
+      const ts =
+        typeof window.rarityTimestamps !== 'undefined'
+          ? (window.rarityTimestamps.get(n) ?? 0)
+          : 0;
+      return ts > lastClaimTime;
+    });
   }
   function canClaim(t, d) {
     if (t.isGlobal) return ((d.global && d.global.lastRot) ?? -1) < rotIdx();
@@ -431,13 +521,17 @@
     const tier = TIERS.find((t) => t.id === tierId);
     if (!tier) return;
     const d = loadData();
-    if (!isComplete(tier) || !canClaim(tier, d)) return;
+    if (!isComplete(tier, d) || !canClaim(tier, d)) return;
     const rew = tier.rewards[rewIdx];
     if (!rew) return;
 
-    if (tier.isGlobal)
-      d.global = Object.assign({}, d.global || {}, { lastRot: rotIdx() });
-    else d[tier.id] = { lastClaim: Date.now() };
+    const now = Date.now();
+    if (tier.isGlobal) {
+      d.global = { ...(d.global ?? {}), lastRot: rotIdx(), lastClaimTime: now };
+    } else {
+      d[tier.id] = { lastClaim: now, lastClaimTime: now };
+    }
+
     saveData(d);
     applyReward(rew, tierId);
     renderGauntlets();

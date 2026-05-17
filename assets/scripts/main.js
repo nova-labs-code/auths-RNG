@@ -9,6 +9,9 @@ const POINTS_KEY = 'shopPoints';
 const SHOP_UPGRADES_KEY = 'shopUpgrades';
 const SOLD_OUT_KEY = 'soldOutRarities';
 
+const RARITY_TIMESTAMPS_KEY = 'rarityTimestamps';
+let rarityTimestamps = new Map();
+
 window.formatNum = function (n) {
   if (window.rawNumbers) return String(Math.round(n));
   if (n >= 1e9) return (n / 1e9).toFixed(1).replace(/\.0$/, '') + 'B';
@@ -967,6 +970,10 @@ function saveAllData() {
   localStorage.setItem(POINTS_KEY, points);
   localStorage.setItem(SHOP_UPGRADES_KEY, JSON.stringify(shopUpgrades));
   localStorage.setItem(
+    RARITY_TIMESTAMPS_KEY,
+    JSON.stringify([...rarityTimestamps.entries()]),
+  );
+  localStorage.setItem(
     SOLD_OUT_KEY,
     JSON.stringify(Array.from(soldOutRarities.entries())),
   );
@@ -1603,6 +1610,14 @@ if (savedActive) {
   } catch {}
 }
 
+const savedTimestamps = localStorage.getItem(RARITY_TIMESTAMPS_KEY);
+if (savedTimestamps) {
+  try {
+    rarityTimestamps = new Map(JSON.parse(savedTimestamps));
+  } catch {}
+}
+window.rarityTimestamps = rarityTimestamps;
+
 async function resetInventory() {
   const confirmed = await window.showConfirm(
     'are you comfortably sure that you will delete your sweet sweet data???',
@@ -1629,6 +1644,9 @@ async function resetInventory() {
   localStorage.removeItem('_beacon_v2');
   localStorage.removeItem('mutationsUnlocked');
   localStorage.removeItem(NOTIF_KEY);
+  localStorage.removeItem(RARITY_TIMESTAMPS_KEY);
+  rarityTimestamps = new Map();
+  window.rarityTimestamps = rarityTimestamps;
   notifications = [];
   inventoryData.clear();
   inventoryList.innerHTML = '';

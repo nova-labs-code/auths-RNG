@@ -1899,6 +1899,61 @@ body.legacy-mode #legacySettingsBtn {
 .gauntlet-tier[data-tier='eon'] {
   border-color: #2a1a3a;
 }
+
+/* we're not making a color for snowy since we just want white yknow */
+
+/* void */
+.gauntlet-tier[data-tier='void'] {
+  border-color: #160f2a;
+}
+.gauntlet-tier[data-tier='void'] .gauntlet-tier-name {
+  color: #9966ff;
+}
+
+/* abyss */
+.gauntlet-tier[data-tier='abyss'] {
+  border-color: #082020;
+}
+.gauntlet-tier[data-tier='abyss'] .gauntlet-tier-name {
+  color: #00cccc;
+}
+
+/* eclipse gate */
+.gauntlet-tier[data-tier='eclipse_gate'] {
+  border-color: #281400;
+}
+.gauntlet-tier[data-tier='eclipse_gate'] .gauntlet-tier-name {
+  color: #ff8800;
+}
+
+/* oblivion */
+.gauntlet-tier[data-tier='oblivion'] {
+  border-color: #220022;
+}
+@keyframes oblivion-pulse {
+  0%   { color: #cc00ff; }
+  50%  { color: #ff00aa; }
+  100% { color: #cc00ff; }
+}
+.gauntlet-tier[data-tier='oblivion'] .gauntlet-tier-name {
+  animation: oblivion-pulse 3s ease-in-out infinite;
+}
+
+/* transcendence */
+.gauntlet-tier[data-tier='transcendence'] {
+  border-color: #2a2200;
+  box-shadow: 0 0 12px rgba(255, 220, 50, 0.06);
+}
+@keyframes transcendence-glow {
+  0%   { color: #ffe566; text-shadow: 0 0 8px rgba(255,220,50,0.4); }
+  33%  { color: #ffffff; text-shadow: 0 0 14px rgba(255,255,255,0.5); }
+  66%  { color: #ffaa33; text-shadow: 0 0 8px rgba(255,160,30,0.4); }
+  100% { color: #ffe566; text-shadow: 0 0 8px rgba(255,220,50,0.4); }
+}
+.gauntlet-tier[data-tier='transcendence'] .gauntlet-tier-name {
+  animation: transcendence-glow 4s ease-in-out infinite;
+}
+
 @keyframes eon-rgb {
   0% {
     color: #ff6666;
