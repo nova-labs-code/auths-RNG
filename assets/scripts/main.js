@@ -1229,19 +1229,30 @@ function updateItem(d) {
       return;
     }
 
-    const pointsEarned = calculateRarityPoints(rarityObj) * availableToSell;
-    const countAtSellTime = currentData.count; // capture NOW, not at confirm time
+    const snapCount = currentData.count;
+    const snapAvailable = availableToSell;
+    const pointsEarned = calculateRarityPoints(rarityObj) * snapAvailable;
 
     showConfirmModal(
       'sell rarity?',
-      `sell ${availableToSell}x ${rarityObj.name} for ${formatNum(pointsEarned)} points? (you keep the rarity)`,
+      `sell ${snapAvailable}x ${rarityObj.name} for ${formatNum(pointsEarned)} points? (you keep the rarity)`,
       () => {
-        points += pointsEarned;
-        soldOutRarities.set(key, { count: countAtSellTime }); // use captured count
+        const freshData = inventoryData.get(rarityObj.name);
+        if (!freshData) return;
+        const freshSold = soldOutRarities.get(key);
+        const freshAlready = freshSold ? freshSold.count : 0;
+        const actualAvailable = freshData.count - freshAlready;
+        if (actualAvailable <= 0) {
+          window.showAlert('nothing left to sell!');
+          return;
+        }
+        const actualEarned = calculateRarityPoints(rarityObj) * actualAvailable;
+        points += actualEarned;
+        soldOutRarities.set(key, { count: freshData.count });
         updatePointsDisplay();
         updateShopUI();
         saveAllData();
-        updateItem(currentData);
+        updateItem(freshData);
         recalcLuckMultiplier();
         updateLuckDisplay();
       },
@@ -1808,9 +1819,11 @@ function showRollChoice(res, onDone) {
   document.getElementById('rollChoiceSell').onclick = () =>
     cleanup(() => {
       points += pts;
-      soldOutRarities.set(res.name, { count: 1 });
-      // still add to inventory so it shows as collected, just mark sold
-      addToInventory(res);
+      addToInventory(res); // add first so count is updated
+      const currentData = inventoryData.get(res.name);
+      const currentCount = currentData ? currentData.count : 1;
+      // Mark this new copy as sold; preserve any previously sold count
+      soldOutRarities.set(res.name, { count: currentCount });
       updatePointsDisplay();
       updateShopUI();
       showAnomalyPopup(`sold ${res.name} for ${formatNum(pts)} pts`);
@@ -2118,15 +2131,20 @@ function updateWeeklyUI() {
 weeklyBtn.addEventListener('click', async () => {
   const { lastClaim, streak } = loadWeeklyData();
   const now = Date.now();
-  let newStreak = streak;
+  const oneWeek = 7 * 24 * 60 * 60 * 1000;
+
+  // Guard: shouldn't be reachable if UI is correct, but be safe
+  if (lastClaim && now - Number(lastClaim) < oneWeek) return;
+
+  let newStreak;
   if (!lastClaim) {
     newStreak = 1;
   } else {
-    const diffWeeks = Math.floor(
-      (now - Number(lastClaim)) / (7 * 24 * 60 * 60 * 1000),
-    );
+    const diffWeeks = Math.floor((now - Number(lastClaim)) / oneWeek);
+    // streak continues only if exactly 1 week passed; 2+ weeks resets
     newStreak = diffWeeks === 1 ? streak + 1 : 1;
   }
+
   saveWeeklyData(now.toString(), newStreak);
   updateWeeklyUI();
   await window.showAlert(
@@ -2717,6 +2735,7 @@ if (throwWellBtn) {
 
 // CFGVHHSUGDCSVHBDJOKVHBHFDSJDOJFBH VSBJNSUHNKXJBHVGCTFDFGHIJNKJBHVGCFXRDTFYGUHINKMTDFGKN ,MNDWBGVFYGHEK;F,NKRG
 if (isWellOnCooldown()) {
+  // human centipede fucking bitches asshole whoa im so not family friendly WHY IS THERE AN ERROR HERE
   startWellCooldownTimer();
 }
 

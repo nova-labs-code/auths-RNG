@@ -441,15 +441,17 @@
   function isComplete(t, d) {
     if (typeof inventoryData === 'undefined') return false;
 
-    const lastClaimTime = t.isGlobal
-      ? (d.global?.lastClaimTime ?? 0)
-      : (d[t.id]?.lastClaimTime ?? 0);
+    const stateKey = t.isGlobal ? 'global' : t.id;
+    const tierState = d[stateKey];
+    const lastClaimTime = tierState?.lastClaimTime ?? 0;
 
     return getTierRarities(t).every((n) => {
       if (!inventoryData.has(n)) return false;
-      // first-ever claim: existing inventory counts (safe migration for old saves)
-      if (lastClaimTime === 0) return true;
-      // otherwise the rarity must have been rolled AFTER the last claim
+      // Only bypass timestamp check if this is literally the first time
+      // we've ever rendered gauntlets (no state stored at all for this tier).
+      // If the tier state exists but lastClaimTime is 0, it means a claim
+      // happened with broken data — don't fuckin' bypass!!!!!!!
+      if (!tierState && lastClaimTime === 0) return true;
       const ts =
         typeof window.rarityTimestamps !== 'undefined'
           ? (window.rarityTimestamps.get(n) ?? 0)
