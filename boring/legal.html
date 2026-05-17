@@ -237,20 +237,23 @@
 
       <!-- ======================== PRIVACY POLICY ======================== -->
       <div id="tab-privacy" class="tab-content active">
-        <div class="toc">
-          <div class="toc-title">sections</div>
-          <a href="#pp-who">who we are</a>
-          <a href="#pp-collect">what we collect</a>
-          <a href="#pp-how">how we use it</a>
-          <a href="#pp-storage">where data is stored</a>
-          <a href="#pp-share">do we share your data?</a>
-          <a href="#pp-cloud">cloud backups</a>
-          <a href="#pp-leaderboard">leaderboard</a>
-          <a href="#pp-cookies">cookies &amp; local storage</a>
-          <a href="#pp-rights">your rights (pipeda / alberta pipa)</a>
-          <a href="#pp-minors">children &amp; minors</a>
-          <a href="#pp-contact">contact</a>
-        </div>
+      <div class="toc">
+        <div class="toc-title">sections</div>
+        <a href="#pp-who">who we are</a>
+        <a href="#pp-collect">what we collect</a>
+        <a href="#pp-how">how we use it</a>
+        <a href="#pp-storage">where data is stored</a>
+        <a href="#pp-share">do we share your data?</a>
+        <a href="#pp-cloud">cloud backups</a>
+        <a href="#pp-leaderboard">leaderboard</a>
+        <a href="#pp-cookies">cookies &amp; local storage</a>
+        <a href="#pp-thirdparty">third-party services</a>
+        <a href="#pp-retention">data retention</a>
+        <a href="#pp-breach">breach notification</a>
+        <a href="#pp-rights">your rights (pipeda / alberta pipa)</a>
+        <a href="#pp-minors">children &amp; minors</a>
+        <a href="#pp-contact">contact</a>
+      </div>
 
         <div class="section-item" id="pp-who">
           <div class="section-title">who we are</div>
@@ -317,13 +320,10 @@
               </li>
             </ul>
             <div class="note">
-              we do not use analytics platforms (google analytics, mixpanel,
-              etc.), advertising networks, fingerprinting scripts, or any
-              third-party tracking. the only external request on load is from
-              instant.page (a preloading library hosted by cdnjs), librecounter
-              (an open-source hit counter), and hitscounter.dev. these are
-              open-source/privacy-friendly tools, but their own privacy policies
-              apply.
+              we do not use analytics platforms (google analytics, mixpanel, etc.),
+              advertising networks, fingerprinting scripts, or any third-party tracking.
+              external services loaded by the game are listed in the
+              <a href="#pp-thirdparty">third-party services</a> section below.
             </div>
           </div>
         </div>
@@ -354,14 +354,31 @@
         <div class="section-item" id="pp-storage">
           <div class="section-title">where data is stored</div>
           <div class="section-body">
-            server-side data (cloud backups and leaderboard entries) is stored
-            on servers operated by the developer. servers may be located in
-            canada or through a hosting provider that operates internationally.
-            if data is processed outside canada, we take reasonable steps to
-            ensure it is protected under standards consistent with canadian law.
+            there are two distinct hosting layers:
+            <ul>
+              <li>
+                <strong>game files (static frontend)</strong> — authsrng.xyz is hosted on
+                <strong>cloudflare pages</strong>, a global edge network. the game's html, js,
+                and assets are served from cloudflare's infrastructure worldwide, not from a
+                single server in canada.
+              </li>
+              <li>
+                <strong>backend data (cloud backups &amp; leaderboard)</strong> — stored on
+                servers operated by the developer, physically located in canada, and accessed
+                via a cloudflare tunnel (no port forwarding).
+              </li>
+            </ul>
+            <div class="highlight-note">
+              because the frontend is served via cloudflare pages and all backend traffic routes
+              through a cloudflare tunnel, cloudflare's infrastructure processes every request
+              made to the game — including ip addresses and request headers — subject to
+              <a href="https://www.cloudflare.com/privacypolicy/" target="_blank">cloudflare's privacy policy</a>.
+              cloudflare acts as a data processor on our behalf and is not permitted to use
+              your data for its own purposes.
+            </div>
             <div class="note">
-              your local game data never leaves your device unless you
-              explicitly enable cloud backups or join the leaderboard.
+              your local game data never leaves your device unless you explicitly enable
+              cloud backups or join the leaderboard.
             </div>
           </div>
         </div>
@@ -460,6 +477,93 @@
               settings. doing so will permanently delete your local save data.
               if you have cloud backups enabled, you can restore from there
               afterward.
+            </div>
+          </div>
+        </div>
+
+        <div class="section-item" id="pp-thirdparty">
+          <div class="section-title">third-party services</div>
+          <div class="section-body">
+            the following third-party scripts or services are loaded when you visit the game.
+            we do not control their data practices — please review their own privacy policies:
+            <ul>
+              <li>
+                <strong>cloudflare</strong> — serves the game frontend via cloudflare pages
+                (global edge CDN) and proxies all backend api traffic via cloudflare tunnel.
+                sees all request traffic (ip, headers) for both.
+                <a href="https://www.cloudflare.com/privacypolicy/" target="_blank">cloudflare privacy policy</a>
+              </li>
+              <li>
+                <strong>instant.page</strong> — preloading library served via cdnjs.
+                may record requests to cdnjs infrastructure.
+                <a href="https://instant.page/" target="_blank">instant.page</a>
+              </li>
+              <li>
+                <strong>librecounter</strong> — open-source hit counter. records a page
+                view when you visit. <a href="https://librecounter.org/" target="_blank">librecounter.org</a>
+              </li>
+              <li>
+                <strong>hitscounter.dev</strong> — visit counter. records a page view
+                when you visit. <a href="https://hitscounter.dev/" target="_blank">hitscounter.dev</a>
+              </li>
+            </ul>
+            <div class="note">
+              none of these services are used for advertising or behavioural tracking.
+              they are open-source or privacy-oriented tools, but their own policies govern
+              what they collect.
+            </div>
+          </div>
+        </div>
+
+        <div class="section-item" id="pp-retention">
+          <div class="section-title">data retention</div>
+          <div class="section-body">
+            we retain data only as long as necessary:
+            <ul>
+              <li>
+                <strong>cloud backups</strong> — kept indefinitely until you delete
+                them via the in-game settings, or until you contact us requesting
+                removal
+              </li>
+              <li>
+                <strong>leaderboard entries</strong> — kept until you opt out
+                in-game, at which point they are permanently deleted from our server
+              </li>
+              <li>
+                <strong>server access logs</strong> — rotated and deleted on a
+                rolling basis (typically within 30 days). not processed for profiling.
+              </li>
+              <li>
+                <strong>concurrent user session ids</strong> — not stored at all.
+                they exist only in memory for the duration of the request.
+              </li>
+            </ul>
+            <div class="note">
+              local browser data (localStorage) is entirely under your control and
+              persists until you clear your browser data or use the in-game wipe feature.
+            </div>
+          </div>
+        </div>
+
+        <div class="section-item" id="pp-breach">
+          <div class="section-title">breach notification</div>
+          <div class="section-body">
+            in the event of a breach of security safeguards involving your personal
+            information that poses a real risk of significant harm, we will:
+            <ul>
+              <li>notify affected individuals as soon as feasible</li>
+              <li>
+                report the breach to the office of the privacy commissioner of
+                canada (OPC) as required under pipeda
+              </li>
+              <li>maintain a record of the breach as required by law</li>
+            </ul>
+            <div class="note">
+              given that we hold almost no identifying personal information, the
+              practical scope of any breach would be limited — your game data is
+              not linked to your name, email, or any account. the highest-risk
+              scenario would be exposure of leaderboard usernames paired with
+              game statistics, which are already public.
             </div>
           </div>
         </div>
@@ -680,11 +784,17 @@
               <li>your username is permanent and cannot be changed</li>
               <li>you will not submit false or manipulated statistics</li>
               <li>
-                the developer reserves the right to remove any leaderboard entry
-                that appears to contain fabricated data, violates these terms,
-                or includes an offensive username
+                your username is user-generated content. the developer reserves the
+                right to remove any leaderboard entry — without notice and without
+                breach of these terms — that contains fabricated data, an offensive
+                or inappropriate username, impersonation of another player or person,
+                or any other violation of these terms
               </li>
             </ul>
+            <div class="note">
+              removal of your leaderboard entry does not delete your cloud backup
+              data. your local save is unaffected.
+            </div>
           </div>
         </div>
 
