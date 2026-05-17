@@ -5,6 +5,38 @@
   const MUTATION_HISTORY_KEY = 'mutationHistory';
   const MUTATION_HISTORY_MAX = 50;
 
+  const TRUST_KEY = 'mutationTrust';
+  const TRUST_OWNED_KEY = 'mutationTrustOwned';
+  const TRUST_ACTIVE_KEY = 'mutationTrustActive';
+
+  function getTrust() {
+    return parseInt(localStorage.getItem(TRUST_KEY) || '0');
+  }
+  function setTrust(v) {
+    localStorage.setItem(TRUST_KEY, String(Math.max(0, v)));
+  }
+  function addTrust(delta) {
+    setTrust(getTrust() + delta);
+  }
+  function getTrustDelta(wasGood, resultIdx, idxA, idxB) {
+    const better = Math.min(idxA, idxB);
+    const worse = Math.max(idxA, idxB);
+    if (wasGood) {
+      const gap = better - resultIdx;
+      if (gap >= 50) return 7;
+      if (gap >= 15) return 4;
+      return 2;
+    }
+    const gap = resultIdx - worse;
+    if (gap >= 30) return -4;
+    if (gap >= 10) return -3;
+    return -1;
+  }
+  function renderTrustBalance() {
+    const el = document.getElementById('mutationTrustAmt');
+    if (el) el.textContent = getTrust();
+  }
+
   function loadHistory() {
     try {
       return JSON.parse(localStorage.getItem(MUTATION_HISTORY_KEY) || '[]');
@@ -143,10 +175,10 @@
 
     if (!isUnlocked()) {
       container.innerHTML = `
-        <div style="text-align:center;opacity:0.4;margin-top:48px;">
-          <div style="font-size:2.2em;margin-bottom:14px;">🧬</div>
-          <div style="font-size:0.9em;">complete the eon gauntlet to unlock mutations</div>
-        </div>`;
+      <div style="text-align:center;opacity:0.4;margin-top:48px;">
+        <div style="font-size:2.2em;margin-bottom:14px;">🧬</div>
+        <div style="font-size:0.9em;">complete the eon gauntlet to unlock mutations</div>
+      </div>`;
       return;
     }
 
@@ -164,47 +196,57 @@
       .join('');
 
     container.innerHTML = `
-      <div class="mutation-panel">
-        <div class="mutation-subtitle">combine two rarities for an unpredictable result</div>
-        <div class="mutation-odds">≈65% worse · ≈35% better &nbsp;|&nbsp; rarer inputs improve odds</div>
+    <div class="mutation-trust-header">
+      <span class="mutation-trust-label">🧬 trust</span>
+      <span class="mutation-trust-value"><span id="mutationTrustAmt">${getTrust()}</span></span>
+    </div>
 
-        <div class="mutation-selectors">
-          <div class="mutation-slot">
-            <div class="mutation-slot-label">rarity A</div>
-            <select id="mutateSelectA" class="mutation-select">${options}</select>
-          </div>
-          <div class="mutation-plus">🧬</div>
-          <div class="mutation-slot">
-            <div class="mutation-slot-label">rarity B</div>
-            <select id="mutateSelectB" class="mutation-select">${options}</select>
-          </div>
+    <div class="mutation-panel">
+      <div class="mutation-subtitle">combine two rarities for an unpredictable result</div>
+      <div class="mutation-odds">≈65% worse · ≈35% better &nbsp;|&nbsp; rarer inputs improve odds</div>
+
+      <div class="mutation-selectors">
+        <div class="mutation-slot">
+          <div class="mutation-slot-label">rarity A</div>
+          <select id="mutateSelectA" class="mutation-select">${options}</select>
         </div>
+        <div class="mutation-plus">🧬</div>
+        <div class="mutation-slot">
+          <div class="mutation-slot-label">rarity B</div>
+          <select id="mutateSelectB" class="mutation-select">${options}</select>
+        </div>
+      </div>
 
-        <button id="mutateBtn" class="mutation-btn">mutate</button>
-        <div id="mutationCooldown" class="mutation-cooldown"></div>
-        <div id="mutationResult"></div>
-      </div>`;
+      <button id="mutateBtn" class="mutation-btn">mutate</button>
+      <div id="mutationCooldown" class="mutation-cooldown"></div>
+      <div id="mutationResult"></div>
+    </div>`;
 
     const selB = document.getElementById('mutateSelectB');
     if (selB && selB.options.length > 1) selB.selectedIndex = 1;
 
     document.getElementById('mutateBtn').addEventListener('click', doMutation);
 
-    // history notebook
     const histSection = document.createElement('div');
     histSection.innerHTML = `
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:24px;margin-bottom:8px;">
-        <div style="font-size:0.8em;opacity:0.5;">mutation log</div>
-        <button class="small" id="clearMutationHistory" style="opacity:0.4;font-size:0.72em;">clear</button>
-      </div>
-      <div id="mutationHistory" class="mutation-history"></div>`;
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:24px;margin-bottom:8px;">
+      <div style="font-size:0.8em;opacity:0.5;">mutation log</div>
+      <button class="small" id="clearMutationHistory" style="opacity:0.4;font-size:0.72em;">clear</button>
+    </div>
+    <div id="mutationHistory" class="mutation-history"></div>`;
     container.appendChild(histSection);
+
     document.getElementById('clearMutationHistory').onclick = () => {
       saveHistory([]);
       renderHistory();
     };
     renderHistory();
     updateCooldownDisplay();
+
+    const shopMount = document.createElement('div');
+    shopMount.id = 'trustShopMount';
+    container.appendChild(shopMount);
+    if (window.trustCosmetics) window.trustCosmetics.renderShop(shopMount);
   }
 
   function updateCooldownDisplay() {
@@ -246,10 +288,17 @@
     const resultIdx = getRarityIndex(result.name);
     const wasGood = resultIdx < Math.min(idxA, idxB);
 
+    const trustDelta = getTrustDelta(wasGood, resultIdx, idxA, idxB);
+    addTrust(trustDelta);
+
     const onDone = () => {
       addToHistory(nameA, nameB, result, wasGood);
       renderHistory();
       updateCooldownDisplay();
+      renderTrustBalance();
+      const shopMount = document.getElementById('trustShopMount');
+      if (shopMount && window.trustCosmetics)
+        window.trustCosmetics.renderShop(shopMount);
       if (typeof saveAllData === 'function') saveAllData();
     };
 
@@ -261,6 +310,7 @@
     }
 
     const denom = Math.round(1 / result.chance);
+    const sign = trustDelta >= 0 ? '+' : '';
     const resultEl = document.getElementById('mutationResult');
     if (resultEl) {
       resultEl.innerHTML = `
@@ -268,6 +318,7 @@
         <div class="mutation-result-quality">${wasGood ? '✨ better!' : '💀 worse...'}</div>
         <div class="mutation-result-name">${result.name}</div>
         <div class="mutation-result-chance">1/${denom.toLocaleString()}</div>
+        <div class="mutation-trust-delta ${trustDelta >= 0 ? 'trust-gain' : 'trust-loss'}">${sign}${trustDelta} trust</div>
       </div>`;
     }
   }
