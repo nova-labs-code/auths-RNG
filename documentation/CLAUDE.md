@@ -25,4 +25,4 @@ We don't want an existing system in place to be replaced with a "refined" AI-gen
 
 This project was coded with AI before, but it is becoming more human and more man-made. We want to stay human, but if you want to use AI nonetheless, you can, but you're limited.
 
-We, and you, should use AI as a tool. Use it with your heart but don't overuse it! :)
+We, and you, should use AI as a tool. Use it when your heart desires but don't overuse it! You're causing the internet to get slopp-ified! :)
