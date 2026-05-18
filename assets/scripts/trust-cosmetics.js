@@ -171,8 +171,8 @@
   function startAutoMutate() {
     if (!getOwned().includes('upgrade_automutate')) return;
     setInterval(() => {
-      const inv = getInventoryRarities();
-      if (inv.length < 2) return;
+      const inv = window.getInventoryRarities?.();
+      if (!inv || inv.length < 2) return;
       const shuffle = [...inv].sort(() => rng() - 0.5);
       const a = shuffle[0];
       const b = shuffle[1];
@@ -406,6 +406,9 @@
   );
 
   function renderShop(container) {
+    const fresh = container.cloneNode(false);
+    container.parentNode.replaceChild(fresh, container);
+    container = fresh;
     const owned = getOwned();
     const active = getActive();
     const trust = getTrust();
