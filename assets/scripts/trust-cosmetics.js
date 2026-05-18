@@ -85,7 +85,7 @@
       id: 'upgrade_automutate',
       name: 'auto-mutate',
       cost: 15,
-      desc: 'automatically mutates random rarities every 30s',
+      desc: 'automatically mutates random rarities every 20s',
     },
   ];
 
@@ -190,7 +190,7 @@
       renderTrustBalance();
       if (typeof addToInventory === 'function') addToInventory(result);
       if (typeof saveAllData === 'function') saveAllData();
-    }, 30000);
+    }, 20000);
   }
 
   function initTrail(id) {
