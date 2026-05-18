@@ -43,14 +43,15 @@
     const worse = Math.max(idxA, idxB);
     if (wasGood) {
       const gap = better - resultIdx;
-      if (gap >= 50) return 7;
-      if (gap >= 15) return 4;
-      return 2;
+      if (gap >= 50) return 16;
+      if (gap >= 15) return 8;
+      return 4;
+    } else {
+      const gap = resultIdx - worse;
+      if (gap >= 30) return -7;
+      if (gap >= 10) return -5;
+      return -2;
     }
-    const gap = resultIdx - worse;
-    if (gap >= 30) return -4;
-    if (gap >= 10) return -3;
-    return -1;
   }
   function renderTrustBalance() {
     const el = document.getElementById('mutationTrustAmt');
