@@ -102,7 +102,7 @@
       })
       .join('');
   }
-  const MUTATION_COOLDOWN = 30000;
+  const MUTATION_COOLDOWN = 15000;
 
   const EXCLUDED_NAMES = new Set([
     'SUMMER',
