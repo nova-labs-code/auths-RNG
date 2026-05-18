@@ -484,10 +484,6 @@
       updatePointsDisplay();
       saveAllData();
       showAnomalyPopup('+' + rew.amount.toLocaleString() + ' pts 🎉');
-    } else if (rew.type === 'unlock_starmap') {
-      localStorage.setItem('starmapUnlocked', '1');
-      showAnomalyPopup('✦ starmap unlocked!');
-      if (typeof renderStarmap === 'function') renderStarmap();
     } else if (rew.type === 'anomaly') {
       anomalies += rew.amount;
       updateAnomalyUI();
@@ -519,6 +515,12 @@
       localStorage.setItem('mutationsUnlocked', '1');
       showAnomalyPopup('mutations unlocked! 🧬');
       if (typeof renderMutations === 'function') renderMutations();
+      window.unlockPageDot?.(3);
+    } else if (rew.type === 'unlock_starmap') {
+      localStorage.setItem('starmapUnlocked', '1');
+      showAnomalyPopup('✦ starmap unlocked!');
+      if (typeof renderStarmap === 'function') renderStarmap();
+      window.unlockPageDot?.(4);
     }
   }
 

@@ -1636,6 +1636,32 @@ function handleSwipe() {
     
 <script src="assets/scripts/trust-cosmetics.js" defer></script> <!-- a lone ugly ass soul-->
 
+<script>
+(function() {
+  function hidePageDot(pageIndex) {
+    const dot = document.querySelector(`.page-dot[data-page="${pageIndex}"]`);
+    if (dot) dot.classList.add('dot-hidden');
+  }
+
+  function unlockPageDot(pageIndex) {
+    const dot = document.querySelector(`.page-dot[data-page="${pageIndex}"]`);
+    if (!dot || !dot.classList.contains('dot-hidden')) return;
+    dot.classList.remove('dot-hidden');
+    dot.classList.add('dot-unlocking');
+    dot.addEventListener('animationend', () => dot.classList.remove('dot-unlocking'), { once: true });
+  }
+
+  window.unlockPageDot = unlockPageDot;
+  window.hidePageDot = hidePageDot;
+
+  if (localStorage.getItem('mutationsUnlocked') !== '1') {
+  hidePageDot(3);
+}
+if (localStorage.getItem('starmapUnlocked') !== '1') {
+  hidePageDot(4);
+}
+})();
+</script>
 </body>
 
 </html>
