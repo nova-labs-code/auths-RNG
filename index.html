@@ -987,10 +987,14 @@ if (visitCount < 6) {
   
 function goToPage(index) {
   if (index < 0 || index >= totalPages) return;
-  
+
   const targetDot = document.querySelector(`.page-dot[data-page="${index}"]`);
-  if (targetDot?.classList.contains('dot-hidden')) return;
-  
+  if (targetDot?.classList.contains('dot-hidden')) {
+    if (index > currentPage) goToPage(index + 1);
+    else goToPage(index - 1);
+    return;
+  }
+
   currentPage = index;
   container.style.transform = `translateX(-${currentPage * 100}%)`;
   
