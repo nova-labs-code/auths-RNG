@@ -987,9 +987,8 @@ if (visitCount < 6) {
   
 function goToPage(index) {
   if (index < 0 || index >= totalPages) return;
-
-  const targetDot = document.querySelector(`.page-dot[data-page="${index}"]`);
-  if (targetDot?.classList.contains('dot-hidden')) {
+  const page = document.getElementById(`page-${index + 1}`);
+  if (page && page.style.display === 'none') {
     if (index > currentPage) goToPage(index + 1);
     else goToPage(index - 1);
     return;
@@ -1644,15 +1643,18 @@ function handleSwipe() {
 <script src="assets/scripts/trust-cosmetics.js" defer></script> <!-- a lone ugly ass soul-->
 
 <script>
-(function() {
   function hidePageDot(pageIndex) {
     const dot = document.querySelector(`.page-dot[data-page="${pageIndex}"]`);
     if (dot) dot.classList.add('dot-hidden');
+    const page = document.getElementById(`page-${pageIndex + 1}`);
+    if (page) page.style.display = 'none';
   }
 
   function unlockPageDot(pageIndex) {
     const dot = document.querySelector(`.page-dot[data-page="${pageIndex}"]`);
     if (!dot || !dot.classList.contains('dot-hidden')) return;
+    const page = document.getElementById(`page-${pageIndex + 1}`);
+    if (page) page.style.display = '';
     dot.classList.remove('dot-hidden');
     dot.classList.add('dot-unlocking');
     dot.addEventListener('animationend', () => dot.classList.remove('dot-unlocking'), { once: true });
@@ -1662,12 +1664,11 @@ function handleSwipe() {
   window.hidePageDot = hidePageDot;
 
   if (localStorage.getItem('mutationsUnlocked') !== '1') {
-  hidePageDot(3);
-}
-if (localStorage.getItem('starmapUnlocked') !== '1') {
-  hidePageDot(4);
-}
-})();
+    hidePageDot(3);
+  }
+  if (localStorage.getItem('starmapUnlocked') !== '1') {
+    hidePageDot(4);
+  }
 </script>
 </body>
 
