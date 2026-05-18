@@ -965,6 +965,10 @@ toggleBtn.addEventListener('click', () => {
   </script>
   
   <script>
+  const lockedPages = new Set(); 
+  </script>
+
+  <script>
 (function() {
   const container = document.querySelector('.page-container');
   const dots = document.querySelectorAll('.page-dot');
@@ -974,6 +978,7 @@ toggleBtn.addEventListener('click', () => {
   
   let currentPage = 0;
   const totalPages = 8;
+  const lockedPages = new Set();
   
   // ???????????????????????????????????/
 let visitCount = parseInt(localStorage.getItem('pageVisitCount') || '0');
@@ -1642,8 +1647,6 @@ function handleSwipe() {
 <script src="assets/scripts/trust-cosmetics.js" defer></script> <!-- a lone ugly ass soul-->
 
 <script>
-  const lockedPages = new Set();
-
 function hidePageDot(pageIndex) {
   const dot = document.querySelector(`.page-dot[data-page="${pageIndex}"]`);
   if (dot) dot.classList.add('dot-hidden');
