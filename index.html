@@ -963,10 +963,6 @@ toggleBtn.addEventListener('click', () => {
       subtree: true
     });
   </script>
-  
-  <script>
-  const lockedPages = new Set(); 
-  </script>
 
   <script>
 (function() {
@@ -1074,8 +1070,8 @@ function handleSwipe() {
     if (e.key === 'ArrowRight') goToPage(currentPage + 1);
   });
   
-  const savedPage = parseInt(localStorage.getItem('currentPage') || '0');
-  goToPage(savedPage);
+  window.lockedPages = lockedPages;
+  window.goToPage = goToPage;
 })();
 </script>
 
@@ -1652,7 +1648,7 @@ function hidePageDot(pageIndex) {
   if (dot) dot.classList.add('dot-hidden');
   const page = document.getElementById(`page-${pageIndex + 1}`);
   if (page) page.style.display = 'none';
-  lockedPages.add(pageIndex);
+  window.lockedPages.add(pageIndex);
 }
 
 function unlockPageDot(pageIndex) {
@@ -1660,7 +1656,7 @@ function unlockPageDot(pageIndex) {
   if (!dot || !dot.classList.contains('dot-hidden')) return;
   const page = document.getElementById(`page-${pageIndex + 1}`);
   if (page) page.style.display = '';
-  lockedPages.delete(pageIndex);
+  window.lockedPages.add(pageIndex);
   dot.classList.remove('dot-hidden');
   dot.classList.add('dot-unlocking');
   dot.addEventListener('animationend', () => dot.classList.remove('dot-unlocking'), { once: true });
@@ -1675,6 +1671,9 @@ function unlockPageDot(pageIndex) {
   if (localStorage.getItem('starmapUnlocked') !== '1') {
     hidePageDot(4);
   }
+
+  const savedPage = parseInt(localStorage.getItem('currentPage') || '0');
+  window.goToPage(savedPage);
 </script>
 </body>
 
