@@ -1529,9 +1529,8 @@ function initNotifCenter() {
     if (notifPanelOpen) renderNotifList();
   });
 
-  document.addEventListener('click', (e) => {
+  document.addEventListener('pointerdown', (e) => {
     if (!notifPanelOpen) return;
-    if (!e.isTrusted) return; // ignore programmatic clicks (auto-roll, etc.)
     if (!panel.contains(e.target) && !bell.contains(e.target)) {
       notifPanelOpen = false;
       panel.classList.remove('open');
@@ -2267,7 +2266,8 @@ else
   );
 
 function generateRunCard() {
-  const W = 720, H = 400;
+  const W = 720,
+    H = 400;
   const canvas = document.createElement('canvas');
   canvas.width = W;
   canvas.height = H;
@@ -2281,9 +2281,11 @@ function generateRunCard() {
   let y = 0;
   const line = (text, color = '#ddd') => {
     ctx.fillStyle = color;
-    ctx.fillText(text, 30, y += 22);
+    ctx.fillText(text, 30, (y += 22));
   };
-  const gap = () => { y += 8; };
+  const gap = () => {
+    y += 8;
+  };
   const dim = (text) => line(text, '#555');
 
   line("auth's RNG  :::  run summary");
@@ -2300,17 +2302,22 @@ function generateRunCard() {
 
   line(`points           ${formatNum(points)}`);
   line(`luck mult        ${formatMult(globalLuckMultiplier)}x`);
-  line(`shop luck        lv${shopUpgrades.luck}  speed lv${shopUpgrades.speed}  pts lv${shopUpgrades.pointMult}`);
+  line(
+    `shop luck        lv${shopUpgrades.luck}  speed lv${shopUpgrades.speed}  pts lv${shopUpgrades.pointMult}`,
+  );
   line(`anomalies        ${anomalies} held  /  ${anomaliesUsed} consumed`);
   line(`collected        ${inventoryData.size} / ${rarities.length}`);
-  line(`achievements     ${achievementsUnlocked.size} / ${achievementsList.length}`);
+  line(
+    `achievements     ${achievementsUnlocked.size} / ${achievementsList.length}`,
+  );
 
   gap();
   dim('─'.repeat(54));
   gap();
 
-  const rarest = Array.from(inventoryData.values())
-    .sort((a, b) => a.rarityObj.chance - b.rarityObj.chance)[0];
+  const rarest = Array.from(inventoryData.values()).sort(
+    (a, b) => a.rarityObj.chance - b.rarityObj.chance,
+  )[0];
 
   if (rarest) {
     const d = Math.round(1 / rarest.rarityObj.chance).toLocaleString();
@@ -2319,7 +2326,9 @@ function generateRunCard() {
     line(`rarest rolled    (none yet)`);
   }
 
-  dim(`generated        ${new Date().toISOString().slice(0, 19).replace('T', ' ')} UTC`);
+  dim(
+    `generated        ${new Date().toISOString().slice(0, 19).replace('T', ' ')} UTC`,
+  );
 
   ctx.fillStyle = '#444';
   ctx.font = '11px monospace';

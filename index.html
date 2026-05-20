@@ -174,9 +174,79 @@ if (navigator.userAgent.includes("Screenjesus")) {
   <script src="assets/scripts/screensaver.js" defer></script>
   
   <button id="legacyShopBtn">shop</button>
-  <button id="legacySettingsBtn">settings</button>
-  <div id="legacyShopPopup"></div>
-  <div id="legacySettingsPopup"></div>
+<button id="legacySettingsBtn">settings</button>
+<div id="legacyShopPopup"></div>
+<div id="legacySettingsPopup"></div>
+
+<script>
+(function() {
+  function movePageIntoPopup(pageId, popupId) {
+    const page = document.getElementById(pageId);
+    const popup = document.getElementById(popupId);
+    if (!page || !popup || popup._hasContent) return;
+    while (page.firstChild) popup.appendChild(page.firstChild);
+    popup._sourcePageId = pageId;
+    popup._hasContent = true;
+  }
+
+  function movePopupBackToPage(popupId) {
+    const popup = document.getElementById(popupId);
+    if (!popup || !popup._hasContent || !popup._sourcePageId) return;
+    const page = document.getElementById(popup._sourcePageId);
+    if (!page) return;
+    while (popup.firstChild) page.appendChild(popup.firstChild);
+    popup._hasContent = false;
+  }
+
+  function openPopup(popupId, otherPopupId, pageId) {
+    const popup = document.getElementById(popupId);
+    const other = document.getElementById(otherPopupId);
+    if (!popup) return;
+
+    if (other && other.classList.contains('open')) {
+      other.classList.remove('open');
+      movePopupBackToPage(otherPopupId);
+    }
+
+    if (popup.classList.contains('open')) {
+      popup.classList.remove('open');
+      movePopupBackToPage(popupId);
+      return;
+    }
+
+    movePageIntoPopup(pageId, popupId);
+    popup.classList.add('open');
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const shopBtn = document.getElementById('legacyShopBtn');
+    const settingsBtn = document.getElementById('legacySettingsBtn');
+
+    if (shopBtn) shopBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openPopup('legacyShopPopup', 'legacySettingsPopup', 'page-2');
+    });
+
+    if (settingsBtn) settingsBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openPopup('legacySettingsPopup', 'legacyShopPopup', 'page-7');
+    });
+
+    document.addEventListener('pointerdown', (e) => {
+      const shopPopup = document.getElementById('legacyShopPopup');
+      const settingsPopup = document.getElementById('legacySettingsPopup');
+      if (shopBtn && !shopBtn.contains(e.target) && shopPopup && shopPopup.classList.contains('open') && !shopPopup.contains(e.target)) {
+        shopPopup.classList.remove('open');
+        movePopupBackToPage('legacyShopPopup');
+      }
+      if (settingsBtn && !settingsBtn.contains(e.target) && settingsPopup && settingsPopup.classList.contains('open') && !settingsPopup.contains(e.target)) {
+        settingsPopup.classList.remove('open');
+        movePopupBackToPage('legacySettingsPopup');
+      }
+    });
+  });
+})();
+</script>
 
   <!-- if you're reading this in the source code, you're cool -->
   <!-- yes i recoded everything i hate myself -->
