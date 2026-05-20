@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ES2022",
+    "moduleResolution": "Bundler",
+    "rootDir": "./assets/scripts/ts",
+    "outDir": "./assets/scripts/js",
+    "strict": true,
+    "sourceMap": true,
+    "lib": ["ES2022", "DOM"]
+  },
+  "include": ["assets/scripts/ts/**/*.ts"]
+}
