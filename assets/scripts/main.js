@@ -2267,7 +2267,7 @@ else
   );
 
 function generateRunCard() {
-  const W = 720, H = 480;
+  const W = 720, H = 620;
   const canvas = document.createElement('canvas');
   canvas.width = W;
   canvas.height = H;
@@ -2276,7 +2276,6 @@ function generateRunCard() {
   ctx.fillStyle = '#000';
   ctx.fillRect(0, 0, W, H);
 
-  ctx.fillStyle = '#ddd';
   ctx.font = '13px monospace';
 
   let y = 0;
@@ -2345,9 +2344,19 @@ function generateRunCard() {
     }
   }
 
-  gap();
-  dim('─'.repeat(54));
-  dim(`generated ${new Date().toISOString().slice(0, 19).replace('T', ' ')} UTC`);
+  const rarestEntry = entries[0];
+  if (rarestEntry) {
+    const d = Math.round(1 / rarestEntry.rarityObj.chance).toLocaleString();
+    ctx.fillStyle = '#444';
+    ctx.font = '11px monospace';
+    ctx.fillText(`rarest: ${rarestEntry.rarityObj.name} (1/${d})`, 30, H - 20);
+  }
+
+  ctx.fillStyle = '#444';
+  ctx.font = '11px monospace';
+  ctx.textAlign = 'right';
+  ctx.fillText("play auth's RNG at authsrng.xyz!!!!", W - 30, H - 20);
+  ctx.textAlign = 'left';
 
   const a = document.createElement('a');
   a.href = canvas.toDataURL('image/png');
