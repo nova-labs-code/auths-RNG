@@ -1643,43 +1643,43 @@ function handleSwipe() {
 <script src="assets/scripts/trust-cosmetics.js" defer></script> <!-- a lone ugly ass soul-->
 
 <script>
-function hidePageDot(pageIndex) {
-  const dot = document.querySelector(`.page-dot[data-page="${pageIndex}"]`);
-  if (dot) dot.classList.add('dot-hidden');
-  const page = document.getElementById(`page-${pageIndex + 1}`);
-  if (page) {
-    page.style.visibility = 'hidden';
-    page.style.pointerEvents = 'none';
+function goToPage(index) {
+  if (index < 0 || index >= totalPages) return;
+  if (lockedPages.has(index)) {
+    if (index > currentPage) goToPage(index + 1);
+    else goToPage(index - 1);
+    return;
   }
-  window.lockedPages.add(pageIndex);
-}
 
-function unlockPageDot(pageIndex) {
-  const dot = document.querySelector(`.page-dot[data-page="${pageIndex}"]`);
-  if (!dot || !dot.classList.contains('dot-hidden')) return;
-  const page = document.getElementById(`page-${pageIndex + 1}`);
-  if (page) {
-    page.style.visibility = '';
-    page.style.pointerEvents = '';
+  const distance = Math.abs(index - currentPage);
+  if (distance > 1) {
+    container.style.transition = 'none';
   }
-  window.lockedPages.delete(pageIndex);
-  dot.classList.remove('dot-hidden');
-  dot.classList.add('dot-unlocking');
-  dot.addEventListener('animationend', () => dot.classList.remove('dot-unlocking'), { once: true });
-}
 
-window.hidePageDot = hidePageDot;
-window.unlockPageDot = unlockPageDot;
+  currentPage = index;
+  container.style.transform = `translateX(-${currentPage * 100}%)`;
 
-if (localStorage.getItem('mutationsUnlocked') !== '1') {
-  hidePageDot(3);
-}
-if (localStorage.getItem('starmapUnlocked') !== '1') {
-  hidePageDot(4);
-}
+  if (distance > 1) {
+    // double rAF: first frame applies the transform, second re-enables transition
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      container.style.transition = '';
+    }));
+  }
 
-const savedPage = parseInt(localStorage.getItem('currentPage') || '0');
-window.goToPage(savedPage);
+  const activePage = document.getElementById(`page-${currentPage + 1}`);
+  if (activePage) {
+    container.style.height = activePage.scrollHeight + 'px';
+  }
+
+  dots.forEach((dot, i) => {
+    dot.classList.toggle('active', i === currentPage);
+  });
+
+  prevBtn.disabled = currentPage === 0;
+  nextBtn.disabled = currentPage === totalPages - 1;
+
+  localStorage.setItem('currentPage', currentPage.toString());
+}
 </script>
 </body>
 
