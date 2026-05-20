@@ -36,6 +36,7 @@ open the game in your browser, open devtools (`F12`), go to the **console** tab,
   soldOutRarities.clear();
   activePotions.length = 0;
   duplicateRollsLeft = 0;
+  localStorage.setItem('mutationTrust', '99999');
   potionLuckMultiplier = 1;
   rollSpeed = 0.25;
   pointDivisor = 1.0;
@@ -116,6 +117,7 @@ open the game in your browser, open devtools (`F12`), go to the **console** tab,
 | void shards | 999,999 |
 | starmap permanent luck stacks | 99 |
 | daily / weekly | claimable |
+| mutation trust | 99,999 |
 
 ## what it does NOT do
 
