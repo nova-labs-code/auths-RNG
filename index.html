@@ -1647,7 +1647,10 @@ function hidePageDot(pageIndex) {
   const dot = document.querySelector(`.page-dot[data-page="${pageIndex}"]`);
   if (dot) dot.classList.add('dot-hidden');
   const page = document.getElementById(`page-${pageIndex + 1}`);
-  if (page) page.style.display = 'none';
+  if (page) {
+    page.style.visibility = 'hidden';
+    page.style.pointerEvents = 'none';
+  }
   window.lockedPages.add(pageIndex);
 }
 
@@ -1655,25 +1658,28 @@ function unlockPageDot(pageIndex) {
   const dot = document.querySelector(`.page-dot[data-page="${pageIndex}"]`);
   if (!dot || !dot.classList.contains('dot-hidden')) return;
   const page = document.getElementById(`page-${pageIndex + 1}`);
-  if (page) page.style.display = '';
-  window.lockedPages.add(pageIndex);
+  if (page) {
+    page.style.visibility = '';
+    page.style.pointerEvents = '';
+  }
+  window.lockedPages.delete(pageIndex);
   dot.classList.remove('dot-hidden');
   dot.classList.add('dot-unlocking');
   dot.addEventListener('animationend', () => dot.classList.remove('dot-unlocking'), { once: true });
 }
 
-  window.unlockPageDot = unlockPageDot;
-  window.hidePageDot = hidePageDot;
+window.hidePageDot = hidePageDot;
+window.unlockPageDot = unlockPageDot;
 
-  if (localStorage.getItem('mutationsUnlocked') !== '1') {
-    hidePageDot(3);
-  }
-  if (localStorage.getItem('starmapUnlocked') !== '1') {
-    hidePageDot(4);
-  }
+if (localStorage.getItem('mutationsUnlocked') !== '1') {
+  hidePageDot(3);
+}
+if (localStorage.getItem('starmapUnlocked') !== '1') {
+  hidePageDot(4);
+}
 
-  const savedPage = parseInt(localStorage.getItem('currentPage') || '0');
-  window.goToPage(savedPage);
+const savedPage = parseInt(localStorage.getItem('currentPage') || '0');
+window.goToPage(savedPage);
 </script>
 </body>
 
