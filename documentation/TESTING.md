@@ -80,6 +80,15 @@ open the game in your browser, open devtools (`F12`), go to the **console** tab,
   localStorage.setItem('wishingWell', JSON.stringify({
     lastThrow: 0, totalThrown: 0, totalReceived: 0, timesThrown: 0, successes: 0
   }));
+  localStorage.setItem('runesUnlocked', '1');
+  localStorage.setItem('runesData', JSON.stringify({
+    counts: { rare: 99, 'mid-rare': 99, common: 99 },
+    elementals: { water: 99, fire: 99, earth: 99, wizardry: 99 },
+    totalDropped: 999
+  }));
+  localStorage.setItem('runeBlocks', '999999');
+  window.unlockPageDot?.(5);
+  window.renderRunes?.();
 
   saveAllData();
 
@@ -118,6 +127,10 @@ open the game in your browser, open devtools (`F12`), go to the **console** tab,
 | starmap permanent luck stacks | 99 |
 | daily / weekly | claimable |
 | mutation trust | 99,999 |
+| runes page | unlocked |
+| all rune types | 99 each |
+| elemental runes | 99 each |
+| blocks | 999,999 |
 
 ## what it does NOT do
 

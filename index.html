@@ -556,8 +556,13 @@ if (navigator.userAgent.includes("Screenjesus")) {
   <div id="starmapContainer" style="width:100%;max-width:540px;"></div>
 </div>
 
+<div class="page" id="page-6">
+  <h2 style="margin-top: 0;">runes</h2>
+  <p style="font-size: 0.8em; opacity: 0.5; margin: -6px 0 16px;">runes drop as you roll · collect all 4 elementals to choose a gift · spend blocks on permanent upgrades</p>
+  <div id="runesContainer" style="width:100%;max-width:540px;"></div>
+</div>
 
-    <div class="page" id="page-6">
+    <div class="page" id="page-7">
   <h2 style="margin-top: 0;">wishing well</h2>
   
   <div class="well-container">
@@ -599,7 +604,7 @@ if (navigator.userAgent.includes("Screenjesus")) {
   </div>
 </div>
 
-<div class="page" id="page-7">
+<div class="page" id="page-8">
   <h2 style="margin-top: 0; margin-bottom: 20px;">settings</h2>
   
   <button id="openThemeEditorBtn" style="width:100%;margin-top:12px;padding:10px;">open theme editor</button>
@@ -692,7 +697,7 @@ if (navigator.userAgent.includes("Screenjesus")) {
       <div id="leaderboardSection"></div>
 </div>
 
-<div class="page" id="page-8">
+<div class="page" id="page-9">
   <h2 style="margin-top: 0;">links and more</h2>
   
   <!--
@@ -801,7 +806,7 @@ if (navigator.userAgent.includes("Screenjesus")) {
   <div class="page-dot" data-page="5"></div>
   <div class="page-dot" data-page="6"></div>
   <div class="page-dot" data-page="7"></div>
-
+  <div class="page-dot" data-page="8"></div>
 </div>
 
 <button class="page-arrow left" id="prevPage">‹</button>
@@ -1389,6 +1394,7 @@ toggleBtn.addEventListener('click', () => {
 
 <script src="assets/scripts/gauntlets.js" defer></script>
 <script src="assets/scripts/starmap.js" defer></script>
+<script src="assets/scripts/runes.js" defer></script>
 <script src="assets/scripts/mutations.js" defer></script>
 
 <script> // TAGS </script>
@@ -1750,6 +1756,7 @@ window.unlockPageDot = unlockPageDot;
 
 if (localStorage.getItem('mutationsUnlocked') !== '1') hidePageDot(3);
 if (localStorage.getItem('starmapUnlocked') !== '1') hidePageDot(4);
+if (localStorage.getItem('runesUnlocked') !== '1') hidePageDot(5);
 
 const savedPage = parseInt(localStorage.getItem('currentPage') || '0');
 window.goToPage(savedPage);

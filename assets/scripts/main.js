@@ -523,7 +523,25 @@ function recalcLuckMultiplier() {
     typeof window.getStarmapLuckBonus === 'function'
       ? window.getStarmapLuckBonus()
       : 1;
-  globalLuckMultiplier = shopLuckMultiplier * anomalyMult * starmapMult;
+  const runeTripMult =
+    typeof window.getRuneTripleLuckMultiplier === 'function'
+      ? window.getRuneTripleLuckMultiplier()
+      : 1;
+  const runeGiftMult =
+    typeof window.getRuneGiftLuckMultiplier === 'function'
+      ? window.getRuneGiftLuckMultiplier()
+      : 1;
+  const runeCloverMult =
+    typeof window.getRuneDoubleCloverLuckMultiplier === 'function'
+      ? window.getRuneDoubleCloverLuckMultiplier()
+      : 1;
+  globalLuckMultiplier =
+    shopLuckMultiplier *
+    anomalyMult *
+    starmapMult *
+    runeTripMult *
+    runeGiftMult *
+    runeCloverMult;
   if (luckBoostActive) globalLuckMultiplier *= 4;
   globalLuckMultiplier *= potionLuckMultiplier;
   updateLuckDisplay();
@@ -1048,6 +1066,7 @@ function updateTotalRolls() {
 
 function addToInventory(o) {
   rarityTimestamps.set(o.name, Date.now());
+  if (typeof window.tryDropRune === 'function') window.tryDropRune(o);
 
   if (inventoryData.has(o.name)) {
     const d = inventoryData.get(o.name);
@@ -1700,6 +1719,10 @@ async function resetInventory() {
   localStorage.removeItem('mutationTrustActive');
   localStorage.removeItem('mutationHistory');
   localStorage.removeItem('mutationBestResult');
+  localStorage.removeItem('runesData');
+  localStorage.removeItem('runeBlocks');
+  localStorage.removeItem('runeGift');
+  localStorage.removeItem('runeUpgrades');
   rarityTimestamps = new Map();
   window.rarityTimestamps = rarityTimestamps;
   notifications = [];

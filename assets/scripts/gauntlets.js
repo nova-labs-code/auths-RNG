@@ -294,7 +294,7 @@
       rewards: [
         { type: 'points', amount: 20000000, label: '20,000,000 pts' },
         { type: 'anomaly', amount: 25000, label: '25,000 anomalies' },
-        { type: 'luck', mult: 15, dur: 720, label: '12m 15x luck' },
+        { type: 'unlock_runes', label: 'unlock runes 🔷' },
       ],
     },
     {
@@ -521,6 +521,11 @@
       showAnomalyPopup('✦ starmap unlocked!');
       if (typeof renderStarmap === 'function') renderStarmap();
       window.unlockPageDot?.(4);
+    } else if (rew.type === 'unlock_runes') {
+      localStorage.setItem('runesUnlocked', '1');
+      showAnomalyPopup('🔷 runes unlocked!');
+      if (typeof renderRunes === 'function') renderRunes();
+      window.unlockPageDot?.(5);
     }
   }
 
