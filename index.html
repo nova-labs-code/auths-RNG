@@ -971,107 +971,105 @@ toggleBtn.addEventListener('click', () => {
   const prevBtn = document.getElementById('prevPage');
   const nextBtn = document.getElementById('nextPage');
   const swipeIndicator = document.querySelector('.swipe-indicator');
-  
+
   let currentPage = 0;
   const totalPages = 8;
   const lockedPages = new Set();
-  
-  // ???????????????????????????????????/
-let visitCount = parseInt(localStorage.getItem('pageVisitCount') || '0');
-if (visitCount < 6) {
-  setTimeout(() => {
-    swipeIndicator.classList.add('show');
-    setTimeout(() => swipeIndicator.classList.remove('show'), 10000);
-  }, 1000);
-  localStorage.setItem('pageVisitCount', (visitCount + 1).toString());
-}
-  
-function goToPage(index) {
-  if (index < 0 || index >= totalPages) return;
-  if (lockedPages.has(index)) {
-    if (index > currentPage) goToPage(index + 1);
-    else goToPage(index - 1);
-    return;
+
+  let visitCount = parseInt(localStorage.getItem('pageVisitCount') || '0');
+  if (visitCount < 6) {
+    setTimeout(() => {
+      swipeIndicator.classList.add('show');
+      setTimeout(() => swipeIndicator.classList.remove('show'), 10000);
+    }, 1000);
+    localStorage.setItem('pageVisitCount', (visitCount + 1).toString());
   }
 
-  currentPage = index;
-  container.style.transform = `translateX(-${currentPage * 100}%)`;
-  
-  const activePage = document.getElementById(`page-${currentPage + 1}`);
-  if (activePage) {
-    container.style.height = activePage.scrollHeight + 'px';
+  function getPageLeft(pageIndex) {
+    let offset = 0;
+    for (let i = 0; i < pageIndex; i++) {
+      const p = document.getElementById(`page-${i + 1}`);
+      offset += p ? p.offsetWidth : 0;
+    }
+    return offset;
   }
-  
-  dots.forEach((dot, i) => {
-    dot.classList.toggle('active', i === currentPage);
-  });
-  
-  prevBtn.disabled = currentPage === 0;
-  nextBtn.disabled = currentPage === totalPages - 1;
-  
-  localStorage.setItem('currentPage', currentPage.toString());
-}
-  
+
+  function goToPage(index) {
+    if (index < 0 || index >= totalPages) return;
+    if (lockedPages.has(index)) {
+      if (index > currentPage) goToPage(index + 1);
+      else goToPage(index - 1);
+      return;
+    }
+
+    const prevOffset = getPageLeft(currentPage);
+    const newOffset  = getPageLeft(index);
+    const pageWidth  = container.offsetWidth;
+    const bigJump    = Math.abs(newOffset - prevOffset) > pageWidth * 1.5;
+
+    if (bigJump) container.style.transition = 'none';
+
+    currentPage = index;
+    window._currentPage = index;
+    container.style.transform = `translateX(-${newOffset}px)`;
+
+    if (bigJump) {
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        container.style.transition = '';
+      }));
+    }
+
+    const activePage = document.getElementById(`page-${currentPage + 1}`);
+    if (activePage) container.style.height = activePage.scrollHeight + 'px';
+
+    dots.forEach((dot, i) => dot.classList.toggle('active', i === currentPage));
+
+    prevBtn.disabled = currentPage === 0;
+    nextBtn.disabled = currentPage === totalPages - 1;
+
+    localStorage.setItem('currentPage', currentPage.toString());
+  }
+
   prevBtn.addEventListener('click', () => goToPage(currentPage - 1));
   nextBtn.addEventListener('click', () => goToPage(currentPage + 1));
-  
-  dots.forEach((dot, index) => {
-    dot.addEventListener('click', () => goToPage(index));
-  });
-  
-let touchStartX = 0;
-let touchEndX = 0;
-let touchStartY = 0;
-let touchEndY = 0;
+  dots.forEach((dot, index) => dot.addEventListener('click', () => goToPage(index)));
 
-container.parentElement.addEventListener('touchstart', (e) => {
-  touchStartX = e.changedTouches[0].screenX;
-  touchStartY = e.changedTouches[0].screenY;
-}, { passive: true });
+  let touchStartX = 0, touchEndX = 0, touchStartY = 0, touchEndY = 0;
 
-container.parentElement.addEventListener('touchend', (e) => {
-  touchEndX = e.changedTouches[0].screenX;
-  touchEndY = e.changedTouches[0].screenY;
-  handleSwipe();
-}, { passive: true });
+  container.parentElement.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
 
-function handleSwipe() {
-  const swipeThreshold = 80;
-  const diffX = touchStartX - touchEndX;
-  const diffY = touchStartY - touchEndY;
-  
-  if (Math.abs(diffX) > swipeThreshold && Math.abs(diffX) > Math.abs(diffY)) {
-    if (diffX > 0) {
-      if (currentPage < totalPages - 1) {
-        goToPage(currentPage + 1);
+  container.parentElement.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    touchEndY = e.changedTouches[0].screenY;
+    handleSwipe();
+  }, { passive: true });
+
+  function handleSwipe() {
+    const swipeThreshold = 80;
+    const diffX = touchStartX - touchEndX;
+    const diffY = touchStartY - touchEndY;
+    if (Math.abs(diffX) > swipeThreshold && Math.abs(diffX) > Math.abs(diffY)) {
+      if (diffX > 0) {
+        if (currentPage < totalPages - 1) goToPage(currentPage + 1);
+        else { const d = document.querySelector('.page-dot.active'); if (d) { d.classList.add('flash-red'); setTimeout(() => d.classList.remove('flash-red'), 300); } }
       } else {
-        const activeDot = document.querySelector('.page-dot.active');
-        if (activeDot) {
-          activeDot.classList.add('flash-red');
-          setTimeout(() => activeDot.classList.remove('flash-red'), 300);
-        }
-      }
-    } else if (diffX < 0) {
-      if (currentPage > 0) {
-        goToPage(currentPage - 1);
-      } else {
-        const activeDot = document.querySelector('.page-dot.active');
-        if (activeDot) {
-          activeDot.classList.add('flash-red');
-          setTimeout(() => activeDot.classList.remove('flash-red'), 300);
-        }
+        if (currentPage > 0) goToPage(currentPage - 1);
+        else { const d = document.querySelector('.page-dot.active'); if (d) { d.classList.add('flash-red'); setTimeout(() => d.classList.remove('flash-red'), 300); } }
       }
     }
   }
-}
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowLeft') goToPage(currentPage - 1);
     if (e.key === 'ArrowRight') goToPage(currentPage + 1);
   });
-  
+
   window.lockedPages = lockedPages;
   window.goToPage = goToPage;
+  window._currentPage = 0;
 })();
 </script>
 
@@ -1648,8 +1646,11 @@ function hidePageDot(pageIndex) {
   if (dot) dot.classList.add('dot-hidden');
   const page = document.getElementById(`page-${pageIndex + 1}`);
   if (page) {
+    page.style.minWidth = '0';
+    page.style.width = '0';
+    page.style.overflow = 'hidden';
     page.style.visibility = 'hidden';
-    page.style.pointerEvents = 'none';
+    page.style.padding = '0';
   }
   window.lockedPages.add(pageIndex);
 }
@@ -1659,13 +1660,18 @@ function unlockPageDot(pageIndex) {
   if (!dot || !dot.classList.contains('dot-hidden')) return;
   const page = document.getElementById(`page-${pageIndex + 1}`);
   if (page) {
+    page.style.minWidth = '';
+    page.style.width = '';
+    page.style.overflow = '';
     page.style.visibility = '';
-    page.style.pointerEvents = '';
+    page.style.padding = '';
   }
   window.lockedPages.delete(pageIndex);
   dot.classList.remove('dot-hidden');
   dot.classList.add('dot-unlocking');
   dot.addEventListener('animationend', () => dot.classList.remove('dot-unlocking'), { once: true });
+  // re-sync transform since layout widths changed
+  window.goToPage(window._currentPage);
 }
 
 window.hidePageDot = hidePageDot;
