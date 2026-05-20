@@ -2267,7 +2267,7 @@ else
   );
 
 function generateRunCard() {
-  const W = 720, H = 380;
+  const W = 720, H = 400;
   const canvas = document.createElement('canvas');
   canvas.width = W;
   canvas.height = H;
@@ -2304,7 +2304,6 @@ function generateRunCard() {
   line(`anomalies        ${anomalies} held  /  ${anomaliesUsed} consumed`);
   line(`collected        ${inventoryData.size} / ${rarities.length}`);
   line(`achievements     ${achievementsUnlocked.size} / ${achievementsList.length}`);
-  line(`daily streak     ${localStorage.getItem('daily_streak') || 0}  (weekly: ${localStorage.getItem('weekly_streak') || 0})`);
 
   gap();
   dim('─'.repeat(54));
@@ -2325,7 +2324,7 @@ function generateRunCard() {
   ctx.fillStyle = '#444';
   ctx.font = '11px monospace';
   ctx.textAlign = 'right';
-  ctx.fillText("play auth's RNG at authsrng.xyz!!!!", W - 30, H - 20);
+  ctx.fillText("play auth's RNG at authsrng.xyz!!!!", W - 30, H - 12);
   ctx.textAlign = 'left';
 
   const a = document.createElement('a');
