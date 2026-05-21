@@ -347,6 +347,7 @@
   window.renderMutations = renderMutations;
 
   function tryInit(n) {
+    if (!isUnlocked()) return;
     if (
       typeof inventoryData !== 'undefined' &&
       inventoryData instanceof Map &&
@@ -355,5 +356,4 @@
       renderMutations();
     else if (n > 0) setTimeout(() => tryInit(n - 1), 200);
   }
-  tryInit(60);
 })();

@@ -376,7 +376,51 @@ const messages = [
   'TYPESCRIPT IS A FREAK',
   'your walls are comfortable to be inside.. oh theres also a chip bag in here',
   'qwertyuiopasdfghjklzxcvbnm',
-  'NOOO WHYYYYYYYYYYYYYYYYYYY'
+  'NOOO WHYYYYYYYYYYYYYYYYYYY',
+  'best of luck this session...',
+  'you guys are my concurrent users and you guys are analytics',
+  ':D!',
+  'im in a time machine woahhhhhhhh',
+  'microslop microslop microslop i wont stop saying it',
+  'adding bugs.. hold on',
+  'THIS ISNT A ROBLOX RNG GAME KNOCKOFF AHHHHHHHH',
+  'you gotta understand.. theres a difference between THIS and those slop RNG roblox games you find everywhere',
+  'oh boy.. gambling!!',
+  'to this day i still accidentally type "gambaling" and not "gambling" english is weird',
+  'THE NAME OF THE GAME IS NOT authsrng THATS JUST THE URL AHHHHHHHH',
+  'do NOT turn on adhd mode',
+  'oh nocturne newpromise daily_lastClaim!',
+  'coding aint cringe you ronaldo glazer... why is there an angry crowd out my hou-',
+  'coding is not cringe ahhhhhh',
+  'stop asking me how much money i get from this game i earn nothing',
+  'i suffer for your entertainment',
+  'tip: check out the theme editor in settings! you will see what freedom feels like in there...',
+  'tip: auto. roll.',
+  'toaster.. TOASTER!!!',
+  'MUTATION_HISTORY_MAX AHHHHHHHHHHH',
+  'I Adapt To Your Senses!',
+  'whoever uses thoughts (like *oh no! he found out!*) in text messages should be crucified',
+  'maybe opt in the leaderboard in settings? in the bottom by the way',
+  'By using this certified: Stupid Game you agree to our privacy policy and TOS.',
+  'shut up garbald',
+  'b2r t2r thats your bar 9o tar',
+  'saddy.. wait i meant to spell sadly not saddy',
+  'sponge....................',
+  // too much too much A
+  // i have too much free time
+  'i am damaged because of your failures',
+  'this used to be just a game where you genuinely just click a button.. and somehow people liked it',
+  'the art of gambling is not for the earnings.. but for all the lost  ̶m̶o̶n̶e̶y̶ time you have done throughout the way.',
+
+
+  'I҈̗̙̜̜͉͆͂̃̒̉͋̓̄͆M̴̥̪̘̘͙̥̞̜̙͚̪̀́̇̾͒͐͑̃̀̈́͆ S̶͍̰̱̟̲͕͔͎̬̘̔̅̇͑̍̃̏̅̈́̎̈́T҈͚̘̣͎̮̗̠̤̞̬͛̂̄̂U҉̥̫̦̜̮̭̙̙̏̃̍̓͛C̸͍̭̪̞̩̈̆̾̔K̴͔̱̠̤̤̐̃̈́̔̃ͅ Ȟ̴͎̙̮̘͋̒͊̓̆̃͆̌̐̇Ȇ̶̤̬̱̪̜̓̐͒R̵̰͖̞̘͙̮̱̾̊͋̉̚E̷͕̞̮̲̩͉̖͑̔̋̎͋̐́ H҉̭̮̜̟̦͙̆̓̆̆̽̓̃E̶̝͓̮̱͔͔̗͓̫̜̎̋͆́Ĺ̶̟̣̙̞͔̽͗̀͂͒͂̉P҈̳͙͈͕͓͍͔͔͔̍̐̊̓ͅ',
+
+
+  'hey did we smell fire here?',
+  'honey! new auths RNG update dropped!',
+  'go to FakeRobuxSite.fake for free robux!',
+  'let me just open the blinds for ya..',
+  'unicode scares me'
 ];
 
 const randomIndex = Math.floor(Math.random() * messages.length);

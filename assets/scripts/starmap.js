@@ -92,7 +92,7 @@
     const now = Date.now();
     // use 0 explicitly — if lastShardCalc was never set, full elapsed since epoch
     // would be wrong, so cap to a sane max of 24h to avoid absurd catch-up grants
-    const last = d.lastShardCalc > 0 ? d.lastShardCalc : now;
+    const last = d.lastShardCalc ?? now;
     const elapsed = Math.min((now - last) / 3600000, 24); // cap at 24h
     d.voidShards =
       (d.voidShards || 0) + totalShardsPerHour(d.constellations) * elapsed;
@@ -209,7 +209,7 @@
       index: idx,
       createdAt: Date.now(),
       totalRolls: rolls,
-      playtime: typeof totalSeconds !== 'undefined' ? totalSeconds : 0,
+      playtime: typeof window.totalSeconds !== 'undefined' ? window.totalSeconds : 0,
       stars,
       shardsPerHour: stars.reduce(
         (s, st) => s + shardsPerHourForStar(st.chance),

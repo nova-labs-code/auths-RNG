@@ -2,104 +2,151 @@
   'use strict';
 
   const BUILT_IN_PRESETS = [
-    {
-      name: 'default',
-      vars: {
-        bgColor: '#0e0e0e',
-        textColor: '#dcdcdc',
-        panelBg: '#111111',
-        overlayBg: '#0a0a0a',
-        borderColor: '#2a2a2a',
-        buttonBg: '#1a1a1a',
-        accentColor: '#dcdcdc',
-        pointsColor: '#ffb86b',
-        achievementBg: '#1a2a1a',
-        achievementBorder: '#2a4a2a',
-      },
-      settings: { radius: 2, borderWidth: 1, textSize: 16, font: 'default' },
+  {
+    name: 'default',
+    vars: {
+      bgColor: '#0e0e0e',
+      textColor: '#dcdcdc',
+      panelBg: '#111111',
+      overlayBg: '#0a0a0a',
+      borderColor: '#2a2a2a',
+      buttonBg: '#1a1a1a',
+      accentColor: '#dcdcdc',
+      pointsColor: '#ffb86b',
+      achievementBg: '#1a2a1a',
+      achievementBorder: '#2a4a2a',
     },
-    {
-      name: 'material you',
-      vars: {
-        bgColor: '#1c1b1f',
-        textColor: '#e6e1e5',
-        panelBg: '#2d2c31',
-        overlayBg: '#141218',
-        borderColor: '#49454f',
-        buttonBg: '#4a4458',
-        accentColor: '#d0bcff',
-        pointsColor: '#ffb4ab',
-        achievementBg: '#21005d',
-        achievementBorder: '#d0bcff',
-      },
-      settings: { radius: 16, borderWidth: 0, textSize: 16, font: 'default' },
+    settings: { radius: 2, borderWidth: 1, textSize: 16, font: 'default' },
+  },
+  {
+    name: 'material you',
+    vars: {
+      bgColor: '#1c1b1f',
+      textColor: '#e6e1e5',
+      panelBg: '#2d2c31',
+      overlayBg: '#141218',
+      borderColor: '#49454f',
+      buttonBg: '#4a4458',
+      accentColor: '#d0bcff',
+      pointsColor: '#ffb4ab',
+      achievementBg: '#21005d',
+      achievementBorder: '#d0bcff',
     },
-    {
-      name: 'light',
-      vars: {
-        bgColor: '#ffffff',
-        textColor: '#0e0e0e',
-        panelBg: '#fafafa',
-        overlayBg: '#f5f5f5',
-        borderColor: '#d0d0d0',
-        buttonBg: '#f0f0f0',
-        accentColor: '#0e0e0e',
-        pointsColor: '#d97706',
-        achievementBg: '#e8f5e8',
-        achievementBorder: '#90c090',
-      },
-      settings: { radius: 3, borderWidth: 1, textSize: 16, font: 'default' },
+    settings: { radius: 16, borderWidth: 0, textSize: 16, font: 'default' },
+  },
+  {
+    name: 'midnight blue',
+    vars: {
+      bgColor: '#0a0e1a',
+      textColor: '#c8d8f0',
+      panelBg: '#0f1525',
+      overlayBg: '#070b14',
+      borderColor: '#1e2d4a',
+      buttonBg: '#152038',
+      accentColor: '#4d9fff',
+      pointsColor: '#ffd166',
+      achievementBg: '#0d1e3a',
+      achievementBorder: '#2255aa',
     },
-    {
-      name: 'glassmorphism',
-      vars: {
-        bgColor: '#0f0e17',
-        textColor: '#fffffe',
-        panelBg: '#1a1a2e',
-        overlayBg: '#0d0d1a',
-        borderColor: '#ffffff22',
-        buttonBg: '#ffffff11',
-        accentColor: '#a786df',
-        pointsColor: '#f2a65a',
-        achievementBg: '#16213e',
-        achievementBorder: '#a786df',
-      },
-      settings: { radius: 12, borderWidth: 1, textSize: 16, font: 'default' },
-      extra: { blurPanels: true },
+    settings: { radius: 4, borderWidth: 1, textSize: 16, font: 'default' },
+  },
+  {
+    name: 'rose',
+    vars: {
+      bgColor: '#1a0d0f',
+      textColor: '#f0d8dc',
+      panelBg: '#240f13',
+      overlayBg: '#120709',
+      borderColor: '#4a1f26',
+      buttonBg: '#331218',
+      accentColor: '#ff6b8a',
+      pointsColor: '#ffb347',
+      achievementBg: '#2a0d14',
+      achievementBorder: '#8b2a3a',
     },
-    {
-      name: 'terminal',
-      vars: {
-        bgColor: '#000000',
-        textColor: '#39ff14',
-        panelBg: '#0a0a0a',
-        overlayBg: '#000000',
-        borderColor: '#003300',
-        buttonBg: '#001100',
-        accentColor: '#39ff14',
-        pointsColor: '#39ff14',
-        achievementBg: '#001a00',
-        achievementBorder: '#39ff14',
-      },
-      settings: { radius: 0, borderWidth: 1, textSize: 15, font: 'mono' },
+    settings: { radius: 3, borderWidth: 1, textSize: 16, font: 'default' },
+  },
+  {
+    name: 'forest',
+    vars: {
+      bgColor: '#0a1208',
+      textColor: '#c8e0c0',
+      panelBg: '#0f1a0c',
+      overlayBg: '#070e05',
+      borderColor: '#1e3a18',
+      buttonBg: '#142610',
+      accentColor: '#6abf5e',
+      pointsColor: '#d4a843',
+      achievementBg: '#0d2209',
+      achievementBorder: '#2d6625',
     },
-    {
-      name: 'solarized',
-      vars: {
-        bgColor: '#fdf6e3',
-        textColor: '#657b83',
-        panelBg: '#eee8d5',
-        overlayBg: '#fdf6e3',
-        borderColor: '#93a1a1',
-        buttonBg: '#eee8d5',
-        accentColor: '#268bd2',
-        pointsColor: '#cb4b16',
-        achievementBg: '#d5e8d4',
-        achievementBorder: '#82b366',
-      },
-      settings: { radius: 3, borderWidth: 1, textSize: 16, font: 'default' },
+    settings: { radius: 2, borderWidth: 1, textSize: 16, font: 'default' },
+  },
+  {
+    name: 'slate',
+    vars: {
+      bgColor: '#0f1117',
+      textColor: '#cbd5e1',
+      panelBg: '#161b27',
+      overlayBg: '#0b0e17',
+      borderColor: '#2a3347',
+      buttonBg: '#1e2538',
+      accentColor: '#94a3b8',
+      pointsColor: '#f59e0b',
+      achievementBg: '#162032',
+      achievementBorder: '#334d6e',
     },
-  ];
+    settings: { radius: 6, borderWidth: 1, textSize: 16, font: 'default' },
+  },
+  {
+    name: 'paper',
+    vars: {
+      bgColor: '#f5f0e8',
+      textColor: '#2c2416',
+      panelBg: '#ede8de',
+      overlayBg: '#f9f6f0',
+      borderColor: '#c8b99a',
+      buttonBg: '#e0d8c8',
+      accentColor: '#8b5e3c',
+      pointsColor: '#c2540a',
+      achievementBg: '#dff0df',
+      achievementBorder: '#7aaa6a',
+    },
+    settings: { radius: 2, borderWidth: 1, textSize: 16, font: 'serif' },
+  },
+  {
+    name: 'amber',
+    vars: {
+      bgColor: '#0f0a00',
+      textColor: '#ffe8a0',
+      panelBg: '#1a1000',
+      overlayBg: '#090600',
+      borderColor: '#3d2a00',
+      buttonBg: '#261900',
+      accentColor: '#ffb800',
+      pointsColor: '#ff7c00',
+      achievementBg: '#1f1500',
+      achievementBorder: '#7a5500',
+    },
+    settings: { radius: 0, borderWidth: 1, textSize: 15, font: 'mono' },
+  },
+  {
+    name: 'ice',
+    vars: {
+      bgColor: '#f0f6ff',
+      textColor: '#1a2a3a',
+      panelBg: '#e4eef9',
+      overlayBg: '#f7faff',
+      borderColor: '#b8d0e8',
+      buttonBg: '#d8eaf7',
+      accentColor: '#2e7fc2',
+      pointsColor: '#0066cc',
+      achievementBg: '#d8eef8',
+      achievementBorder: '#5aaade',
+    },
+    settings: { radius: 8, borderWidth: 1, textSize: 16, font: 'default' },
+  },
+];
 
   const STORAGE_KEY = 'themeEditorPresets';
   const ACTIVE_KEY = 'themeEditorActive';
@@ -445,6 +492,10 @@
       season: s.season,
       particleDensity: s.particleDensity,
       blurPanels: s.blurPanels,
+      blurIntensity: s.blurIntensity,
+      blurSaturate: s.blurSaturate,
+      blurPanelOpacity: s.blurPanelOpacity,
+      blurBorderOpacity: s.blurBorderOpacity,
       compactMode: s.compactMode,
       hideCursor: s.hideCursor,
       hideLuckBreakdown: s.hideLuckBreakdown,
@@ -457,7 +508,7 @@
       accentColor: v.accentColor,
       confettiThreshold: s.confettiThreshold,
       rareThreshold: s.rareThreshold,
-      cutsceneThreshold: s.cutsceneThreshold, // the comma is HERE guys stop fucking giving me this syntax error you doucebag
+      cutsceneThreshold: s.cutsceneThreshold,
       bgType: s.bgType,
       bgGradientFrom: s.bgGradientFrom,
       bgGradientTo: s.bgGradientTo,
@@ -676,7 +727,7 @@
   }
 
   function renderPresets() {
-    const container = el('themePresetsContainer');
+    const container = el('presetGrid');
     if (!container) return;
 
     const all = getAllPresets();
@@ -771,9 +822,8 @@
         );
         document.body.setAttribute('style', snapshotBeforeOpen.bodyStyle);
       }
-      if (window.applySettings && window.getCurrentSettings) {
-        const s = window.getCurrentSettings();
-        window.applySettings(s);
+      if (window.applySettings && window.savedSettings) {
+        window.applySettings(window.savedSettings);
       }
       closeEditor();
     });

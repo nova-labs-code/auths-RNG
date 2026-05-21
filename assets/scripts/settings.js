@@ -473,6 +473,9 @@
     document.body.classList.toggle('reduce-motion', !!settings.reduceMotion);
     document.body.classList.toggle('high-contrast', !!settings.highContrast);
     document.body.classList.toggle('large-targets', !!settings.largeTargets);
+    document.body.classList.toggle('rgb-bg', !!settings.rgb);
+    document.body.classList.toggle('wacky-text', !!settings.wacky);
+    document.body.classList.toggle('adhd-mode', !!settings.chaos);
 
     if (!localStorage.getItem('themeEditorActive')) {
       if (settings.theme === 'white') {
@@ -1043,7 +1046,7 @@
     const legacyShopPopup = el('legacyShopPopup');
     const legacySettingsPopup = el('legacySettingsPopup');
     const shopPage = document.querySelector('#page-2');
-    const settingsPage = document.querySelector('#page-6');
+    const settingsPage = document.querySelector('#page-8');
     if (
       !legacyShopBtn ||
       !legacySettingsBtn ||
@@ -1180,6 +1183,10 @@
   } else {
     init();
   }
+
+  Object.defineProperty(window, 'savedSettings', {
+    get: () => savedSettings,
+  });
 
   // Expose globals
   window.applySettings = function (settings) {

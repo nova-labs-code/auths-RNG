@@ -288,8 +288,9 @@
         typeof points !== 'undefined' &&
         typeof updatePointsDisplay === 'function'
       ) {
-        window.points += 200000;
+        points += 200000;
         updatePointsDisplay();
+        if (typeof saveAllData === 'function') saveAllData();
       }
     }, 1000);
   }
@@ -390,9 +391,10 @@
   function startAnomalyMachine() {
     if (anomalyMachineInterval) clearInterval(anomalyMachineInterval);
     anomalyMachineInterval = setInterval(() => {
-      if (typeof window.anomalies !== 'undefined') {
-        window.anomalies += 50;
+      if (typeof anomalies !== 'undefined') {
+        anomalies += 50;
         if (typeof updateAnomalyUI === 'function') updateAnomalyUI();
+        if (typeof saveAllData === 'function') saveAllData();
       }
     }, 2000);
   }

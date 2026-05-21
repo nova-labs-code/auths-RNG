@@ -362,7 +362,7 @@
       potionData['_g_' + id] = {
         name: id + ' luck',
         emoji: '🏆',
-        mult: 0,
+        mult: 1,
         duration: 0,
       };
     }
@@ -443,15 +443,14 @@
 
     const stateKey = t.isGlobal ? 'global' : t.id;
     const tierState = d[stateKey];
-    const lastClaimTime = tierState?.lastClaimTime ?? 0;
 
+    if (!tierState) {
+      return getTierRarities(t).every((n) => inventoryData.has(n));
+    }
+
+    const lastClaimTime = tierState.lastClaimTime ?? 0;
     return getTierRarities(t).every((n) => {
       if (!inventoryData.has(n)) return false;
-      // Only bypass timestamp check if this is literally the first time
-      // we've ever rendered gauntlets (no state stored at all for this tier).
-      // If the tier state exists but lastClaimTime is 0, it means a claim
-      // happened with broken data — don't fuckin' bypass!!!!!!!
-      if (!tierState && lastClaimTime === 0) return true;
       const ts =
         typeof window.rarityTimestamps !== 'undefined'
           ? (window.rarityTimestamps.get(n) ?? 0)
@@ -459,6 +458,7 @@
       return ts > lastClaimTime;
     });
   }
+
   function canClaim(t, d) {
     if (t.isGlobal) return ((d.global && d.global.lastRot) ?? -1) < rotIdx();
     const last = (d[t.id] && d[t.id].lastClaim) ?? 0;

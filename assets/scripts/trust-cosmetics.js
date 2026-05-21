@@ -173,7 +173,7 @@
     setInterval(() => {
       const inv = window.getInventoryRarities?.();
       if (!inv || inv.length < 2) return;
-      const shuffle = [...inv].sort(() => rng() - 0.5);
+      const shuffle = [...inv].sort(() => (typeof Beacon !== 'undefined' ? Beacon.float() : Math.random()) - 0.5);
       const a = shuffle[0];
       const b = shuffle[1];
       if (a.name === b.name) return;
