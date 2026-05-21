@@ -358,7 +358,25 @@ const messages = [
   'Update 7.3.1: reduced screaming by 14% and fixed bug where fish became immortal',
   'dont worry about this part for now',
   'fire bad. wheel squeaky',
-  'you have died my peasent'
+  'you have died my peasent',
+  'oh noes!',
+  'wowie.. common is the best rarity',
+  'unc still got it 🥹🙏',
+  'i encourage you to get your friends to play this in school.. just kidding do your work',
+  'these messages are randomized.. ahhh',
+  'any message you see up here is SATIRE',
+  'Thank you for giving us your IP! Your WiFi will be DDoSed shortly!',
+  'tip: got a question? check out the FAQ',
+  'tip: grind.',
+  'auth fact: she is a BAD BAD PERSON',
+  'congrats! you will now get 50 pizzas to your house. enjoy paying the tip!',
+  'HTML IS A FREAK',
+  'JAVASCRIPT IS A FREAK',
+  'CSS IS A FREAK',
+  'TYPESCRIPT IS A FREAK',
+  'your walls are comfortable to be inside.. oh theres also a chip bag in here',
+  'qwertyuiopasdfghjklzxcvbnm',
+  'NOOO WHYYYYYYYYYYYYYYYYYYY'
 ];
 
 const randomIndex = Math.floor(Math.random() * messages.length);
