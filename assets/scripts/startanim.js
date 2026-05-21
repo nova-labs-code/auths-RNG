@@ -1,11 +1,23 @@
 window.addEventListener('DOMContentLoaded', () => {
+  let _bg = '#0e0e0e';
+  let _fg = '#dcdcdc';
+
+  try {
+    const saved = JSON.parse(localStorage.getItem('themeEditorActive') || 'null');
+    if (saved && saved.editorData && saved.editorData.vars) {
+      const v = saved.editorData.vars;
+      if (v.bgColor)    _bg = v.bgColor;
+      if (v.textColor)  _fg = v.textColor;
+    }
+  } catch (_) {}
+
   const style = document.createElement('style');
   style.textContent = `
     .entry-container {
       position: fixed;
       inset: 0;
       z-index: 9999;
-      background: #0e0e0e;
+      background: ${_bg};
       display: flex;
       justify-content: center;
       align-items: center;
@@ -17,7 +29,7 @@ window.addEventListener('DOMContentLoaded', () => {
     .tap-text {
       position: absolute;
       bottom: 8%;
-      color: #dcdcdc;
+      color: ${_fg};
       font-size: 0.9em;
       font-family: monospace;
       letter-spacing: 0.08em;
@@ -43,7 +55,7 @@ window.addEventListener('DOMContentLoaded', () => {
       left: 50%;
       width: 1px;
       height: 1px;
-      background: #dcdcdc;
+      background: ${_fg};
       transform: translate(-50%, -50%);
       opacity: 0.8;
       transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
