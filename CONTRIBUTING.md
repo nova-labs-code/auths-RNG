@@ -61,4 +61,4 @@ see documentation/STYLES.md
 
 ---
 
-for more information, see the documentation/ folder
+for more information, see the meta/ folder
