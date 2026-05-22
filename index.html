@@ -1547,6 +1547,66 @@ toggleBtn.addEventListener('click', () => {
 
         <label style="display:block;margin-bottom:4px;font-size:0.85em;opacity:0.7;">achievement border</label>
         <input type="color" id="te-achievementBorder" value="#2a4a2a" style="width:100%;height:32px;margin-bottom:10px;">
+
+				<div style="margin-top:28px;">
+  <div style="font-size:0.75em;opacity:0.4;letter-spacing:0.06em;margin-bottom:12px;">start animation</div>
+
+  <label style="display:flex;align-items:center;gap:8px;margin-bottom:14px;font-size:0.85em;opacity:0.7;">
+    <input type="checkbox" id="te-sa-enabled" checked>
+    show start animation
+  </label>
+
+  <div id="te-sa-controls">
+    <label style="display:block;margin-bottom:4px;font-size:0.85em;opacity:0.7;">preset</label>
+    <select id="te-sa-preset" style="width:100%;margin-bottom:6px;">
+      <option value="default">default (line expand)</option>
+      <option value="fade">fade</option>
+      <option value="glitch">glitch</option>
+      <option value="scan">scanline</option>
+      <option value="typewriter">typewriter</option>
+      <option value="curtain">curtain</option>
+      <option value="pixelate">pixelate</option>
+      <option value="ripple">ripple</option>
+      <option value="none">none (instant load)</option>
+    </select>
+    <div id="te-sa-preset-desc" style="font-size:0.75em;opacity:0.4;margin-bottom:12px;min-height:2em;line-height:1.5;"></div>
+
+    <label style="display:block;margin-bottom:4px;font-size:0.85em;opacity:0.7;">background color</label>
+    <select id="te-sa-bgColor" style="width:100%;margin-bottom:8px;">
+      <option value="theme">use theme background</option>
+      <option value="custom">custom</option>
+    </select>
+    <div id="te-sa-customBg-row" style="display:none;margin-bottom:10px;">
+      <input type="color" id="te-sa-customBg" value="#0e0e0e" style="width:100%;height:32px;">
+    </div>
+
+    <label style="display:block;margin-bottom:4px;font-size:0.85em;opacity:0.7;">foreground / text color</label>
+    <select id="te-sa-fgColor" style="width:100%;margin-bottom:8px;">
+      <option value="theme">use theme text color</option>
+      <option value="custom">custom</option>
+    </select>
+    <div id="te-sa-customFg-row" style="display:none;margin-bottom:10px;">
+      <input type="color" id="te-sa-customFg" value="#dcdcdc" style="width:100%;height:32px;">
+    </div>
+
+    <label style="display:block;margin-bottom:4px;font-size:0.85em;opacity:0.7;">wake prompt text</label>
+    <input type="text" id="te-sa-wakeText" value="click/tap to wake up..." maxlength="60" style="width:100%;padding:6px 8px;margin-bottom:12px;">
+
+    <label style="display:block;margin-bottom:4px;font-size:0.85em;opacity:0.7;">speed</label>
+    <select id="te-sa-speed" style="width:100%;margin-bottom:12px;">
+      <option value="fast">fast</option>
+      <option value="normal" selected>normal</option>
+      <option value="slow">slow</option>
+    </select>
+
+    <label style="display:flex;align-items:center;gap:8px;margin-bottom:14px;font-size:0.85em;opacity:0.7;">
+      <input type="checkbox" id="te-sa-skipOnReturn">
+      skip when returning from another page on this site
+    </label>
+
+    <button id="te-sa-preview-btn" class="small" style="width:100%;padding:8px;">preview animation</button>
+  </div>
+</div>
       </div>
 
       <div>
