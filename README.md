@@ -36,6 +36,11 @@ auth's RNG is inspired by RNG games on the platform Roblox, such as Sol's RNG an
 
 this game is NOT a roblox RNG game. auth's RNG is NOT AND NEVER WILL BE a roblox RNG game. stop confusing this game with the roblox slop games, please.
 
+check out the official wiki all about auth's RNG, how it works, and how to play it!  
+                ↓↓↓↓↓↓  
+https://github.com/authsrng-game/auths-RNG/wiki
+
+
 ---
 
 # contributing notes
