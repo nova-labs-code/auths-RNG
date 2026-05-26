@@ -1,6 +1,8 @@
 # auth's RNG
 the repository for the web game, auth's RNG!
 
+it's "auth's RNG" not "Auth's RNG"
+
 ![Version](https://img.shields.io/github/v/release/auth1ery/auths-RNG)
 ![Repo Size](https://img.shields.io/github/repo-size/auth1ery/auths-RNG)
 ![Last Commit](https://img.shields.io/github/last-commit/auth1ery/auths-RNG)
@@ -49,17 +51,17 @@ the `.github/workflows` part should NOT be changed or else they break the develo
 
 we don't bite with contributions!
 
-refer to `CONTRIBUTING.md` for further instructions.
+refer to `CONTRIBUTING.md` for further instructions and ESPECIALLY `meta/TESTING.md`, a ton of useful info is there.
 
 auth's RNG does not use frameworks like react. server code is hosted on the servers only and will never be open-source for security reasons. 
 
 game data is stored in localStorage and user data (music uploading and other stuff) is stored as base64 in IndexedDB.
 
-> [!NOTE]
-> this repository is a bit of a mess, im sorry if contributing is horrible, im trying to keep as much things organized as possible. you can make contributions organizing the repo which is definitely appreciated as a first contribution.
-
 a good PR would look something like a UI tweak, balancing tweak, and bug fix.
 a bad PR would look something like the RNG algorithm being rewritten with no purpose
+
+> [!NOTE]
+> this repository is a bit of a mess, im sorry if contributing is horrible, im trying to keep as much things organized as possible. you can make contributions organizing the repo which is definitely appreciated as a first contribution. lowkey i just wanted to say this because i wnated to use this markdown feature LMAO
 
 ---
 
