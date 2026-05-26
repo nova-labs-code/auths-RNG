@@ -108,7 +108,7 @@
       );
       if (!username) return null;
 
-      if (!/^[a-zA-Z0-9_\-]{3,20}$/.test(username)) {
+      if (!/^[a-zA-Z0-9_-]{3,20}$/.test(username)) {
         alert(
           'invalid. 3–20 chars, letters/numbers/underscore/hyphen only. try again.',
         );
