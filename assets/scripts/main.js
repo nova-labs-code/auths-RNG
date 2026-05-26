@@ -2734,8 +2734,6 @@ function throwIntoWell() {
   wellData.totalThrown += amount;
   wellData.timesThrown++;
 
-  let reward = 0;
-
   if (won) {
     reward = amount * 2;
     points += reward;
