@@ -18,25 +18,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Setup Da Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
 
       - name: Install lint tools
-        run: npm install --no-save eslint stylelint stylelint-config-standard htmlhint
+        run: npm install --no-save eslint @eslint/js globals stylelint stylelint-config-standard htmlhint
 
       - name: ESLint
-        run: |
-          npx eslint \
-            "assets/scripts/**/*.js" \
-            "engine/**/*.js" \
-            "service-worker.js" \
-            --env browser,es2021 \
-            --rule "no-undef: warn" \
-            --rule "no-unused-vars: warn" \
-            --rule "no-console: off" \
-            --max-warnings 0
+        run: npx eslint --max-warnings 0
 
       - name: Stylelint
         run: npx stylelint "styles.css" --config '{"extends":["stylelint-config-standard"]}'
@@ -62,7 +53,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
 
       - name: Install test tools
         run: npm install --no-save @playwright/test serve wait-on
@@ -91,7 +82,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
 
       - name: Install tools
         run: npm install --no-save @lhci/cli serve wait-on
@@ -102,7 +93,7 @@ jobs:
       - name: Wait for server
         run: npx wait-on http://localhost:8080 --timeout 15000
 
-      - name: Lighthouse CI
+      - name: stupid Lighthouse CI
         run: npx lhci autorun
 
   all-checks-passed:
