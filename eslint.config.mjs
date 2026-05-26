@@ -5,6 +5,10 @@ export default [
 	js.configs.recommended,
 
 	{
+		ignores: ['eslint.config.mjs', 'lighthouserc.js'],
+	},
+
+	{
 		files: [
 			'assets/scripts/**/*.js',
 			'engine/**/*.js',
@@ -14,9 +18,7 @@ export default [
 		languageOptions: {
 			ecmaVersion: 2021,
 			sourceType: 'script',
-			globals: {
-				...globals.browser,
-			},
+			globals: { ...globals.browser },
 		},
 		rules: {
 			'no-undef': 'off',
@@ -33,9 +35,7 @@ export default [
 		languageOptions: {
 			ecmaVersion: 2021,
 			sourceType: 'module',
-			globals: {
-				...globals.browser,
-			},
+			globals: { ...globals.browser },
 		},
 		rules: {
 			'no-undef': 'off',
@@ -63,20 +63,6 @@ export default [
 			'no-unused-vars': 'warn',
 			'no-console': 'off',
 			'no-empty': ['error', { allowEmptyCatch: true }],
-		},
-	},
-
-	{
-		files: ['lighthouserc.js', '*.config.js', '*.config.mjs'],
-		languageOptions: {
-			ecmaVersion: 2021,
-			sourceType: 'commonjs',
-			globals: {
-				...globals.node,
-			},
-		},
-		rules: {
-			'no-undef': 'error',
 		},
 	},
 ];
