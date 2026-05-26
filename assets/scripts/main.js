@@ -2543,7 +2543,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 document.addEventListener('keydown', (e) => {
-  // Ignore if typing in input fields
+  if (e.repeat) return;
   if (
     e.target.tagName === 'INPUT' ||
     e.target.tagName === 'TEXTAREA' ||
@@ -2554,7 +2554,7 @@ document.addEventListener('keydown', (e) => {
 
   const key = e.key.toLowerCase();
 
-  // Space = Roll (+ for start anim)
+	// fucking spacebar to roll
   if (key === ' ' || key === '+') {
     e.preventDefault();
     const rollBtn = document.getElementById('rollBtn');
@@ -2580,7 +2580,7 @@ document.addEventListener('keydown', (e) => {
     }
   }
 
-  // W = Click (simulates mouse click at cursor position)
+  // fucking W to click even when theres a button on your mouse dedicated to fucking doing that
   if (key === 'w') {
     e.preventDefault();
     const elementUnderCursor = document.elementFromPoint(
