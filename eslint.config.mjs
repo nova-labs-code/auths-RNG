@@ -9,11 +9,25 @@ export default [
 	},
 
 	{
-		files: [
-			'assets/scripts/**/*.js',
-			'engine/**/*.js',
-			'service-worker.js',
-		],
+		files: ['tests/**/*.js'],
+		languageOptions: {
+			ecmaVersion: 2021,
+			sourceType: 'commonjs',
+			globals: { ...globals.node },
+		},
+		rules: {
+			'no-undef': 'error',
+			'no-unused-vars': 'warn',
+			'no-console': 'off',
+		},
+	},
+
+	{
+		ignores: ['eslint.config.mjs', 'lighthouserc.js', 'playwright.config.js'],
+	},
+
+	{
+		files: ['assets/scripts/**/*.js', 'engine/**/*.js', 'service-worker.js'],
 		ignores: ['engine/epic/epic.js'],
 		languageOptions: {
 			ecmaVersion: 2021,
