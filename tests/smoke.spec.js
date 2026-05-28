@@ -55,6 +55,11 @@ test.describe('auths-RNG smoke tests', () => {
 			await saContainer.click();
 		}
 
+		const updatePopup = page.locator('#updatePopup');
+		if (await updatePopup.isVisible()) {
+			await page.locator('#updatePopupClose').click();
+		}
+
 		await page.locator('#rollBtn').waitFor({ state: 'visible', timeout: 5000 });
 		await page.locator('#rollBtn').click();
 		await page.waitForTimeout(1000);
