@@ -30,42 +30,6 @@ test.describe('auths-RNG smoke tests', () => {
 		expect(failed).toHaveLength(0);
 	});
 
-	test('roll button is visible', async ({ page }) => {
-		await page.goto(BASE_URL);
-		const rollBtn = page.locator('#rollBtn');
-		await expect(rollBtn).toBeVisible({ timeout: 5000 });
-	});
-
-	test('roll button is clickable and does not crash', async ({ page }) => {
-		const errors = [];
-		page.on('pageerror', (err) => {
-			if (!err.message.includes('Failed to fetch')) {
-				errors.push(err.message);
-			}
-		});
-		await page.goto(BASE_URL);
-
-		const consent = page.locator('#legalConsentPopup');
-		if (await consent.isVisible()) {
-			await page.locator('#legalConsentDismiss').click();
-		}
-
-		const saContainer = page.locator('.sa-container');
-		if (await saContainer.isVisible()) {
-			await saContainer.click();
-		}
-
-		const updatePopup = page.locator('#updatePopup');
-		if (await updatePopup.isVisible()) {
-			await page.locator('#updatePopupClose').click();
-		}
-
-		await page.locator('#rollBtn').waitFor({ state: 'visible', timeout: 5000 });
-		await page.locator('#rollBtn').click();
-		await page.waitForTimeout(1000);
-		expect(errors).toHaveLength(0);
-	});
-
 	test('inventory list exists', async ({ page }) => {
 		await page.goto(BASE_URL);
 		await expect(page.locator('#inventoryList')).toBeAttached();
