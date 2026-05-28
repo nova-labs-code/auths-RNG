@@ -1,3 +1,5 @@
+const rollBtn = document.getElementById('rollBtn'),
+
 const messages = [
   'hang on there',
   'update 9.1 is close..',

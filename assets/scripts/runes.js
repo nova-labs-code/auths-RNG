@@ -1,200 +1,197 @@
 (function () {
-  'use strict';
+	'use strict';
 
-  const RUNES_KEY = 'runesUnlocked';
-  const RUNES_DATA_KEY = 'runesData';
-  const BLOCKS_KEY = 'runeBlocks';
-  const GIFT_KEY = 'runeGift';
-  const UPGRADES_KEY = 'runeUpgrades';
-  const ELEMENTS = ['water', 'fire', 'earth', 'wizardry'];
-  const ELEMENT_EMOJI = {
-    water: '💧',
-    fire: '🔥',
-    earth: '🌍',
-    wizardry: '🔮',
-  };
-  const RUNE_DROP_CHANCES = [
-    { weight: 1, label: 'rare' },
-    { weight: (1 / 70) * 30, label: 'mid-rare' },
-    { weight: (1 / 140) * 30, label: 'common' },
-  ];
+	console.log(performance.now());
 
-  let runesData = { counts: {}, elementals: {}, totalDropped: 0 };
-  let blocks = 0;
-  let gift = null;
-  let upgrades = {
-    tripleLuck: false,
-    moreBlocks: false,
-    anomalyMachine: false,
-    dopamineAttack: false,
-    doubleClover: false,
-  };
+	const RUNES_KEY = 'runesUnlocked';
+	const RUNES_DATA_KEY = 'runesData';
+	const BLOCKS_KEY = 'runeBlocks';
+	const GIFT_KEY = 'runeGift';
+	const UPGRADES_KEY = 'runeUpgrades';
+	const ELEMENTS = ['water', 'fire', 'earth', 'wizardry'];
+	const ELEMENT_EMOJI = {
+		water: '💧',
+		fire: '🔥',
+		earth: '🌍',
+		wizardry: '🔮',
+	};
+	const RUNE_DROP_CHANCES = [
+		{ weight: 1, label: 'rare' },
+		{ weight: (1 / 70) * 30, label: 'mid-rare' },
+		{ weight: (1 / 140) * 30, label: 'common' },
+	];
 
-  let anomalyMachineInterval = null;
-  let dopamineAttackInterval = null;
-  let giftWealthInterval = null;
-  let linkAnimationActive = false;
+	let runesData = { counts: {}, elementals: {}, totalDropped: 0 };
+	let blocks = 0;
+	let gift = null;
+	let upgrades = {
+		tripleLuck: false,
+		moreBlocks: false,
+		anomalyMachine: false,
+		dopamineAttack: false,
+		doubleClover: false,
+	};
 
-  function isUnlocked() {
-    return localStorage.getItem(RUNES_KEY) === '1';
-  }
+	let anomalyMachineInterval = null;
+	let dopamineAttackInterval = null;
+	let giftWealthInterval = null;
+	let linkAnimationActive = false;
 
-  function loadData() {
-    try {
-      const d = JSON.parse(localStorage.getItem(RUNES_DATA_KEY) || '{}');
-      runesData = {
-        counts: d.counts || {},
-        elementals: d.elementals || {},
-        totalDropped: d.totalDropped || 0,
-      };
-    } catch (_) {}
-    blocks = parseFloat(localStorage.getItem(BLOCKS_KEY) || '0');
-    gift = localStorage.getItem(GIFT_KEY) || null;
-    try {
-      const u = JSON.parse(localStorage.getItem(UPGRADES_KEY) || '{}');
-      upgrades = Object.assign(
-        {
-          tripleLuck: false,
-          moreBlocks: false,
-          anomalyMachine: false,
-          dopamineAttack: false,
-          doubleClover: false,
-        },
-        u,
-      );
-    } catch (_) {}
-  }
+	function isUnlocked() {
+		return localStorage.getItem(RUNES_KEY) === '1';
+	}
 
-  function saveData() {
-    localStorage.setItem(RUNES_DATA_KEY, JSON.stringify(runesData));
-    localStorage.setItem(BLOCKS_KEY, String(blocks));
-    if (gift) localStorage.setItem(GIFT_KEY, gift);
-    localStorage.setItem(UPGRADES_KEY, JSON.stringify(upgrades));
-  }
+	function loadData() {
+		try {
+			const d = JSON.parse(localStorage.getItem(RUNES_DATA_KEY) || '{}');
+			runesData = {
+				counts: d.counts || {},
+				elementals: d.elementals || {},
+				totalDropped: d.totalDropped || 0,
+			};
+		} catch (_) {}
+		blocks = parseFloat(localStorage.getItem(BLOCKS_KEY) || '0');
+		gift = localStorage.getItem(GIFT_KEY) || null;
+		try {
+			const u = JSON.parse(localStorage.getItem(UPGRADES_KEY) || '{}');
+			upgrades = Object.assign(
+				{
+					tripleLuck: false,
+					moreBlocks: false,
+					anomalyMachine: false,
+					dopamineAttack: false,
+					doubleClover: false,
+				},
+				u
+			);
+		} catch (_) {}
+	}
 
-  function getRarityTier(rarityObj) {
-    const denom = Math.round(1 / rarityObj.chance);
-    if (denom >= 1000) return 'rare';
-    if (denom >= 70) return 'mid-rare';
-    return 'common';
-  }
+	function saveData() {
+		localStorage.setItem(RUNES_DATA_KEY, JSON.stringify(runesData));
+		localStorage.setItem(BLOCKS_KEY, String(blocks));
+		if (gift) localStorage.setItem(GIFT_KEY, gift);
+		localStorage.setItem(UPGRADES_KEY, JSON.stringify(upgrades));
+	}
 
-  function getDropChance(tier) {
-    if (tier === 'rare') return 1 / 30;
-    if (tier === 'mid-rare') return 1 / 70;
-    return 1 / 140;
-  }
+	function getRarityTier(rarityObj) {
+		const denom = Math.round(1 / rarityObj.chance);
+		if (denom >= 1000) return 'rare';
+		if (denom >= 70) return 'mid-rare';
+		return 'common';
+	}
 
-  function rng() {
-    return typeof Beacon !== 'undefined' ? Beacon.float() : Math.random();
-  }
+	function getDropChance(tier) {
+		if (tier === 'rare') return 1 / 30;
+		if (tier === 'mid-rare') return 1 / 70;
+		return 1 / 140;
+	}
 
-  function tryDropRune(rarityObj) {
-    if (!isUnlocked()) return;
-    const tier = getRarityTier(rarityObj);
-    const chance = getDropChance(tier);
-    if (rng() > chance) return;
+	function rng() {
+		return typeof Beacon !== 'undefined' ? Beacon.float() : Math.random();
+	}
 
-    const isElemental = rng() < 1 / 20;
+	function tryDropRune(rarityObj) {
+		if (!isUnlocked()) return;
+		const tier = getRarityTier(rarityObj);
+		const chance = getDropChance(tier);
+		if (rng() > chance) return;
 
-    if (isElemental) {
-      const el = ELEMENTS[Math.floor(rng() * ELEMENTS.length)];
-      runesData.elementals[el] = (runesData.elementals[el] || 0) + 1;
-      runesData.totalDropped++;
-      saveData();
-      if (typeof showAnomalyPopup === 'function')
-        showAnomalyPopup(`${ELEMENT_EMOJI[el]} elemental rune: ${el}!`);
-      checkElementalCompletion();
-    } else {
-      runesData.counts[tier] = (runesData.counts[tier] || 0) + 1;
-      runesData.totalDropped++;
-      saveData();
-      if (typeof showAnomalyPopup === 'function')
-        showAnomalyPopup(`🔷 ${tier} rune dropped!`);
-    }
+		const isElemental = rng() < 1 / 20;
 
-    renderRunes();
-  }
+		if (isElemental) {
+			const el = ELEMENTS[Math.floor(rng() * ELEMENTS.length)];
+			runesData.elementals[el] = (runesData.elementals[el] || 0) + 1;
+			runesData.totalDropped++;
+			saveData();
+			if (typeof showAnomalyPopup === 'function')
+				showAnomalyPopup(`${ELEMENT_EMOJI[el]} elemental rune: ${el}!`);
+			checkElementalCompletion();
+		} else {
+			runesData.counts[tier] = (runesData.counts[tier] || 0) + 1;
+			runesData.totalDropped++;
+			saveData();
+			if (typeof showAnomalyPopup === 'function') showAnomalyPopup(`🔷 ${tier} rune dropped!`);
+		}
 
-  function checkElementalCompletion() {
-    const collected = ELEMENTS.filter(
-      (el) => (runesData.elementals[el] || 0) > 0,
-    );
-    if (collected.length < 4 || gift || linkAnimationActive) return;
-    linkAnimationActive = true;
-    playLinkAnimation();
-  }
+		renderRunes();
+	}
 
-  function playLinkAnimation() {
-    const overlay = document.createElement('div');
-    overlay.id = 'runeLinkOverlay';
-    overlay.style.cssText =
-      'position:fixed;inset:0;background:#000;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;';
+	function checkElementalCompletion() {
+		const collected = ELEMENTS.filter((el) => (runesData.elementals[el] || 0) > 0);
+		if (collected.length < 4 || gift || linkAnimationActive) return;
+		linkAnimationActive = true;
+		playLinkAnimation();
+	}
 
-    const title = document.createElement('div');
-    title.style.cssText =
-      'font-family:monospace;font-size:1.4em;color:#fff;opacity:0;transition:opacity 1s;';
-    title.textContent = 'the elements converge...';
-    overlay.appendChild(title);
+	function playLinkAnimation() {
+		const overlay = document.createElement('div');
+		overlay.id = 'runeLinkOverlay';
+		overlay.style.cssText =
+			'position:fixed;inset:0;background:#000;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;';
 
-    const runeRow = document.createElement('div');
-    runeRow.style.cssText = 'display:flex;gap:32px;font-size:3em;';
-    overlay.appendChild(runeRow);
+		const title = document.createElement('div');
+		title.style.cssText =
+			'font-family:monospace;font-size:1.4em;color:#fff;opacity:0;transition:opacity 1s;';
+		title.textContent = 'the elements converge...';
+		overlay.appendChild(title);
 
-    document.body.appendChild(overlay);
+		const runeRow = document.createElement('div');
+		runeRow.style.cssText = 'display:flex;gap:32px;font-size:3em;';
+		overlay.appendChild(runeRow);
 
-    setTimeout(() => {
-      title.style.opacity = '1';
-    }, 200);
+		document.body.appendChild(overlay);
 
-    let i = 0;
-    const interval = setInterval(() => {
-      const el = ELEMENTS[i];
-      const span = document.createElement('span');
-      span.textContent = ELEMENT_EMOJI[el];
-      span.style.cssText =
-        'opacity:0;transition:opacity 0.6s,transform 0.6s;transform:scale(0.5);';
-      runeRow.appendChild(span);
-      setTimeout(() => {
-        span.style.opacity = '1';
-        span.style.transform = 'scale(1)';
-      }, 50);
-      i++;
-      if (i >= 4) {
-        clearInterval(interval);
-        setTimeout(() => {
-          overlay.style.transition = 'background 1.5s';
-          overlay.style.background = '#fff';
-          setTimeout(() => {
-            document.body.removeChild(overlay);
-            linkAnimationActive = false;
-            showGiftChoice();
-          }, 1800);
-        }, 1200);
-      }
-    }, 800);
-  }
+		setTimeout(() => {
+			title.style.opacity = '1';
+		}, 200);
 
-  function generateConfirmString() {
-    const chars = 'abcdefghjkmnpqrstuvwxyz23456789';
-    let s = '';
-    for (let i = 0; i < 8; i++)
-      s += chars[Math.floor(Math.random() * chars.length)];
-    return s;
-  }
+		let i = 0;
+		const interval = setInterval(() => {
+			const el = ELEMENTS[i];
+			const span = document.createElement('span');
+			span.textContent = ELEMENT_EMOJI[el];
+			span.style.cssText = 'opacity:0;transition:opacity 0.6s,transform 0.6s;transform:scale(0.5);';
+			runeRow.appendChild(span);
+			setTimeout(() => {
+				span.style.opacity = '1';
+				span.style.transform = 'scale(1)';
+			}, 50);
+			i++;
+			if (i >= 4) {
+				clearInterval(interval);
+				setTimeout(() => {
+					overlay.style.transition = 'background 1.5s';
+					overlay.style.background = '#fff';
+					setTimeout(() => {
+						document.body.removeChild(overlay);
+						linkAnimationActive = false;
+						showGiftChoice();
+					}, 1800);
+				}, 1200);
+			}
+		}, 800);
+	}
 
-  function showGiftChoice() {
-    const modal = document.createElement('div');
-    modal.style.cssText =
-      'position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:99999;display:flex;align-items:center;justify-content:center;';
+	function generateConfirmString() {
+		const chars = 'abcdefghjkmnpqrstuvwxyz23456789';
+		let s = '';
+		for (let i = 0; i < 8; i++) s += chars[Math.floor(Math.random() * chars.length)];
+		return s;
+	}
 
-    const panel = document.createElement('div');
-    panel.style.cssText =
-      'background:var(--panel-bg);border:1px solid var(--border-color);padding:32px;border-radius:4px;max-width:480px;width:90%;font-family:monospace;color:var(--text-color);text-align:center;';
+	function showGiftChoice() {
+		const modal = document.createElement('div');
+		modal.style.cssText =
+			'position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:99999;display:flex;align-items:center;justify-content:center;';
 
-    const confirmStr = generateConfirmString();
+		const panel = document.createElement('div');
+		panel.style.cssText =
+			'background:var(--panel-bg);border:1px solid var(--border-color);padding:32px;border-radius:4px;max-width:480px;width:90%;font-family:monospace;color:var(--text-color);text-align:center;';
 
-    panel.innerHTML = `
+		const confirmStr = generateConfirmString();
+
+		panel.innerHTML = `
       <div style="font-size:1.3em;margin-bottom:8px;">choose your gift</div>
       <div style="font-size:0.8em;opacity:0.5;margin-bottom:24px;">this decision is permanent. it defines your run until SUMMER.</div>
       <div id="giftOptions" style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;">
@@ -215,290 +212,277 @@
       </div>
     `;
 
-    modal.appendChild(panel);
-    document.body.appendChild(modal);
+		modal.appendChild(panel);
+		document.body.appendChild(modal);
 
-    let selectedGift = null;
-    const confirmArea = panel.querySelector('#giftConfirmArea');
-    const confirmStrEl = panel.querySelector('#confirmStrDisplay');
-    const confirmInput = panel.querySelector('#giftConfirmInput');
-    const confirmBtn = panel.querySelector('#giftConfirmBtn');
-    const cancelBtn = panel.querySelector('#giftCancelBtn');
+		let selectedGift = null;
+		const confirmArea = panel.querySelector('#giftConfirmArea');
+		const confirmStrEl = panel.querySelector('#confirmStrDisplay');
+		const confirmInput = panel.querySelector('#giftConfirmInput');
+		const confirmBtn = panel.querySelector('#giftConfirmBtn');
+		const cancelBtn = panel.querySelector('#giftCancelBtn');
 
-    panel.querySelectorAll('.gift-opt').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        selectedGift = btn.dataset.gift;
-        panel
-          .querySelectorAll('.gift-opt')
-          .forEach((b) => (b.style.opacity = '0.4'));
-        btn.style.opacity = '1';
-        btn.style.borderColor = 'var(--text-color)';
-        confirmStrEl.textContent = confirmStr;
-        confirmArea.style.display = 'block';
-        confirmInput.value = '';
-        confirmBtn.disabled = true;
-        confirmBtn.style.opacity = '0.5';
-        confirmInput.focus();
-      });
-    });
+		panel.querySelectorAll('.gift-opt').forEach((btn) => {
+			btn.addEventListener('click', () => {
+				selectedGift = btn.dataset.gift;
+				panel.querySelectorAll('.gift-opt').forEach((b) => (b.style.opacity = '0.4'));
+				btn.style.opacity = '1';
+				btn.style.borderColor = 'var(--text-color)';
+				confirmStrEl.textContent = confirmStr;
+				confirmArea.style.display = 'block';
+				confirmInput.value = '';
+				confirmBtn.disabled = true;
+				confirmBtn.style.opacity = '0.5';
+				confirmInput.focus();
+			});
+		});
 
-    confirmInput.addEventListener('input', () => {
-      const match = confirmInput.value === confirmStr;
-      confirmBtn.disabled = !match;
-      confirmBtn.style.opacity = match ? '1' : '0.5';
-    });
+		confirmInput.addEventListener('input', () => {
+			const match = confirmInput.value === confirmStr;
+			confirmBtn.disabled = !match;
+			confirmBtn.style.opacity = match ? '1' : '0.5';
+		});
 
-    confirmBtn.addEventListener('click', () => {
-      if (!selectedGift) return;
-      gift = selectedGift;
-      saveData();
-      document.body.removeChild(modal);
-      applyGift();
-      renderRunes();
-    });
+		confirmBtn.addEventListener('click', () => {
+			if (!selectedGift) return;
+			gift = selectedGift;
+			saveData();
+			document.body.removeChild(modal);
+			applyGift();
+			renderRunes();
+		});
 
-    cancelBtn.addEventListener('click', () => {
-      selectedGift = null;
-      confirmArea.style.display = 'none';
-      panel.querySelectorAll('.gift-opt').forEach((b) => {
-        b.style.opacity = '1';
-        b.style.borderColor = 'var(--border-color)';
-      });
-    });
-  }
+		cancelBtn.addEventListener('click', () => {
+			selectedGift = null;
+			confirmArea.style.display = 'none';
+			panel.querySelectorAll('.gift-opt').forEach((b) => {
+				b.style.opacity = '1';
+				b.style.borderColor = 'var(--border-color)';
+			});
+		});
+	}
 
-  function applyGift() {
-    if (gift === 'luck') {
-      if (typeof recalcLuckMultiplier === 'function') recalcLuckMultiplier();
-      if (typeof showAnomalyPopup === 'function')
-        showAnomalyPopup('⚡ gift of luck active: 2x permanent luck!');
-    }
-    if (gift === 'wealth') {
-      startWealthGift();
-      if (typeof showAnomalyPopup === 'function')
-        showAnomalyPopup('💰 gift of wealth active: 200k pts/sec!');
-    }
-  }
+	function applyGift() {
+		if (gift === 'luck') {
+			if (typeof recalcLuckMultiplier === 'function') recalcLuckMultiplier();
+			if (typeof showAnomalyPopup === 'function')
+				showAnomalyPopup('⚡ gift of luck active: 2x permanent luck!');
+		}
+		if (gift === 'wealth') {
+			startWealthGift();
+			if (typeof showAnomalyPopup === 'function')
+				showAnomalyPopup('💰 gift of wealth active: 200k pts/sec!');
+		}
+	}
 
-  function startWealthGift() {
-    if (giftWealthInterval) clearInterval(giftWealthInterval);
-    if (gift !== 'wealth') return;
-    giftWealthInterval = setInterval(() => {
-      if (
-        typeof points !== 'undefined' &&
-        typeof updatePointsDisplay === 'function'
-      ) {
-        points += 200000;
-        updatePointsDisplay();
-        if (typeof saveAllData === 'function') saveAllData();
-      }
-    }, 1000);
-  }
+	function startWealthGift() {
+		if (giftWealthInterval) clearInterval(giftWealthInterval);
+		if (gift !== 'wealth') return;
+		giftWealthInterval = setInterval(() => {
+			if (typeof points !== 'undefined' && typeof updatePointsDisplay === 'function') {
+				points += 200000;
+				updatePointsDisplay();
+				if (typeof saveAllData === 'function') saveAllData();
+			}
+		}, 1000);
+	}
 
-  function getGiftLuckMultiplier() {
-    return gift === 'luck' ? 2 : 1;
-  }
-  window.getRuneGiftLuckMultiplier = getGiftLuckMultiplier;
+	function getGiftLuckMultiplier() {
+		return gift === 'luck' ? 2 : 1;
+	}
+	window.getRuneGiftLuckMultiplier = getGiftLuckMultiplier;
 
-  function totalRunes() {
-    return (
-      (runesData.counts.rare || 0) +
-      (runesData.counts['mid-rare'] || 0) +
-      (runesData.counts.common || 0)
-    );
-  }
+	function totalRunes() {
+		return (
+			(runesData.counts.rare || 0) +
+			(runesData.counts['mid-rare'] || 0) +
+			(runesData.counts.common || 0)
+		);
+	}
 
-  function totalElementalRunes() {
-    return ELEMENTS.reduce((s, el) => s + (runesData.elementals[el] || 0), 0);
-  }
+	function totalElementalRunes() {
+		return ELEMENTS.reduce((s, el) => s + (runesData.elementals[el] || 0), 0);
+	}
 
-  function getExchangeRate() {
-    return upgrades.moreBlocks ? 10 : 1.25;
-  }
+	function getExchangeRate() {
+		return upgrades.moreBlocks ? 10 : 1.25;
+	}
 
-  function exchangeRunesToBlocks(count) {
-    if (totalRunes() < count) return;
-    const total =
-      (runesData.counts.rare || 0) +
-      (runesData.counts['mid-rare'] || 0) +
-      (runesData.counts.common || 0);
-    let remaining = count;
-    for (const tier of ['common', 'mid-rare', 'rare']) {
-      const use = Math.min(runesData.counts[tier] || 0, remaining);
-      runesData.counts[tier] = (runesData.counts[tier] || 0) - use;
-      remaining -= use;
-      if (remaining <= 0) break;
-    }
-    blocks += count * getExchangeRate();
-    saveData();
-    renderRunes();
-  }
+	function exchangeRunesToBlocks(count) {
+		if (totalRunes() < count) return;
+		const total =
+			(runesData.counts.rare || 0) +
+			(runesData.counts['mid-rare'] || 0) +
+			(runesData.counts.common || 0);
+		let remaining = count;
+		for (const tier of ['common', 'mid-rare', 'rare']) {
+			const use = Math.min(runesData.counts[tier] || 0, remaining);
+			runesData.counts[tier] = (runesData.counts[tier] || 0) - use;
+			remaining -= use;
+			if (remaining <= 0) break;
+		}
+		blocks += count * getExchangeRate();
+		saveData();
+		renderRunes();
+	}
 
-  function exchangeBlocksToRunes(count) {
-    const cost = Math.ceil(count / 0.85);
-    if (blocks < cost) return;
-    blocks -= cost;
-    runesData.counts.common = (runesData.counts.common || 0) + count;
-    saveData();
-    renderRunes();
-  }
+	function exchangeBlocksToRunes(count) {
+		const cost = Math.ceil(count / 0.85);
+		if (blocks < cost) return;
+		blocks -= cost;
+		runesData.counts.common = (runesData.counts.common || 0) + count;
+		saveData();
+		renderRunes();
+	}
 
-  function buyUpgrade(key) {
-    if (upgrades[key]) return;
-    const costs = {
-      tripleLuck: 9000,
-      moreBlocks: 15000,
-      anomalyMachine: 17000,
-      dopamineAttack: 20000,
-      doubleClover: 50000,
-    };
-    const cost = costs[key];
-    if (blocks < cost) {
-      if (typeof window.showAlert === 'function')
-        window.showAlert(`need ${formatNum(cost)} blocks!`);
-      return;
-    }
-    blocks -= cost;
-    upgrades[key] = true;
-    saveData();
-    activateUpgrade(key);
-    renderRunes();
-  }
+	function buyUpgrade(key) {
+		if (upgrades[key]) return;
+		const costs = {
+			tripleLuck: 9000,
+			moreBlocks: 15000,
+			anomalyMachine: 17000,
+			dopamineAttack: 20000,
+			doubleClover: 50000,
+		};
+		const cost = costs[key];
+		if (blocks < cost) {
+			if (typeof window.showAlert === 'function')
+				window.showAlert(`need ${formatNum(cost)} blocks!`);
+			return;
+		}
+		blocks -= cost;
+		upgrades[key] = true;
+		saveData();
+		activateUpgrade(key);
+		renderRunes();
+	}
 
-  function activateUpgrade(key) {
-    if (key === 'tripleLuck') {
-      if (typeof recalcLuckMultiplier === 'function') recalcLuckMultiplier();
-      if (typeof showAnomalyPopup === 'function')
-        showAnomalyPopup('🔺 triple luck active!');
-    }
-    if (key === 'anomalyMachine') {
-      startAnomalyMachine();
-    }
-    if (key === 'dopamineAttack') {
-      startDopamineAttack();
-    }
-    if (key === 'doubleClover') {
-      if (typeof anomalies !== 'undefined') {
-        window.anomalies = (window.anomalies || 0) + 50000000;
-        if (typeof updateAnomalyUI === 'function') updateAnomalyUI();
-      }
-      if (typeof recalcLuckMultiplier === 'function') recalcLuckMultiplier();
-      if (typeof showAnomalyPopup === 'function')
-        showAnomalyPopup('🍀 double clover: 50M anomalies + 4x luck!');
-    }
-  }
+	function activateUpgrade(key) {
+		if (key === 'tripleLuck') {
+			if (typeof recalcLuckMultiplier === 'function') recalcLuckMultiplier();
+			if (typeof showAnomalyPopup === 'function') showAnomalyPopup('🔺 triple luck active!');
+		}
+		if (key === 'anomalyMachine') {
+			startAnomalyMachine();
+		}
+		if (key === 'dopamineAttack') {
+			startDopamineAttack();
+		}
+		if (key === 'doubleClover') {
+			if (typeof anomalies !== 'undefined') {
+				window.anomalies = (window.anomalies || 0) + 50000000;
+				if (typeof updateAnomalyUI === 'function') updateAnomalyUI();
+			}
+			if (typeof recalcLuckMultiplier === 'function') recalcLuckMultiplier();
+			if (typeof showAnomalyPopup === 'function')
+				showAnomalyPopup('🍀 double clover: 50M anomalies + 4x luck!');
+		}
+	}
 
-  function startAnomalyMachine() {
-    if (anomalyMachineInterval) clearInterval(anomalyMachineInterval);
-    anomalyMachineInterval = setInterval(() => {
-      if (typeof anomalies !== 'undefined') {
-        anomalies += 50;
-        if (typeof updateAnomalyUI === 'function') updateAnomalyUI();
-        if (typeof saveAllData === 'function') saveAllData();
-      }
-    }, 2000);
-  }
+	function startAnomalyMachine() {
+		if (anomalyMachineInterval) clearInterval(anomalyMachineInterval);
+		anomalyMachineInterval = setInterval(() => {
+			if (typeof anomalies !== 'undefined') {
+				anomalies += 50;
+				if (typeof updateAnomalyUI === 'function') updateAnomalyUI();
+				if (typeof saveAllData === 'function') saveAllData();
+			}
+		}, 2000);
+	}
 
-  function startDopamineAttack() {
-    if (dopamineAttackInterval) clearInterval(dopamineAttackInterval);
-    const rollEvery = Math.round(1000 / 3);
-    dopamineAttackInterval = setInterval(() => {
-      const btn = document.getElementById('rollBtn');
-      if (
-        btn &&
-        !btn.disabled &&
-        typeof isCutscenePlaying !== 'undefined' &&
-        !isCutscenePlaying
-      ) {
-        btn.click();
-      }
-    }, rollEvery);
-  }
+	function startDopamineAttack() {
+		if (dopamineAttackInterval) clearInterval(dopamineAttackInterval);
+		const rollEvery = Math.round(1000 / 3);
+		dopamineAttackInterval = setInterval(() => {
+			const btn = document.getElementById('rollBtn');
+			if (btn && !btn.disabled && typeof isCutscenePlaying !== 'undefined' && !isCutscenePlaying) {
+				btn.click();
+			}
+		}, rollEvery);
+	}
 
-  function getTripleLuckMultiplier() {
-    return upgrades.tripleLuck ? 3 : 1;
-  }
-  window.getRuneTripleLuckMultiplier = getTripleLuckMultiplier;
+	function getTripleLuckMultiplier() {
+		return upgrades.tripleLuck ? 3 : 1;
+	}
+	window.getRuneTripleLuckMultiplier = getTripleLuckMultiplier;
 
-  function getDoubleCloverLuckMultiplier() {
-    return upgrades.doubleClover ? 4 : 1;
-  }
-  window.getRuneDoubleCloverLuckMultiplier = getDoubleCloverLuckMultiplier;
+	function getDoubleCloverLuckMultiplier() {
+		return upgrades.doubleClover ? 4 : 1;
+	}
+	window.getRuneDoubleCloverLuckMultiplier = getDoubleCloverLuckMultiplier;
 
-  function formatBlocks(n) {
-    if (typeof formatNum === 'function') return formatNum(n);
-    return Math.round(n).toLocaleString();
-  }
+	function formatBlocks(n) {
+		if (typeof formatNum === 'function') return formatNum(n);
+		return Math.round(n).toLocaleString();
+	}
 
-  function renderRunes() {
-    const container = document.getElementById('runesContainer');
-    if (!container) return;
+	function renderRunes() {
+		const container = document.getElementById('runesContainer');
+		if (!container) return;
 
-    if (!isUnlocked()) {
-      container.innerHTML = `
+		if (!isUnlocked()) {
+			container.innerHTML = `
         <div style="text-align:center;opacity:0.4;margin-top:48px;">
           <div style="font-size:2.2em;margin-bottom:14px;">🔷</div>
           <div style="font-size:0.9em;">complete the abyss gauntlet to unlock runes</div>
         </div>`;
-      return;
-    }
+			return;
+		}
 
-    const allElementsCollected = ELEMENTS.every(
-      (el) => (runesData.elementals[el] || 0) > 0,
-    );
-    const exchangeRate = getExchangeRate();
+		const allElementsCollected = ELEMENTS.every((el) => (runesData.elementals[el] || 0) > 0);
+		const exchangeRate = getExchangeRate();
 
-    const upgradeList = [
-      {
-        key: 'tripleLuck',
-        name: 'always triple your luck',
-        cost: 9000,
-        desc: 'permanent 3x luck multiplier',
-        emoji: '🔺',
-      },
-      {
-        // yay more f-ing blocks! fufk fuck fuck fuck ruck
-        key: 'moreBlocks',
-        name: 'more blocks!',
-        cost: 15000,
-        desc: 'exchange rate becomes 1 rune = 10 blocks',
-        emoji: '📦',
-      },
-      {
-        key: 'anomalyMachine',
-        name: 'anomaly anomaly anomaly',
-        cost: 17000,
-        desc: '+50 anomalies every 2 seconds',
-        emoji: '⚗️',
-      },
-      {
-        key: 'dopamineAttack',
-        name: 'dopamine attack',
-        cost: 20000,
-        desc: 'auto-roll 3 times per second',
-        emoji: '⚡',
-      },
-      {
-        key: 'doubleClover',
-        name: 'double clover',
-        cost: 50000,
-        desc: '50M anomalies + 4x permanent luck',
-        emoji: '🍀',
-      },
-    ];
+		const upgradeList = [
+			{
+				key: 'tripleLuck',
+				name: 'always triple your luck',
+				cost: 9000,
+				desc: 'permanent 3x luck multiplier',
+				emoji: '🔺',
+			},
+			{
+				// yay more f-ing blocks! fufk fuck fuck fuck ruck
+				key: 'moreBlocks',
+				name: 'more blocks!',
+				cost: 15000,
+				desc: 'exchange rate becomes 1 rune = 10 blocks',
+				emoji: '📦',
+			},
+			{
+				key: 'anomalyMachine',
+				name: 'anomaly anomaly anomaly',
+				cost: 17000,
+				desc: '+50 anomalies every 2 seconds',
+				emoji: '⚗️',
+			},
+			{
+				key: 'dopamineAttack',
+				name: 'dopamine attack',
+				cost: 20000,
+				desc: 'auto-roll 3 times per second',
+				emoji: '⚡',
+			},
+			{
+				key: 'doubleClover',
+				name: 'double clover',
+				cost: 50000,
+				desc: '50M anomalies + 4x permanent luck',
+				emoji: '🍀',
+			},
+		];
 
-    container.innerHTML = `
+		container.innerHTML = `
       <div class="runes-panel">
         <div style="font-size:1.1em;margin-bottom:4px;">🔷 runes</div>
         <div style="font-size:0.8em;opacity:0.5;margin-bottom:20px;">runes drop while rolling. collect all 4 elementals for a gift.</div>
 
         ${
-          gift
-            ? `<div class="rune-gift-banner">
+					gift
+						? `<div class="rune-gift-banner">
           <span>${gift === 'luck' ? '⚡' : '💰'} gift of ${gift} active</span>
         </div>`
-            : ''
-        }
+						: ''
+				}
 
         <div class="rune-stat-grid">
           <div class="rune-stat-card">
@@ -522,14 +506,14 @@
         <div class="rune-section-label">elementals</div>
         <div class="rune-elemental-grid">
           ${ELEMENTS.map((el) => {
-            const count = runesData.elementals[el] || 0;
-            const hasOne = count > 0;
-            return `<div class="rune-elemental-card ${hasOne ? 'rune-el-collected' : ''}">
+						const count = runesData.elementals[el] || 0;
+						const hasOne = count > 0;
+						return `<div class="rune-elemental-card ${hasOne ? 'rune-el-collected' : ''}">
               <div class="rune-el-emoji">${ELEMENT_EMOJI[el]}</div>
               <div class="rune-el-name">${el}</div>
               <div class="rune-el-count">${count}</div>
             </div>`;
-          }).join('')}
+					}).join('')}
         </div>
         ${allElementsCollected && !gift ? '<div style="font-size:0.8em;opacity:0.6;text-align:center;margin-bottom:16px;">all elements collected — gift already granted</div>' : ''}
 
@@ -557,8 +541,8 @@
         <div class="rune-section-label" style="margin-top:20px;">block upgrades</div>
         <div class="rune-upgrades-list">
           ${upgradeList
-            .map(
-              (u) => `
+						.map(
+							(u) => `
             <div class="rune-upgrade-item ${upgrades[u.key] ? 'rune-upgrade-owned' : ''}">
               <div class="rune-upgrade-left">
                 <div class="rune-upgrade-name">${u.emoji} ${u.name}</div>
@@ -566,46 +550,44 @@
               </div>
               <div class="rune-upgrade-right">
                 ${
-                  upgrades[u.key]
-                    ? '<span style="font-size:0.8em;color:#4a4;">owned</span>'
-                    : `<div style="font-size:0.75em;color:#ffb86b;margin-bottom:4px;">${formatBlocks(u.cost)} blocks</div>
+									upgrades[u.key]
+										? '<span style="font-size:0.8em;color:#4a4;">owned</span>'
+										: `<div style="font-size:0.75em;color:#ffb86b;margin-bottom:4px;">${formatBlocks(u.cost)} blocks</div>
                      <button class="small rune-buy-btn" data-key="${u.key}">buy</button>`
-                }
+								}
               </div>
             </div>
-          `,
-            )
-            .join('')}
+          `
+						)
+						.join('')}
         </div>
       </div>
     `;
 
-    const r2b = container.querySelector('#runeToBlockBtn');
-    if (r2b)
-      r2b.addEventListener('click', () => {
-        const val =
-          parseInt(container.querySelector('#runeToBlockInput').value) || 0;
-        if (val > 0) exchangeRunesToBlocks(val);
-      });
+		const r2b = container.querySelector('#runeToBlockBtn');
+		if (r2b)
+			r2b.addEventListener('click', () => {
+				const val = parseInt(container.querySelector('#runeToBlockInput').value) || 0;
+				if (val > 0) exchangeRunesToBlocks(val);
+			});
 
-    const b2r = container.querySelector('#blockToRuneBtn');
-    if (b2r)
-      b2r.addEventListener('click', () => {
-        const val =
-          parseInt(container.querySelector('#blockToRuneInput').value) || 0;
-        if (val > 0) exchangeBlocksToRunes(val);
-      });
+		const b2r = container.querySelector('#blockToRuneBtn');
+		if (b2r)
+			b2r.addEventListener('click', () => {
+				const val = parseInt(container.querySelector('#blockToRuneInput').value) || 0;
+				if (val > 0) exchangeBlocksToRunes(val);
+			});
 
-    container.querySelectorAll('.rune-buy-btn').forEach((btn) => {
-      btn.addEventListener('click', () => buyUpgrade(btn.dataset.key));
-    });
-  }
+		container.querySelectorAll('.rune-buy-btn').forEach((btn) => {
+			btn.addEventListener('click', () => buyUpgrade(btn.dataset.key));
+		});
+	}
 
-  function injectStyles() {
-    if (document.getElementById('runesStyles')) return;
-    const style = document.createElement('style');
-    style.id = 'runesStyles'; // oh CSS my beloved my ass
-    style.textContent = `
+	function injectStyles() {
+		if (document.getElementById('runesStyles')) return;
+		const style = document.createElement('style');
+		style.id = 'runesStyles'; // oh CSS my beloved my ass
+		style.textContent = `
 .runes-panel {
   max-width: 540px;
   width: 100%;
@@ -729,33 +711,33 @@
   color: #88cc88;
 }
     `;
-    document.head.appendChild(style);
-  }
+		document.head.appendChild(style);
+	}
 
-  function init() {
-    injectStyles();
-    loadData();
+	function init() {
+		injectStyles();
+		loadData();
 
-    if (gift === 'wealth') startWealthGift();
-    if (upgrades.anomalyMachine) startAnomalyMachine();
-    if (upgrades.dopamineAttack) startDopamineAttack();
+		if (gift === 'wealth') startWealthGift();
+		if (upgrades.anomalyMachine) startAnomalyMachine();
+		if (upgrades.dopamineAttack) startDopamineAttack();
 
-    renderRunes();
+		renderRunes();
 
-    document.addEventListener('click', (e) => {
-      const dot = e.target.closest('.page-dot');
-      const next = e.target.closest('#nextPage');
-      const prev = e.target.closest('#prevPage');
-      if (dot || next || prev) setTimeout(renderRunes, 80);
-    });
-  }
+		document.addEventListener('click', (e) => {
+			const dot = e.target.closest('.page-dot');
+			const next = e.target.closest('#nextPage');
+			const prev = e.target.closest('#prevPage');
+			if (dot || next || prev) setTimeout(renderRunes, 80);
+		});
+	}
 
-  window.tryDropRune = tryDropRune;
-  window.renderRunes = renderRunes;
+	window.tryDropRune = tryDropRune;
+	window.renderRunes = renderRunes;
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    setTimeout(init, 0);
-  }
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', init);
+	} else {
+		setTimeout(init, 0);
+	}
 })();

@@ -1,3 +1,5 @@
+console.log(performance.now());
+
 window.addEventListener('DOMContentLoaded', () => {
 	const ANIM_KEY = 'startAnimConfig';
 

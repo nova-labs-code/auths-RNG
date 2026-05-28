@@ -1,9 +1,11 @@
 (function () {
-  'use strict';
+	'use strict';
 
-  // ── Inject styles >:DDDDDDDDDDDDDD ──────────────────────────────────────────────────────
-  const style = document.createElement('style');
-  style.textContent = `
+	console.log(performance.now());
+
+	// ── Inject styles >:DDDDDDDDDDDDDD ──────────────────────────────────────────────────────
+	const style = document.createElement('style');
+	style.textContent = `
     #jukebox {
       position: fixed;
       top: 14px;
@@ -175,13 +177,13 @@
       top: 52px;
     }
   `;
-  document.head.appendChild(style);
+	document.head.appendChild(style);
 
-  // ── DOM ────────────────────────────────────────────────────────────────
-  // Using a sibling div for eq bars so they don't rotate with the disc
-  document.body.insertAdjacentHTML(
-    'beforeend',
-    `
+	// ── DOM ────────────────────────────────────────────────────────────────
+	// Using a sibling div for eq bars so they don't rotate with the disc
+	document.body.insertAdjacentHTML(
+		'beforeend',
+		`
     <div id="jukebox">
       <div id="jb-disc"></div>
       <div id="jb-eq">
@@ -196,136 +198,134 @@
         <span id="jb-name">—</span>
       </div>
     </div>
-  `,
-  );
+  `
+	);
 
-  // Re-parent #jb-eq so it's absolutely positioned over the disc
-  // (inserted as a sibling of disc inside #jukebox, sits on top via z-index)
-  const eq = document.getElementById('jb-eq');
-  const jukebox = document.getElementById('jukebox');
-  jukebox.style.position = 'fixed'; // already handled by CSS, just ensure
-  eq.style.position = 'absolute';
-  eq.style.left = '14px';
-  eq.style.top = '14px';
-  // Actually cleaner to just wrap disc+eq together:
-  const discWrap = document.createElement('div');
-  discWrap.style.cssText =
-    'position:relative;width:38px;height:38px;flex-shrink:0;';
-  const disc = document.getElementById('jb-disc');
-  disc.parentNode.insertBefore(discWrap, disc);
-  discWrap.appendChild(disc);
-  discWrap.appendChild(eq);
-  eq.style.position = 'absolute';
-  eq.style.left = '0';
-  eq.style.top = '0';
-  eq.style.width = '38px';
-  eq.style.height = '38px';
+	// Re-parent #jb-eq so it's absolutely positioned over the disc
+	// (inserted as a sibling of disc inside #jukebox, sits on top via z-index)
+	const eq = document.getElementById('jb-eq');
+	const jukebox = document.getElementById('jukebox');
+	jukebox.style.position = 'fixed'; // already handled by CSS, just ensure
+	eq.style.position = 'absolute';
+	eq.style.left = '14px';
+	eq.style.top = '14px';
+	// Actually cleaner to just wrap disc+eq together:
+	const discWrap = document.createElement('div');
+	discWrap.style.cssText = 'position:relative;width:38px;height:38px;flex-shrink:0;';
+	const disc = document.getElementById('jb-disc');
+	disc.parentNode.insertBefore(discWrap, disc);
+	discWrap.appendChild(disc);
+	discWrap.appendChild(eq);
+	eq.style.position = 'absolute';
+	eq.style.left = '0';
+	eq.style.top = '0';
+	eq.style.width = '38px';
+	eq.style.height = '38px';
 
-  const panel = document.getElementById('jb-panel');
-  const nameEl = document.getElementById('jb-name');
-  const btnPlay = document.getElementById('jb-play');
-  const btnPrev = document.getElementById('jb-prev');
-  const btnNext = document.getElementById('jb-next');
+	const panel = document.getElementById('jb-panel');
+	const nameEl = document.getElementById('jb-name');
+	const btnPlay = document.getElementById('jb-play');
+	const btnPrev = document.getElementById('jb-prev');
+	const btnNext = document.getElementById('jb-next');
 
-  // ── State helpers ──────────────────────────────────────────────────────
-  function isPlaying() {
-    const a = window.backgroundMusic;
-    if (a && !a.paused && a.readyState > 0) return true;
-    if (window.customAudioSource) return true;
-    return false;
-  }
+	// ── State helpers ──────────────────────────────────────────────────────
+	function isPlaying() {
+		const a = window.backgroundMusic;
+		if (a && !a.paused && a.readyState > 0) return true;
+		if (window.customAudioSource) return true;
+		return false;
+	}
 
-  function isMuted() {
-    const n = document.getElementById('muteMusic');
-    return n ? n.checked : false;
-  }
+	function isMuted() {
+		const n = document.getElementById('muteMusic');
+		return n ? n.checked : false;
+	}
 
-  function trackName() {
-    const sel = document.getElementById('musicSelect');
-    if (!sel || sel.selectedIndex < 0) return '—';
-    let t = sel.options[sel.selectedIndex].textContent;
-    // strip the fucking noise from built-in labels
-    t = t.replace(/\s*\(custom\)/gi, '').replace(/\s*\(default\)/gi, '');
-    // "Artist - Title" → just Title when long.
-    const d = t.indexOf(' - ');
-    if (d > -1 && t.length > 28) t = t.slice(d + 3);
-    return t.trim() || '—';
-  }
+	function trackName() {
+		const sel = document.getElementById('musicSelect');
+		if (!sel || sel.selectedIndex < 0) return '—';
+		let t = sel.options[sel.selectedIndex].textContent;
+		// strip the fucking noise from built-in labels
+		t = t.replace(/\s*\(custom\)/gi, '').replace(/\s*\(default\)/gi, '');
+		// "Artist - Title" → just Title when long.
+		const d = t.indexOf(' - ');
+		if (d > -1 && t.length > 28) t = t.slice(d + 3);
+		return t.trim() || '—';
+	}
 
-  // ── Controls ───────────────────────────────────────────────────────────
-  function saveSettings() {
-    if (window.applySettings && window.getCurrentSettings)
-      window.applySettings(window.getCurrentSettings());
-  }
+	// ── Controls ───────────────────────────────────────────────────────────
+	function saveSettings() {
+		if (window.applySettings && window.getCurrentSettings)
+			window.applySettings(window.getCurrentSettings());
+	}
 
-  function skip(delta) {
-    const sel = document.getElementById('musicSelect');
-    if (!sel || !sel.options.length) return;
-    sel.selectedIndex =
-      (sel.selectedIndex + delta + sel.options.length) % sel.options.length;
-    saveSettings();
-  }
+	function skip(delta) {
+		const sel = document.getElementById('musicSelect');
+		if (!sel || !sel.options.length) return;
+		sel.selectedIndex = (sel.selectedIndex + delta + sel.options.length) % sel.options.length;
+		saveSettings();
+	}
 
-  function togglePlay() {
-    const m = document.getElementById('muteMusic');
-    if (!m) return;
-    // a shrimp could theoretically pilot a fucking mech if given enough funding
-    m.checked = !m.checked;
-    saveSettings();
-  }
+	function togglePlay() {
+		const m = document.getElementById('muteMusic');
+		if (!m) return;
+		// a shrimp could theoretically pilot a fucking mech if given enough funding
+		m.checked = !m.checked;
+		saveSettings();
+	}
 
-  // ── Render ─────────────────────────────────────────────────────────────
-  function render() {
-    const active = !isMuted();
-    const playing = isPlaying() && active;
+	// ── Render ─────────────────────────────────────────────────────────────
+	function render() {
+		const active = !isMuted();
+		const playing = isPlaying() && active;
 
-    disc.classList.toggle('jb-active', active);
-    disc.classList.toggle('jb-spinning', playing);
+		disc.classList.toggle('jb-active', active);
+		disc.classList.toggle('jb-spinning', playing);
 
-    btnPlay.innerHTML = isMuted() ? '&#9654;' : '&#9646;&#9646;';
-    btnPlay.title = isMuted() ? 'play' : 'pause';
-    nameEl.textContent = trackName();
-  }
+		btnPlay.innerHTML = isMuted() ? '&#9654;' : '&#9646;&#9646;';
+		btnPlay.title = isMuted() ? 'play' : 'pause';
+		nameEl.textContent = trackName();
+	}
 
-  // ── Panel open / close ─────────────────────────────────────────────────
-  let closeTimer;
-  const openPanel = () => {
-    clearTimeout(closeTimer);
-    panel.classList.add('jb-open');
-  };
-  const closePanel = () => {
-    closeTimer = setTimeout(() => panel.classList.remove('jb-open'), 900);
-  };
+	// ── Panel open / close ─────────────────────────────────────────────────
+	let closeTimer;
+	const openPanel = () => {
+		clearTimeout(closeTimer);
+		panel.classList.add('jb-open');
+	};
+	const closePanel = () => {
+		closeTimer = setTimeout(() => panel.classList.remove('jb-open'), 900);
+	};
 
-  discWrap.addEventListener('mouseenter', openPanel);
-  discWrap.addEventListener('mouseleave', closePanel);
-  panel.addEventListener('mouseenter', () => clearTimeout(closeTimer));
-  panel.addEventListener('mouseleave', closePanel);
+	discWrap.addEventListener('mouseenter', openPanel);
+	discWrap.addEventListener('mouseleave', closePanel);
+	panel.addEventListener('mouseenter', () => clearTimeout(closeTimer));
+	panel.addEventListener('mouseleave', closePanel);
 
-  // tap to toggle on touch
-  disc.addEventListener('click', () =>
-    panel.classList.contains('jb-open') ? closePanel() : openPanel(),
-  );
+	// tap to toggle on touch
+	disc.addEventListener('click', () =>
+		panel.classList.contains('jb-open') ? closePanel() : openPanel()
+	);
 
-  // ── Button wiring ──────────────────────────────────────────────────────
-  btnPlay.addEventListener('click', (e) => {
-    e.stopPropagation();
-    togglePlay();
-    render();
-  });
-  btnPrev.addEventListener('click', (e) => {
-    e.stopPropagation();
-    skip(-1);
-    render();
-  });
-  btnNext.addEventListener('click', (e) => {
-    e.stopPropagation();
-    skip(1);
-    render();
-  });
+	// ── Button wiring ──────────────────────────────────────────────────────
+	btnPlay.addEventListener('click', (e) => {
+		e.stopPropagation();
+		togglePlay();
+		render();
+	});
+	btnPrev.addEventListener('click', (e) => {
+		e.stopPropagation();
+		skip(-1);
+		render();
+	});
+	btnNext.addEventListener('click', (e) => {
+		e.stopPropagation();
+		skip(1);
+		render();
+	});
 
-  // ── Poll for external state changes ────────────────────────────────────
-  // (e.g. user mutes from settings panel, or a track finishes. i mean this is pretty self explainatory)
-  setInterval(render, 700);
-  window.addEventListener('load', () => setTimeout(render, 800));
+	// ── Poll for external state changes ────────────────────────────────────
+	// (e.g. user mutes from settings panel, or a track finishes. i mean this is pretty self explainatory)
+	setInterval(render, 700);
+	window.addEventListener('load', () => setTimeout(render, 800));
 })();

@@ -1,95 +1,122 @@
 (function () {
-  'use strict';
+	'use strict';
 
-  const QUOTES = [
-    { text: "luck is just probability taken personally.", attr: "— unknown" },
-    { text: "the rarest drop is the one you stop caring about.", attr: "— some idle game veteran" },
-    { text: "one more roll.", attr: "— everyone, always" },
-    { text: "entropy always wins in the end.", attr: "— second law" },
-    { text: "a 1-in-a-million chance happens six times a day in a city of six million.", attr: "— Diaconis & Mosteller" },
-    { text: "the dice have no memory.", attr: "— Blaise Pascal, probably" },
-    { text: "you miss 100% of the rolls you don't make.", attr: "— wayne gretzky (paraphrased)" },
-    { text: "probability is not a spectator sport.", attr: "— someone sweating over a gacha" },
-    { text: "the house always wins. you are the house.", attr: "— wait no you're not" },
-    { text: "if at first you don't succeed, the sample size is too small.", attr: "— statisticians" },
-    { text: "somewhere, right now, someone rolled the rarest rarity.", attr: "— it wasn't you. keep going." },
-    { text: "rng stands for 'really needs grinding'.", attr: "— every mmo player ever" },
-    { text: "there is no spoon. there is only the roll button.", attr: "— the matrix (abridged)" },
-    { text: "even a stopped clock is right twice a day. you are not a stopped clock.", attr: "— encouragement?" },
-    { text: "math is just counting really fast. you can do it.", attr: "— auth, probably" },
-    { text: "every roll is the first roll if you have bad enough memory.", attr: "— coping mechanism #47" },
-    { text: "the expected value is 1. you will feel nothing.", attr: "— probability theory" },
-    { text: "rng: where skill issue meets fate issue.", attr: "— gacha community wisdom" },
-    { text: "collect them all. you have time. probably.", attr: "— some game dev" },
-    { text: "variance is just the universe trolling you with extra steps.", attr: "— statistics, explained badly" },
-  ];
+	console.log(performance.now());
 
-  function getDailyQuote() {
-    const day = Math.floor(Date.now() / 86400000);
-    return QUOTES[day % QUOTES.length];
-  }
+	const QUOTES = [
+		{ text: 'luck is just probability taken personally.', attr: '— unknown' },
+		{ text: 'the rarest drop is the one you stop caring about.', attr: '— some idle game veteran' },
+		{ text: 'one more roll.', attr: '— everyone, always' },
+		{ text: 'entropy always wins in the end.', attr: '— second law' },
+		{
+			text: 'a 1-in-a-million chance happens six times a day in a city of six million.',
+			attr: '— Diaconis & Mosteller',
+		},
+		{ text: 'the dice have no memory.', attr: '— Blaise Pascal, probably' },
+		{ text: "you miss 100% of the rolls you don't make.", attr: '— wayne gretzky (paraphrased)' },
+		{ text: 'probability is not a spectator sport.', attr: '— someone sweating over a gacha' },
+		{ text: 'the house always wins. you are the house.', attr: "— wait no you're not" },
+		{
+			text: "if at first you don't succeed, the sample size is too small.",
+			attr: '— statisticians',
+		},
+		{
+			text: 'somewhere, right now, someone rolled the rarest rarity.',
+			attr: "— it wasn't you. keep going.",
+		},
+		{ text: "rng stands for 'really needs grinding'.", attr: '— every mmo player ever' },
+		{ text: 'there is no spoon. there is only the roll button.', attr: '— the matrix (abridged)' },
+		{
+			text: 'even a stopped clock is right twice a day. you are not a stopped clock.',
+			attr: '— encouragement?',
+		},
+		{ text: 'math is just counting really fast. you can do it.', attr: '— auth, probably' },
+		{
+			text: 'every roll is the first roll if you have bad enough memory.',
+			attr: '— coping mechanism #47',
+		},
+		{ text: 'the expected value is 1. you will feel nothing.', attr: '— probability theory' },
+		{ text: 'rng: where skill issue meets fate issue.', attr: '— gacha community wisdom' },
+		{ text: 'collect them all. you have time. probably.', attr: '— some game dev' },
+		{
+			text: 'variance is just the universe trolling you with extra steps.',
+			attr: '— statistics, explained badly',
+		},
+	];
 
-  function getCurrentPoints() {
-    try {
-      const raw = localStorage.getItem('shopPoints');
-      return raw !== null ? Number(raw) : null;
-    } catch { return null; }
-  }
+	function getDailyQuote() {
+		const day = Math.floor(Date.now() / 86400000);
+		return QUOTES[day % QUOTES.length];
+	}
 
-  function getTotalRolls() {
-    try {
-      const raw = localStorage.getItem('totalRolls');
-      return raw !== null ? Number(raw) : null;
-    } catch { return null; }
-  }
+	function getCurrentPoints() {
+		try {
+			const raw = localStorage.getItem('shopPoints');
+			return raw !== null ? Number(raw) : null;
+		} catch {
+			return null;
+		}
+	}
 
-  function getLuckMultiplier() {
-    const el = document.getElementById('luckMultiplier');
-    return el ? el.textContent.replace('luck multiplier:', '').trim() : null;
-  }
+	function getTotalRolls() {
+		try {
+			const raw = localStorage.getItem('totalRolls');
+			return raw !== null ? Number(raw) : null;
+		} catch {
+			return null;
+		}
+	}
 
-  function getCollected() {
-    const el = document.getElementById('collectedCounter');
-    return el ? el.textContent.trim() : null;
-  }
+	function getLuckMultiplier() {
+		const el = document.getElementById('luckMultiplier');
+		return el ? el.textContent.replace('luck multiplier:', '').trim() : null;
+	}
 
-  function fmtNum(n) {
-    if (n === null || isNaN(n)) return '???';
-    if (n >= 1e9) return (n / 1e9).toFixed(2) + 'B';
-    if (n >= 1e6) return (n / 1e6).toFixed(2) + 'M';
-    if (n >= 1e3) return (n / 1e3).toFixed(1) + 'K';
-    return n.toLocaleString();
-  }
+	function getCollected() {
+		const el = document.getElementById('collectedCounter');
+		return el ? el.textContent.trim() : null;
+	}
 
-  function copyText(str) {
-    navigator.clipboard.writeText(str).catch(() => {
-      const ta = document.createElement('textarea');
-      ta.value = str;
-      ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0';
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand('copy');
-      document.body.removeChild(ta);
-    });
-  }
+	function fmtNum(n) {
+		if (n === null || isNaN(n)) return '???';
+		if (n >= 1e9) return (n / 1e9).toFixed(2) + 'B';
+		if (n >= 1e6) return (n / 1e6).toFixed(2) + 'M';
+		if (n >= 1e3) return (n / 1e3).toFixed(1) + 'K';
+		return n.toLocaleString();
+	}
 
-  function flashMsg(msg) {
-    if (typeof window.showAlert === 'function') { window.showAlert(msg); return; }
-    const t = document.createElement('div');
-    t.textContent = msg;
-    t.style.cssText = `
+	function copyText(str) {
+		navigator.clipboard.writeText(str).catch(() => {
+			const ta = document.createElement('textarea');
+			ta.value = str;
+			ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0';
+			document.body.appendChild(ta);
+			ta.select();
+			document.execCommand('copy');
+			document.body.removeChild(ta);
+		});
+	}
+
+	function flashMsg(msg) {
+		if (typeof window.showAlert === 'function') {
+			window.showAlert(msg);
+			return;
+		}
+		const t = document.createElement('div');
+		t.textContent = msg;
+		t.style.cssText = `
       position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
       background:var(--panel-bg,#1a1a1a);border:1px solid var(--border-color,#333);color:var(--text-color,#dcdcdc);
       font-family:monospace;font-size:0.8em;padding:6px 14px;
       border-radius:2px;z-index:2147483646;pointer-events:none;
       animation:_ctxFlash 2s forwards;
     `;
-    document.body.appendChild(t);
-    setTimeout(() => t.remove(), 2000);
-  }
+		document.body.appendChild(t);
+		setTimeout(() => t.remove(), 2000);
+	}
 
-  const style = document.createElement('style');
-  style.textContent = `
+	const style = document.createElement('style');
+	style.textContent = `
     @keyframes _ctxIn {
       from { opacity:0; transform:scale(0.94) translateY(-4px); }
       to   { opacity:1; transform:scale(1)    translateY(0);    }
@@ -236,255 +263,314 @@
       margin-bottom: 3px;
     }
   `;
-  document.head.appendChild(style);
+	document.head.appendChild(style);
 
-  const menu = document.createElement('div');
-  menu.id = '_ctx-menu';
-  menu.classList.add('_ctx-hidden');
-  document.body.appendChild(menu);
+	const menu = document.createElement('div');
+	menu.id = '_ctx-menu';
+	menu.classList.add('_ctx-hidden');
+	document.body.appendChild(menu);
 
-  function makeItem(icon, label, badge, onClick, opts = {}) {
-    const el = document.createElement('div');
-    el.className = '_ctx-item' +
-      (opts.disabled ? ' _ctx-disabled' : '') +
-      (opts.danger   ? ' _ctx-danger'   : '');
-    el.innerHTML = `
+	function makeItem(icon, label, badge, onClick, opts = {}) {
+		const el = document.createElement('div');
+		el.className =
+			'_ctx-item' + (opts.disabled ? ' _ctx-disabled' : '') + (opts.danger ? ' _ctx-danger' : '');
+		el.innerHTML = `
       <span class="_ctx-icon">${icon}</span>
       <span class="_ctx-label">${label}</span>
       ${badge ? `<span class="_ctx-badge">${badge}</span>` : ''}
     `;
-    if (!opts.disabled && onClick) el.addEventListener('click', () => { close(); onClick(); });
-    return el;
-  }
+		if (!opts.disabled && onClick)
+			el.addEventListener('click', () => {
+				close();
+				onClick();
+			});
+		return el;
+	}
 
-  function makeHeader(text) {
-    const el = document.createElement('div');
-    el.className = '_ctx-header';
-    el.textContent = text;
-    return el;
-  }
+	function makeHeader(text) {
+		const el = document.createElement('div');
+		el.className = '_ctx-header';
+		el.textContent = text;
+		return el;
+	}
 
-  function makeSep() {
-    const el = document.createElement('div');
-    el.className = '_ctx-sep';
-    return el;
-  }
+	function makeSep() {
+		const el = document.createElement('div');
+		el.className = '_ctx-sep';
+		return el;
+	}
 
-  function makeStatBlock(stats) {
-    const el = document.createElement('div');
-    el.className = '_ctx-stat-block';
-    stats.forEach(([label, val]) => {
-      const s = document.createElement('div');
-      s.className = '_ctx-stat';
-      s.innerHTML = `<span class="_ctx-stat-label">${label}</span> <span class="_ctx-stat-val">${val}</span>`;
-      el.appendChild(s);
-    });
-    return el;
-  }
+	function makeStatBlock(stats) {
+		const el = document.createElement('div');
+		el.className = '_ctx-stat-block';
+		stats.forEach(([label, val]) => {
+			const s = document.createElement('div');
+			s.className = '_ctx-stat';
+			s.innerHTML = `<span class="_ctx-stat-label">${label}</span> <span class="_ctx-stat-val">${val}</span>`;
+			el.appendChild(s);
+		});
+		return el;
+	}
 
-  function makeQuoteBlock(quote) {
-    const el = document.createElement('div');
-    el.className = '_ctx-quote-block';
-    el.innerHTML = `
+	function makeQuoteBlock(quote) {
+		const el = document.createElement('div');
+		el.className = '_ctx-quote-block';
+		el.innerHTML = `
       <div class="_ctx-qotd-label">quote of the day</div>
       <div class="_ctx-quote-text">"${quote.text}"</div>
       <div class="_ctx-quote-attr">${quote.attr}</div>
     `;
-    return el;
-  }
+		return el;
+	}
 
-  let _justOpened = false;
+	let _justOpened = false;
 
-  function close() {
-    menu.classList.add('_ctx-hidden');
-  }
+	function close() {
+		menu.classList.add('_ctx-hidden');
+	}
 
-  function open(x, y) {
-    _justOpened = true;
-    setTimeout(() => { _justOpened = false; }, 120);
+	function open(x, y) {
+		_justOpened = true;
+		setTimeout(() => {
+			_justOpened = false;
+		}, 120);
 
-    menu.classList.remove('_ctx-hidden');
-    menu.innerHTML = '';
+		menu.classList.remove('_ctx-hidden');
+		menu.innerHTML = '';
 
-    const pts    = getCurrentPoints();
-    const rolls  = getTotalRolls();
-    const luck   = getLuckMultiplier();
-    const coll   = getCollected();
-    const currentPageIdx = typeof window._currentPage !== 'undefined' ? window._currentPage : -1;
+		const pts = getCurrentPoints();
+		const rolls = getTotalRolls();
+		const luck = getLuckMultiplier();
+		const coll = getCollected();
+		const currentPageIdx = typeof window._currentPage !== 'undefined' ? window._currentPage : -1;
 
-    const pageNames = [
-      'roll', 'shop', 'gauntlets', 'mutations',
-      'starmap', 'runes', 'wishing well', 'settings', 'links'
-    ];
+		const pageNames = [
+			'roll',
+			'shop',
+			'gauntlets',
+			'mutations',
+			'starmap',
+			'runes',
+			'wishing well',
+			'settings',
+			'links',
+		];
 
-    const now = new Date();
-    const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-    const dateStr = now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
+		const now = new Date();
+		const timeStr = now.toLocaleTimeString([], {
+			hour: '2-digit',
+			minute: '2-digit',
+			second: '2-digit',
+		});
+		const dateStr = now.toLocaleDateString([], {
+			weekday: 'short',
+			month: 'short',
+			day: 'numeric',
+		});
 
-    const statData = [];
-    if (rolls  !== null) statData.push(['rolls',    fmtNum(rolls)]);
-    if (pts    !== null) statData.push(['points',   fmtNum(pts)]);
-    if (luck)            statData.push(['luck',     luck]);
-    if (coll)            statData.push(['index',    coll]);
-    statData.push(['time', timeStr]);
-    statData.push(['date', dateStr]);
+		const statData = [];
+		if (rolls !== null) statData.push(['rolls', fmtNum(rolls)]);
+		if (pts !== null) statData.push(['points', fmtNum(pts)]);
+		if (luck) statData.push(['luck', luck]);
+		if (coll) statData.push(['index', coll]);
+		statData.push(['time', timeStr]);
+		statData.push(['date', dateStr]);
 
-    if (statData.length) menu.appendChild(makeStatBlock(statData));
+		if (statData.length) menu.appendChild(makeStatBlock(statData));
 
-    menu.appendChild(makeHeader('navigate'));
+		menu.appendChild(makeHeader('navigate'));
 
-    pageNames.forEach((name, i) => {
-      const locked = window.lockedPages && window.lockedPages.has(i);
-      const isCurrent = i === currentPageIdx;
-      menu.appendChild(makeItem(
-        isCurrent ? '▶' : '·',
-        name,
-        locked ? 'locked' : (isCurrent ? 'here' : ''),
-        () => { if (typeof window.goToPage === 'function') window.goToPage(i); },
-        { disabled: locked }
-      ));
-    });
+		pageNames.forEach((name, i) => {
+			const locked = window.lockedPages && window.lockedPages.has(i);
+			const isCurrent = i === currentPageIdx;
+			menu.appendChild(
+				makeItem(
+					isCurrent ? '▶' : '·',
+					name,
+					locked ? 'locked' : isCurrent ? 'here' : '',
+					() => {
+						if (typeof window.goToPage === 'function') window.goToPage(i);
+					},
+					{ disabled: locked }
+				)
+			);
+		});
 
-    makeSep() && menu.appendChild(makeSep());
+		makeSep() && menu.appendChild(makeSep());
 
-    menu.appendChild(makeHeader('actions'));
+		menu.appendChild(makeHeader('actions'));
 
-    menu.appendChild(makeItem('🎲', 'roll now', '', () => {
-      const btn = document.getElementById('rollBtn');
-      if (btn && !btn.disabled) btn.click();
-      else flashMsg('roll is on cooldown!');
-    }));
+		menu.appendChild(
+			makeItem('🎲', 'roll now', '', () => {
+				const btn = document.getElementById('rollBtn');
+				if (btn && !btn.disabled) btn.click();
+				else flashMsg('roll is on cooldown!');
+			})
+		);
 
-    menu.appendChild(makeItem('📅', 'claim daily', '', () => {
-      const btn = document.getElementById('dailyBtn');
-      if (btn && !btn.disabled) btn.click();
-      else flashMsg('daily already claimed!');
-    }));
+		menu.appendChild(
+			makeItem('📅', 'claim daily', '', () => {
+				const btn = document.getElementById('dailyBtn');
+				if (btn && !btn.disabled) btn.click();
+				else flashMsg('daily already claimed!');
+			})
+		);
 
-    const autoBtn = document.getElementById('autoRollBtn');
-    const autoOn  = autoBtn && autoBtn.classList.contains('active');
-    menu.appendChild(makeItem(
-      autoOn ? '⏸' : '▶',
-      autoOn ? 'stop auto roll' : 'start auto roll',
-      '',
-      () => { const b = document.getElementById('autoRollBtn'); if (b) b.click(); }
-    ));
+		const autoBtn = document.getElementById('autoRollBtn');
+		const autoOn = autoBtn && autoBtn.classList.contains('active');
+		menu.appendChild(
+			makeItem(autoOn ? '⏸' : '▶', autoOn ? 'stop auto roll' : 'start auto roll', '', () => {
+				const b = document.getElementById('autoRollBtn');
+				if (b) b.click();
+			})
+		);
 
-    menu.appendChild(makeSep());
+		menu.appendChild(makeSep());
 
-    menu.appendChild(makeItem('⚗️', 'consume anomaly', '', () => {
-      const btn = document.getElementById('consumeAnomalyBtn');
-      if (btn) btn.click();
-      else flashMsg('no anomaly button found');
-    }));
+		menu.appendChild(
+			makeItem('⚗️', 'consume anomaly', '', () => {
+				const btn = document.getElementById('consumeAnomalyBtn');
+				if (btn) btn.click();
+				else flashMsg('no anomaly button found');
+			})
+		);
 
-    menu.appendChild(makeItem('📖', 'view rarity index', '', () => {
-      const btn = document.getElementById('indexBtn');
-      if (btn) btn.click();
-    }));
+		menu.appendChild(
+			makeItem('📖', 'view rarity index', '', () => {
+				const btn = document.getElementById('indexBtn');
+				if (btn) btn.click();
+			})
+		);
 
-    menu.appendChild(makeItem('🪄', 'throw 100pts in well', '', () => {
-      if (typeof window.setWellAmount === 'function') window.setWellAmount(100);
-      if (typeof window.goToPage     === 'function') window.goToPage(6);
-      const btn = document.getElementById('throwWellBtn');
-      if (btn) setTimeout(() => btn.click(), 150);
-    }));
+		menu.appendChild(
+			makeItem('🪄', 'throw 100pts in well', '', () => {
+				if (typeof window.setWellAmount === 'function') window.setWellAmount(100);
+				if (typeof window.goToPage === 'function') window.goToPage(6);
+				const btn = document.getElementById('throwWellBtn');
+				if (btn) setTimeout(() => btn.click(), 150);
+			})
+		);
 
-    makeSep() && menu.appendChild(makeSep());
+		makeSep() && menu.appendChild(makeSep());
 
-    menu.appendChild(makeHeader('copy'));
+		menu.appendChild(makeHeader('copy'));
 
-    menu.appendChild(makeItem('💾', 'copy save data', '', () => {
-      const el = document.getElementById('saveTransferCode');
-      if (el && el.textContent && !el.textContent.includes('(no ')) {
-        copyText(el.textContent); flashMsg('save data copied!');
-      } else {
-        const refreshBtn = document.getElementById('refreshSaveBtn');
-        if (refreshBtn) refreshBtn.click();
-        setTimeout(() => {
-          const el2 = document.getElementById('saveTransferCode');
-          if (el2 && el2.textContent && !el2.textContent.includes('(no ')) {
-            copyText(el2.textContent); flashMsg('save data copied!');
-          } else { flashMsg('no save data found'); }
-        }, 80);
-      }
-    }));
+		menu.appendChild(
+			makeItem('💾', 'copy save data', '', () => {
+				const el = document.getElementById('saveTransferCode');
+				if (el && el.textContent && !el.textContent.includes('(no ')) {
+					copyText(el.textContent);
+					flashMsg('save data copied!');
+				} else {
+					const refreshBtn = document.getElementById('refreshSaveBtn');
+					if (refreshBtn) refreshBtn.click();
+					setTimeout(() => {
+						const el2 = document.getElementById('saveTransferCode');
+						if (el2 && el2.textContent && !el2.textContent.includes('(no ')) {
+							copyText(el2.textContent);
+							flashMsg('save data copied!');
+						} else {
+							flashMsg('no save data found');
+						}
+					}, 80);
+				}
+			})
+		);
 
-    menu.appendChild(makeItem('🔗', 'copy page url', '', () => {
-      copyText(location.href); flashMsg('url copied!');
-    }));
+		menu.appendChild(
+			makeItem('🔗', 'copy page url', '', () => {
+				copyText(location.href);
+				flashMsg('url copied!');
+			})
+		);
 
-    if (pts !== null) {
-      menu.appendChild(makeItem('📋', 'copy stats snapshot', '', () => {
-        const snap = [
-          `auth's RNG stats @ ${dateStr} ${timeStr}`,
-          `rolls:  ${fmtNum(rolls)}`,
-          `points: ${fmtNum(pts)}`,
-          `luck:   ${luck || '?'}`,
-          `index:  ${coll || '?'}`,
-        ].join('\n');
-        copyText(snap); flashMsg('stats copied!');
-      }));
-    }
+		if (pts !== null) {
+			menu.appendChild(
+				makeItem('📋', 'copy stats snapshot', '', () => {
+					const snap = [
+						`auth's RNG stats @ ${dateStr} ${timeStr}`,
+						`rolls:  ${fmtNum(rolls)}`,
+						`points: ${fmtNum(pts)}`,
+						`luck:   ${luck || '?'}`,
+						`index:  ${coll || '?'}`,
+					].join('\n');
+					copyText(snap);
+					flashMsg('stats copied!');
+				})
+			);
+		}
 
-    menu.appendChild(makeSep());
+		menu.appendChild(makeSep());
 
-    const sel = window.getSelection ? window.getSelection().toString().trim() : '';
-    if (sel) {
-      menu.appendChild(makeHeader('selection'));
-      menu.appendChild(makeItem('📋', 'copy selection', `"${sel.slice(0,18)}${sel.length>18?'…':''}"`, () => {
-        copyText(sel); flashMsg('copied!');
-      }));
-      menu.appendChild(makeSep());
-    }
+		const sel = window.getSelection ? window.getSelection().toString().trim() : '';
+		if (sel) {
+			menu.appendChild(makeHeader('selection'));
+			menu.appendChild(
+				makeItem(
+					'📋',
+					'copy selection',
+					`"${sel.slice(0, 18)}${sel.length > 18 ? '…' : ''}"`,
+					() => {
+						copyText(sel);
+						flashMsg('copied!');
+					}
+				)
+			);
+			menu.appendChild(makeSep());
+		}
 
-    menu.appendChild(makeHeader('page'));
+		menu.appendChild(makeHeader('page'));
 
-    menu.appendChild(makeItem('↺', 'reload game', '', () => location.reload()));
+		menu.appendChild(makeItem('↺', 'reload game', '', () => location.reload()));
 
-    menu.appendChild(makeItem('📰', 'open github', '', () => {
-      window.open('https://github.com/auth1ery/auths-RNG', '_blank');
-    }));
+		menu.appendChild(
+			makeItem('📰', 'open github', '', () => {
+				window.open('https://github.com/auth1ery/auths-RNG', '_blank');
+			})
+		);
 
-    menu.appendChild(makeItem('💬', 'open discord', '', () => {
-      window.open('https://discord.gg/mTDw8jJYqX', '_blank');
-    }));
+		menu.appendChild(
+			makeItem('💬', 'open discord', '', () => {
+				window.open('https://discord.gg/mTDw8jJYqX', '_blank');
+			})
+		);
 
-    menu.appendChild(makeItem('❓', 'open faq', '', () => {
-      window.open('/FAQ.html', '_blank');
-    }));
+		menu.appendChild(
+			makeItem('❓', 'open faq', '', () => {
+				window.open('/FAQ.html', '_blank');
+			})
+		);
 
-    menu.appendChild(makeSep());
+		menu.appendChild(makeSep());
 
-    menu.appendChild(makeQuoteBlock(getDailyQuote()));
+		menu.appendChild(makeQuoteBlock(getDailyQuote()));
 
-    menu.style.left = '0';
-    menu.style.top  = '0';
-    const mw = menu.offsetWidth  || 220;
-    const mh = menu.offsetHeight || 300;
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
+		menu.style.left = '0';
+		menu.style.top = '0';
+		const mw = menu.offsetWidth || 220;
+		const mh = menu.offsetHeight || 300;
+		const vw = window.innerWidth;
+		const vh = window.innerHeight;
 
-    menu.style.left = Math.min(x, vw - mw - 8) + 'px';
-    menu.style.top  = Math.min(y, vh - mh - 8) + 'px';
-  }
+		menu.style.left = Math.min(x, vw - mw - 8) + 'px';
+		menu.style.top = Math.min(y, vh - mh - 8) + 'px';
+	}
 
-  menu.addEventListener('pointerdown', (e) => {
-    e.stopPropagation();
-  });
+	menu.addEventListener('pointerdown', (e) => {
+		e.stopPropagation();
+	});
 
-  document.addEventListener('contextmenu', (e) => {
-    e.preventDefault();
-    open(e.clientX, e.clientY);
-  });
+	document.addEventListener('contextmenu', (e) => {
+		e.preventDefault();
+		open(e.clientX, e.clientY);
+	});
 
-  document.addEventListener('pointerdown', (e) => {
-    if (_justOpened) return;
-    close();
-  });
+	document.addEventListener('pointerdown', (e) => {
+		if (_justOpened) return;
+		close();
+	});
 
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') close();
-  });
-
+	document.addEventListener('keydown', (e) => {
+		if (e.key === 'Escape') close();
+	});
 })();

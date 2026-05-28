@@ -1,6 +1,8 @@
 (function () {
 	'use strict';
 
+	console.log(performance.now());
+
 	const BUILT_IN_PRESETS = [
 		{
 			name: 'default',

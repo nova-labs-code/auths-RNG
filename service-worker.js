@@ -1,3 +1,5 @@
+console.log(performance.now());
+
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open('app-cache').then((cache) => {
@@ -18,3 +20,4 @@ self.addEventListener('fetch', (event) => {
     }),
   );
 });
+
