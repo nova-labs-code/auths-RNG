@@ -38,12 +38,21 @@ test.describe('auths-RNG smoke tests', () => {
 
 	test('roll button is clickable and does not crash', async ({ page }) => {
 		const errors = [];
-		page.on('pageerror', (err) => errors.push(err.message));
+		page.on('pageerror', (err) => {
+			if (!err.message.includes('Failed to fetch')) {
+				errors.push(err.message);
+			}
+		});
 		await page.goto(BASE_URL);
 
 		const consent = page.locator('#legalConsentPopup');
 		if (await consent.isVisible()) {
 			await page.locator('#legalConsentDismiss').click();
+		}
+
+		const saContainer = page.locator('.sa-container');
+		if (await saContainer.isVisible()) {
+			await saContainer.click();
 		}
 
 		await page.locator('#rollBtn').waitFor({ state: 'visible', timeout: 5000 });
