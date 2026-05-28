@@ -1,4 +1,4 @@
-const rollBtn = document.getElementById('rollBtn'),
+console.log(performance.now());
 
 const messages = [
   'hang on there',
