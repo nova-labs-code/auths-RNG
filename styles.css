@@ -25,6 +25,7 @@ the creature
   --achievement-bg: #1a2a1a;
   --achievement-border: #2a4a2a;
   --border-radius: 2px;
+  --panel-bg-rgb: 17, 17, 17;
   --accent-color: #dcdcdc;
 }
 
@@ -41,6 +42,7 @@ the creature
   --link-border: #ccc;
   --achievement-bg: #e8f5e8;
   --achievement-border: #90c090;
+  --panel-bg-rgb: 250, 250, 250;
 }
 
 @keyframes scale-up-center {
@@ -248,6 +250,21 @@ select {
   max-width: 540px;
   margin-bottom: 1em;
   animation: scale-up-center 0.5s ease forwards;
+}
+
+@keyframes hot-pulse-anim {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(255, 160, 60, 0);
+        border-color: var(--border-color);
+    }
+    50% {
+        box-shadow: 0 0 10px 3px rgba(255, 160, 60, 0.35);
+        border-color: rgba(255, 160, 60, 0.6);
+    }
+}
+
+#rollBtn.hot-pulse {
+    animation: hot-pulse-anim 1.2s ease-in-out infinite;
 }
 
 #rollBtn:disabled {
@@ -1168,22 +1185,24 @@ br + .image-column {
 }
 
 #cutsceneOverlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: #000;
-  z-index: 99999;
-  opacity: 0;
-  transition: opacity 0.5s ease;
+    visibility: hidden;
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 99999;
+    opacity: 0;
+    transition: opacity 0.5s ease;
 }
 
 #cutsceneOverlay.active {
-  display: block;
-  opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    opacity: 1;
 }
 
 #cutsceneOverlay.fadeout {
-  opacity: 0;
+    opacity: 0;
 }
 
 #cutsceneVideo {
@@ -2275,10 +2294,7 @@ body.blur-panels .well-container {
     saturate(var(--blur-saturate, 140%));
   -webkit-backdrop-filter: blur(var(--blur-intensity, 10px))
     saturate(var(--blur-saturate, 140%));
-  background: rgb(
-    var(--panel-bg-rgb, 17, 17, 17),
-    var(--blur-panel-opacity, 0.55)
-  ) !important;
+  background: rgba(var(--panel-bg-rgb, 17, 17, 17), var(--blur-panel-opacity, 0.55)) !important;
   border-color: rgb(
     255
     255
