@@ -657,7 +657,7 @@ const messages = [
 'this website has more soul than 90% of corporate apps',
 'you have been permanently emotionally altered by the internet',
 'hello chat welcome back to another episode of suffering',
-'one wrong tweet and its OVER you're gonna see the most slurs you will ever see in yo life',
+'one wrong tweet and its OVER',
 'this game is what happens when a forum user learns javascript',
 '404 whimsy not found',
 'this message is compatible with internet explorer somehow',
