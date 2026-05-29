@@ -1924,31 +1924,38 @@ function startWellCooldownTimer() {
 const sortSelect = document.getElementById('sortSelect');
 
 rollBtn.addEventListener('click', () => {
-	if (isCutscenePlaying) return;
-	rollBtn.disabled = true;
+    if (isCutscenePlaying) return;
+    rollBtn.disabled = true;
 
-	try {
-		spinner.style.transition = 'none';
-		void spinner.offsetWidth;
-		spinner.style.transform = 'translateY(0)';
+    try {
+        spinner.style.transition = 'none';
+        void spinner.offsetWidth;
+        spinner.style.transform = 'translateY(0)';
 
-		const result = getRandomRarity();
-		const res = result.rarity;
+        const result = getRandomRarity();
+        const res = result.rarity;
 
-		if (result.wasPity) showAnomalyPopup('pity triggered!');
-		if (result.isHotPulse) rollBtn.classList.add('hot-pulse');
-		else rollBtn.classList.remove('hot-pulse');
+        if (result.wasPity) showAnomalyPopup('pity triggered!');
+        if (result.isHotPulse) rollBtn.classList.add('hot-pulse');
+        else rollBtn.classList.remove('hot-pulse');
 
-		const isMuted = checkMuteSettings();
-		if (!isMuted && backgroundMusic.paused && res.name !== 'Lunar') {
-			backgroundMusic.play().catch(() => {});
-		}
+        const isMuted = checkMuteSettings();
+        if (!isMuted && backgroundMusic.paused && res.name !== 'Lunar') {
+            backgroundMusic.play().catch(() => {});
+        }
 
-		setTimeout(() => spinAndReveal(res), 100);
-	} catch (e) {
-		console.error('roll failed:', e);
-		rollBtn.disabled = false;
-	}
+        setTimeout(() => {
+            try {
+                spinAndReveal(res);
+            } catch (e) {
+                console.error('spinAndReveal failed:', e);
+                rollBtn.disabled = false;
+            }
+        }, 100);
+    } catch (e) {
+        console.error('roll failed:', e);
+        rollBtn.disabled = false;
+    }
 });
 
 document.addEventListener('visibilitychange', () => {
@@ -2603,14 +2610,14 @@ function throwIntoWell() {
 	wellData.timesThrown++;
 
 	if (won) {
-		reward = amount * 2;
-		points += reward;
-		wellData.totalReceived += reward;
-		wellData.successes++;
-		updatePointsDisplay();
-		showWellResult(true, reward);
+       const reward = amount * 2;
+       points += reward;
+       wellData.totalReceived += reward;
+ 	   wellData.successes++;
+ 	   updatePointsDisplay();
+ 	   showWellResult(true, reward);
 	} else {
-		showWellResult(false, amount);
+	    showWellResult(false, amount);
 	}
 
 	saveWellData();
