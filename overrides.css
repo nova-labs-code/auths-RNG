@@ -1474,18 +1474,32 @@ br + .image-column {
 	border-radius: 50%;
 	background: var(--border-color);
 	cursor: pointer;
-	transition: background 0.3s, opacity 0.3s, width 0.35s ease, border-radius 0.3s;
+	position: relative;
+	overflow: hidden;
+	transition: width 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), border-radius 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+}
+
+.page-dot::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(90deg, #ffb3b3, #ffd9b3, #fffcb3, #b3f0bb, #b3e8ff, #d4b3ff, #ffb3ee, #ffb3b3);
+	background-size: 300% 100%;
+	opacity: 0;
+	transition: opacity 0.3s ease;
+	animation: rainbow-shift 4s linear infinite;
+	border-radius: inherit;
 }
 
 .page-dot.active {
-	background: linear-gradient(90deg,
-		#ffb3b3, #ffd9b3, #fffcb3, #b3f0bb, #b3e8ff, #d4b3ff, #ffb3ee, #ffb3b3
-	);
-	background-size: 300% 100%;
-	animation: rainbow-shift 4s linear infinite;
-	width: 24px;
-	border-radius: 4px;
+	width: 28px;
+	border-radius: 6px;
+	background: var(--border-color);
 	box-shadow: 0 0 6px rgb(200 160 255 / 20%);
+}
+
+.page-dot.active::after {
+	opacity: 1;
 }
 
 .page-dot.flash-red {
