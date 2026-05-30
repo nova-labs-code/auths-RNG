@@ -1,18 +1,18 @@
 :root {
 	--bg-color: #0e0e0e;
 	--text-color: #dcdcdc;
-	--border-color: #2a2a2a;
+	--border-color: #303030;
 	--button-bg: #1a1a1a;
-	--button-hover: #222;
+	--button-hover: #242424;
 	--button-text: #dcdcdc;
 	--input-bg: #1a1a1a;
-	--panel-bg: #111;
-	--overlay-bg: #0a0a0a;
+	--panel-bg: #131313;
+	--overlay-bg: #0c0c0c;
 	--link-border: #444;
 	--achievement-bg: #1a2a1a;
 	--achievement-border: #2a4a2a;
 	--border-radius: 2px;
-	--panel-bg-rgb: 17, 17, 17;
+	--panel-bg-rgb: 19, 19, 19;
 	--accent-color: #dcdcdc;
 }
 
@@ -290,8 +290,8 @@ body {
 	color: var(--text-color);
 	font-family: monospace;
 	margin: 0;
-	padding: 28px;
-	line-height: 1.7;
+	padding: 36px 28px;
+	line-height: 1.85;
 	font-size: 15px;
 	min-height: 100vh;
 	display: flex;
@@ -309,10 +309,10 @@ body::before {
 	position: fixed;
 	inset: 0;
 	background-image: repeating-conic-gradient(
-		rgb(255 80 80 / 1.2%) 0% 25%,
-		rgb(80 200 120 / 1.2%) 25% 50%,
-		rgb(80 140 255 / 1.2%) 50% 75%,
-		rgb(220 180 80 / 1.2%) 75% 100%
+		rgb(255 80 80 / 0.7%) 0% 25%,
+		rgb(80 200 120 / 0.7%) 25% 50%,
+		rgb(80 140 255 / 0.7%) 50% 75%,
+		rgb(220 180 80 / 0.7%) 75% 100%
 	);
 	background-size: 60px 60px;
 	animation: checker-drift 20s linear infinite;
@@ -444,11 +444,11 @@ select {
 }
 
 #rollBtn {
-	padding: 12px 24px;
+	padding: 16px 24px;
 	font-size: 1.1em;
 	width: 100%;
 	max-width: 540px;
-	margin-bottom: 1em;
+	margin-bottom: 1.4em;
 	position: relative;
 	overflow: hidden;
 	animation: scale-up-center 0.5s ease forwards;
@@ -512,16 +512,27 @@ select {
 }
 
 #spinnerContainer {
-	height: 48px;
+	height: 56px;
 	width: 100%;
 	max-width: 540px;
 	overflow: hidden;
 	position: relative;
 	border: 1px solid var(--border-color);
 	background: var(--overlay-bg);
-	margin-bottom: 1em;
+	margin-bottom: 1.4em;
 	border-radius: 2px;
 	animation: glow-pulse 4s ease-in-out infinite;
+}
+
+.spin-item {
+	height: 56px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 1em;
+	font-weight: normal;
+	opacity: 0.9;
+	color: var(--text-color);
 }
 
 #spinner {
@@ -532,29 +543,25 @@ select {
 	flex-direction: column;
 }
 
-.spin-item {
-	height: 48px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	font-size: 1em;
+#totalRolls {
+	opacity: 0.65;
+	font-size: 0.95em;
+	margin-bottom: 0.6em;
 	font-weight: normal;
-	opacity: 0.9;
 	color: var(--text-color);
 }
 
-#totalRolls {
-	opacity: 0.7;
+#rollsSinceRare {
+	opacity: 0.5;
 	font-size: 0.9em;
-	margin-bottom: 0.5em;
-	font-weight: normal;
+	margin-bottom: 0.6em;
 	color: var(--text-color);
 }
 
 #dailyContainer,
 #weeklyContainer {
-	margin-top: 15px;
-	padding: 12px;
+	margin-top: 20px;
+	padding: 18px 16px;
 	background: var(--panel-bg);
 	border: 1px solid var(--border-color);
 	border-radius: 3px;
@@ -565,17 +572,17 @@ select {
 
 #dailyStatus,
 #weeklyStatus {
-	margin-bottom: 0.8em;
+	margin-bottom: 1em;
 	font-size: 0.9em;
-	opacity: 0.7;
+	opacity: 0.65;
 	color: var(--text-color);
 }
 
 #dailyBtn,
 #weeklyBtn {
-	padding: 6px 14px;
+	padding: 8px 18px;
 	font-size: 0.85em;
-	margin-top: 8px;
+	margin-top: 4px;
 }
 
 #luckBoostOverlay {
@@ -622,14 +629,39 @@ select {
 #inventorySection {
 	width: 100%;
 	max-width: 540px;
-	margin-top: 20px;
+	margin-top: 36px;
+}
+
+#inventoryList {
+	list-style: none;
+	margin: 0;
+	padding: 16px;
+	background: var(--overlay-bg);
+	border: 1px solid var(--border-color);
+	border-radius: 2px;
+	max-height: 300px;
+	overflow-y: auto;
+	font-size: 0.9em;
+	font-weight: normal;
+	text-align: center;
+}
+
+#inventoryList li {
+	padding: 8px 10px;
+	margin-bottom: 6px;
+	opacity: 0.75;
+	border-radius: 2px;
+	transition: opacity 0.2s, background 0.2s;
+	color: var(--text-color);
+	content-visibility: auto;
+	contain-intrinsic-size: auto 36px;
 }
 
 .inventory-header {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	margin-bottom: 0.8em;
+	margin-bottom: 1em;
 	font-size: 0.85em;
 }
 
@@ -664,31 +696,6 @@ select {
 	width: 100%;
 }
 
-#inventoryList {
-	list-style: none;
-	margin: 0;
-	padding: 12px;
-	background: var(--overlay-bg);
-	border: 1px solid var(--border-color);
-	border-radius: 2px;
-	max-height: 280px;
-	overflow-y: auto;
-	font-size: 0.9em;
-	font-weight: normal;
-	text-align: center;
-}
-
-#inventoryList li {
-	padding: 6px 8px;
-	margin-bottom: 4px;
-	opacity: 0.75;
-	border-radius: 2px;
-	transition: opacity 0.2s, background 0.2s;
-	color: var(--text-color);
-	content-visibility: auto;
-	contain-intrinsic-size: auto 32px;
-}
-
 #inventoryList li:hover {
 	opacity: 1;
 	background: var(--panel-bg);
@@ -703,7 +710,7 @@ select {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	margin-top: 0.8em;
+	margin-top: 1.2em;
 	font-size: 0.85em;
 	opacity: 0.7;
 }
@@ -745,20 +752,20 @@ select {
 }
 
 #achievementsContainer {
-	margin-top: 2rem;
+	margin-top: 36px;
 	max-width: 540px;
 	width: 100%;
 	background: var(--overlay-bg);
 	border: 1px solid var(--border-color);
 	border-radius: 3px;
-	padding: 12px;
-	max-height: 300px;
+	padding: 16px;
+	max-height: 320px;
 	overflow-y: auto;
 }
 
 .achievement {
-	padding: 8px 10px;
-	margin-bottom: 8px;
+	padding: 10px 14px;
+	margin-bottom: 10px;
 	background: var(--panel-bg);
 	border-radius: 2px;
 	opacity: 0.6;
@@ -766,7 +773,7 @@ select {
 	display: flex;
 	flex-direction: column;
 	content-visibility: auto;
-	contain-intrinsic-size: auto 52px;
+	contain-intrinsic-size: auto 56px;
 }
 
 .achievement.unlocked {
@@ -1083,22 +1090,17 @@ hr.sep {
 
 @media (width <= 600px) {
 	body {
-		padding: 20px;
+		padding: 24px 16px;
 		font-size: 14px;
 	}
 
 	#rollBtn {
-		padding: 10px 18px;
+		padding: 14px 18px;
 		font-size: 1em;
 	}
 
-	#settingsPanel {
-		width: calc(100vw - 20px);
-	}
-
-	#settingsTooltip {
-		width: calc(100vw - 40px);
-		right: 20px;
+	.page {
+		padding: 40px 16px 120px;
 	}
 }
 
@@ -1233,9 +1235,9 @@ br + .image-column {
 #pointsDisplay {
 	background: var(--panel-bg);
 	border: 1px solid var(--border-color);
-	padding: 12px;
+	padding: 16px;
 	border-radius: 3px;
-	margin-top: 20px;
+	margin-top: 24px;
 	font-size: 1.1em;
 	text-align: center;
 	color: var(--text-color);
@@ -1277,21 +1279,6 @@ br + .image-column {
 	pointer-events: auto;
 }
 
-.shop-item {
-	background: var(--overlay-bg);
-	border: 1px solid var(--border-color);
-	padding: 16px;
-	margin-bottom: 16px;
-	border-radius: 2px;
-	width: 100%;
-}
-
-.shop-item-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 8px;
-}
 
 .shop-item-name {
 	font-size: 1em;
@@ -1305,10 +1292,26 @@ br + .image-column {
 	color: var(--text-color);
 }
 
+.shop-item {
+	background: var(--overlay-bg);
+	border: 1px solid var(--border-color);
+	padding: 20px;
+	margin-bottom: 20px;
+	border-radius: 2px;
+	width: 100%;
+}
+
+.shop-item-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 10px;
+}
+
 .shop-item-desc {
 	font-size: 0.85em;
 	opacity: 0.7;
-	margin-bottom: 8px;
+	margin-bottom: 12px;
 	color: var(--text-color);
 }
 
@@ -1369,8 +1372,9 @@ br + .image-column {
 #luckDisplay {
 	max-width: 540px;
 	width: 100%;
-	margin-top: 10px;
-	padding: 10px 12px;
+	margin-top: 4px;
+	margin-bottom: 8px;
+	padding: 14px 16px;
 	background: var(--panel-bg);
 	border: 1px solid var(--border-color);
 	border-radius: 2px;
@@ -1378,18 +1382,18 @@ br + .image-column {
 }
 
 #luckMultiplier {
-	margin: 0 0 0.3em;
-	font-size: 0.95em;
-	opacity: 0.8;
+	margin: 0 0 0.4em;
+	font-size: 1em;
+	opacity: 0.85;
 	color: var(--text-color);
 }
 
 #luckBreakdown {
 	margin: 0;
-	font-size: 0.8em;
-	opacity: 0.6;
+	font-size: 0.82em;
+	opacity: 0.55;
 	color: var(--text-color);
-	line-height: 1.5;
+	line-height: 1.6;
 }
 
 #cutsceneOverlay {
@@ -1435,7 +1439,7 @@ br + .image-column {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	padding: 40px 20px 120px;
+	padding: 56px 24px 140px;
 	min-height: 100vh;
 }
 
@@ -1702,12 +1706,20 @@ br + .image-column {
 .well-container {
 	max-width: 500px;
 	width: 100%;
-	margin: 20px auto;
-	padding: 24px;
+	margin: 24px auto;
+	padding: 32px 28px;
 	background: var(--panel-bg);
 	border: 1px solid var(--border-color);
 	border-radius: 3px;
 	text-align: center;
+}
+
+.well-stats {
+	margin-top: 28px;
+	padding-top: 24px;
+	border-top: 1px solid var(--border-color);
+	font-size: 0.85em;
+	opacity: 0.7;
 }
 
 .well-title {
@@ -1806,14 +1818,6 @@ br + .image-column {
 	font-size: 0.9em;
 	color: #fa6;
 	margin-top: 8px;
-}
-
-.well-stats {
-	margin-top: 20px;
-	padding-top: 20px;
-	border-top: 1px solid var(--border-color);
-	font-size: 0.85em;
-	opacity: 0.7;
 }
 
 .well-result {
@@ -1955,15 +1959,15 @@ body.legacy-mode #legacySettingsBtn {
 }
 
 .potion-section {
-	margin-top: 20px;
-	padding-top: 20px;
-	border-top: 2px solid var(--border-color);
+	margin-top: 32px;
+	padding-top: 28px;
+	border-top: 1px solid var(--border-color);
 }
 
 .potion-section-title {
-	font-size: 1.1em;
+	font-size: 1em;
 	font-weight: bold;
-	margin-bottom: 16px;
+	margin-bottom: 20px;
 	text-align: center;
 	color: var(--text-color);
 	opacity: 0.9;
@@ -1972,14 +1976,14 @@ body.legacy-mode #legacySettingsBtn {
 .potion-grid {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
-	gap: 12px;
+	gap: 14px;
 	margin-bottom: 16px;
 }
 
 .potion-item {
 	background: var(--overlay-bg);
 	border: 1px solid var(--border-color);
-	padding: 12px;
+	padding: 16px 12px;
 	border-radius: 2px;
 	text-align: center;
 	transition: all 0.2s;
@@ -2067,11 +2071,17 @@ body.legacy-mode #legacySettingsBtn {
 	background: rgb(255 255 255 / 2%);
 	border: 1px solid #1f1f1f;
 	border-radius: 4px;
-	padding: 12px 14px;
-	margin-bottom: 10px;
+	padding: 16px 18px;
+	margin-bottom: 14px;
 	transition: opacity 0.2s;
 	content-visibility: auto;
 	contain-intrinsic-size: auto 160px;
+}
+
+.gauntlet-hr {
+	border: none;
+	border-top: 1px solid #1e1e1e;
+	margin: 12px 0 10px;
 }
 
 .gauntlet-tier-name {
@@ -2268,12 +2278,6 @@ body.legacy-mode #legacySettingsBtn {
 
 .chip-missing {
 	opacity: 0.35;
-}
-
-.gauntlet-hr {
-	border: none;
-	border-top: 1px solid #1e1e1e;
-	margin: 9px 0 7px;
 }
 
 .gauntlet-reward-label {
@@ -2491,13 +2495,6 @@ body.hide-cursor #custom-cursor {
 
 body.high-contrast #inventoryList li.item-rare {
 	border-left-width: 3px;
-}
-
-#rollsSinceRare {
-	opacity: 0.5;
-	font-size: 0.85em;
-	margin-bottom: 0.3em;
-	color: var(--text-color);
 }
 
 #spinner.fade-style {
