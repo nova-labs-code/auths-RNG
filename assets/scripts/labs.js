@@ -138,20 +138,25 @@ console.log(performance.now());
 		}
 	}
 
-	document.addEventListener('DOMContentLoaded', () => {
-		if (isOnNightly()) return;
+	function onReady(fn) {
+    if (document.readyState !== 'loading') fn();
+    else document.addEventListener('DOMContentLoaded', fn);
+  }
 
-		const btn = document.getElementById('labsBtn');
-		if (btn) btn.addEventListener('click', activateLabs);
+  onReady(() => {
+      if (isOnNightly()) return;
 
-		const exitBtn = document.getElementById('exitLabsBtn');
-		if (exitBtn) {
-			if (localStorage.getItem(LABS_KEY) === '1') exitBtn.style.display = '';
-			exitBtn.addEventListener('click', exitLabs);
-		}
+      const btn = document.getElementById('labsBtn');
+      if (btn) btn.addEventListener('click', activateLabs);
 
-		if (localStorage.getItem(LABS_KEY) === '1') {
-			autoLoadNightly();
-		}
-	});
+      const exitBtn = document.getElementById('exitLabsBtn');
+      if (exitBtn) {
+          if (localStorage.getItem(LABS_KEY) === '1') exitBtn.style.display = '';
+          exitBtn.addEventListener('click', exitLabs);
+      }
+
+    if (localStorage.getItem(LABS_KEY) === '1') {
+        autoLoadNightly();
+    }
+  });
 })();
