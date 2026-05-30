@@ -2,7 +2,7 @@ console.log(performance.now());
 
 (function () {
 	const LABS_KEY = 'labsMode';
-	const NIGHTLY = 'https://nightly.authsrng.xyz';
+	const NIGHTLY = 'https://authsrng.xyz';
 
 	function isOnNightly() {
 		return location.hostname === 'nightly.authsrng.xyz';
@@ -20,7 +20,7 @@ console.log(performance.now());
 			'position:fixed;inset:0;background:var(--bg-color,#0e0e0e);z-index:9999999;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:monospace;gap:10px;';
 		overlay.innerHTML = `
       <div id="labsFetchStatus" style="font-size:1.1em;color:var(--text-color,#dcdcdc);opacity:0.8;">${msg}</div>
-      <div style="font-size:0.75em;color:var(--text-color,#dcdcdc);opacity:0.3;">nightly.authsrng.xyz</div>
+      <div style="font-size:0.75em;color:var(--text-color,#dcdcdc);opacity:0.3;">authsrng.xyz</div>
     `;
 		document.body.appendChild(overlay);
 	}
