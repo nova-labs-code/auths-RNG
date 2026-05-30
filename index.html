@@ -760,6 +760,12 @@ Last release date on nightly: ${nightlyRDate}`;
 						>
 							enter labs mode
 						</button>
+						<script>
+							if (location.hostname === 'nightly.authsrng.xyz') {
+								document.getElementById('labsBtn').style.display = 'none';
+								document.getElementById('exitLabsBtn').style.display = 'none';
+							}
+						</script>
 						<button
 							id="exitLabsBtn"
 							class="lazy"
