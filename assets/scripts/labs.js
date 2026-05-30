@@ -1,3 +1,5 @@
+/*
+
 console.log(performance.now());
 
 (function () {
@@ -144,7 +146,7 @@ console.log(performance.now());
   }
 
   onReady(() => {
-      // if (isOnNightly()) return;
+      if (isOnNightly()) return;
 
       const btn = document.getElementById('labsBtn');
       if (btn) btn.addEventListener('click', activateLabs);
@@ -160,3 +162,5 @@ console.log(performance.now());
     }
   });
 })();
+
+*/

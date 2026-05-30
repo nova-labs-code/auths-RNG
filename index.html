@@ -749,30 +749,9 @@ Last release date on nightly: ${nightlyRDate}`;
 					<label style="display: block; margin-top: 12px">
 						<input type="checkbox" id="devOverlay" /> developer overlay
 					</label>
-
-					<div
-						style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; margin-bottom: 8px"
-					>
-						<button
-							id="labsBtn"
-							class="lazy"
-							style="padding: 4px 12px; font-size: 0.8em; width: auto"
-						>
-							enter labs mode
-						</button>
-						<script>
-							if (location.hostname === 'nightly.authsrng.xyz') {
-								document.getElementById('labsBtn').style.display = 'none';
-								document.getElementById('exitLabsBtn').style.display = 'none';
-							}
-						</script>
-						<button
-							id="exitLabsBtn"
-							class="lazy"
-							style="padding: 4px 12px; font-size: 0.8em; width: auto; color: #f66; display: none"
-						>
-							exit labs mode
-						</button>
+          
+          <br>
+          
 						<button
 							id="erudaBtn"
 							class="small"
@@ -780,7 +759,6 @@ Last release date on nightly: ${nightlyRDate}`;
 						>
 							enable eruda once
 						</button>
-					</div>
 
 					<hr class="sep" style="margin: 20px 0" />
 
