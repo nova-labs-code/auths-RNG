@@ -79,6 +79,18 @@ the creature
 	}
 }
 
+@keyframes dot-morph-blur {
+	0% {
+		filter: blur(0px);
+	}
+	40% {
+		filter: blur(1.5px);
+	}
+	100% {
+		filter: blur(0px);
+	}
+}
+
 @keyframes flash {
 	0%,
 	50%,
@@ -1287,9 +1299,11 @@ br + .image-column {
 }
 
 .page-dot.active {
-	background: var(--text-color);
-	width: 24px;
-	border-radius: 4px;
+	width: 28px;
+	border-radius: 6px;
+	background: var(--border-color);
+	box-shadow: 0 0 6px rgb(200 160 255 / 20%);
+	animation: dot-morph-blur 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
 .page-dot.flash-red {
