@@ -36,6 +36,7 @@ console.log(performance.now());
 	}
 
 	async function activateLabs() {
+    console.log('showConfirm:', typeof window.showConfirm);
 		const confirmed = await window.showConfirm(
 			"labs mode lets you test the new features of auth's RNG natively while keeping your save data intact on the main site! things may break and you may ruin your save data, but you will help make auth's RNG better. you will also send some diagnostic data, but they will not be tied to you in ANY way! they will be sent to sentry to be analyzed.",
 			'enter labs mode'
