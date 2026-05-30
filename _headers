@@ -1,3 +1,127 @@
 /*
   Cache-Control: no-store
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+
+/*.html
+  Cache-Control: no-store
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://instant.page; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://librecounter.org https://s01.flagcounter.com https://hitscounter.dev https://tamanotchi.world https://authsrng.xyz https://files.ozel.im; media-src 'self' blob:; connect-src 'self' https://api.authsrng.xyz https://api.github.com https://authsrng.xyz; worker-src 'self' blob:; font-src 'self' data:; frame-ancestors 'none'
+
+/
+  Cache-Control: no-store
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://instant.page; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://librecounter.org https://s01.flagcounter.com https://hitscounter.dev https://tamanotchi.world https://authsrng.xyz https://files.ozel.im; media-src 'self' blob:; connect-src 'self' https://api.authsrng.xyz https://api.github.com https://authsrng.xyz; worker-src 'self' blob:; font-src 'self' data:; frame-ancestors 'none'
+
+/assets/scripts/*.js
+  Cache-Control: public, max-age=300, stale-while-revalidate=60
+  X-Content-Type-Options: nosniff
+
+/engine/*.js
+  Cache-Control: public, max-age=300, stale-while-revalidate=60
+  X-Content-Type-Options: nosniff
+
+/*.chunk.js
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.min.js
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+/assets/frontend/*.html
+  Cache-Control: no-store
+  X-Content-Type-Options: nosniff
+
+/boring/*.html
+  Cache-Control: no-store
+  X-Content-Type-Options: nosniff
+
+/blog/*.html
+  Cache-Control: public, max-age=3600, stale-while-revalidate=300
+
+/styles.css
+  Cache-Control: public, max-age=300, stale-while-revalidate=60
+  X-Content-Type-Options: nosniff
+
+/*.css
+  Cache-Control: public, max-age=300, stale-while-revalidate=60
+  X-Content-Type-Options: nosniff
+
+/assets/images/*.png
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+/assets/images/*.jpg
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+/assets/images/*.webp
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+/assets/images/*.gif
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+/assets/images/*.svg
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+/*.png
+  Cache-Control: public, max-age=86400, stale-while-revalidate=3600
+
+/*.jpg
+  Cache-Control: public, max-age=86400, stale-while-revalidate=3600
+
+/*.ico
+  Cache-Control: public, max-age=604800
+
+/assets/audio/*.mp3
+  Cache-Control: public, max-age=604800
+  Accept-Ranges: bytes
+
+/assets/audio/*.ogg
+  Cache-Control: public, max-age=604800
+  Accept-Ranges: bytes
+
+/assets/audio/*.wav
+  Cache-Control: public, max-age=604800
+  Accept-Ranges: bytes
+
+/*.mp3
+  Cache-Control: public, max-age=604800
+  Accept-Ranges: bytes
+
+/*.ogg
+  Cache-Control: public, max-age=604800
+  Accept-Ranges: bytes
+
+/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.woff
+  Cache-Control: public, max-age=31536000, immutable
+
+/manifest.json
+  Cache-Control: public, max-age=3600, stale-while-revalidate=300
+  X-Content-Type-Options: nosniff
+
+/*.json
+  Cache-Control: public, max-age=60, stale-while-revalidate=30
+  X-Content-Type-Options: nosniff
+
+/LICENSE.txt
+  Cache-Control: public, max-age=86400
+
+/api/*
+  Cache-Control: no-store
   Access-Control-Allow-Origin: https://authsrng.xyz
+  Access-Control-Allow-Methods: GET, POST, OPTIONS
+  Access-Control-Allow-Headers: Content-Type
+  X-Content-Type-Options: nosniff
+
+/sw.js
+  Cache-Control: no-store
+  Service-Worker-Allowed: /
