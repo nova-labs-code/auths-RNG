@@ -790,7 +790,7 @@
 	            ].filter(Boolean);
 	            if (parts.length) {
 	                const metaEl = document.createElement('div');
-	                metaEl.style.cssText = 'font-size:0.75em;opacity:0.4;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;';
+	                metaEl.style.cssText = 'font-size:0.75em;opacity:0.4;margin-top:5px;';
 	                metaEl.textContent = parts.join('  ');
 	                row.appendChild(metaEl);
 	            }
