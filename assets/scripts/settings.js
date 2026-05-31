@@ -49,6 +49,60 @@
 		});
 	}
 
+	function parseID3(buffer) {
+	    const b = new Uint8Array(buffer);
+	    if (b[0] !== 0x49 || b[1] !== 0x44 || b[2] !== 0x33) return null;
+	    const ver = b[3];
+	    const tagEnd = 10 + (((b[6] & 0x7f) << 21) | ((b[7] & 0x7f) << 14) | ((b[8] & 0x7f) << 7) | (b[9] & 0x7f));
+	    const tags = {};
+	    let off = 10;
+	    while (off + 10 <= tagEnd) {
+	        if (b[off] === 0) break;
+	        const id = String.fromCharCode(b[off], b[off+1], b[off+2], b[off+3]);
+	        off += 4;
+	        const sz = ver >= 4
+	            ? ((b[off]&0x7f)<<21)|((b[off+1]&0x7f)<<14)|((b[off+2]&0x7f)<<7)|(b[off+3]&0x7f)
+	            : (b[off]<<24)|(b[off+1]<<16)|(b[off+2]<<8)|b[off+3];
+	        off += 6;
+	        if (sz <= 0 || off + sz > tagEnd) break;
+	        if (id[0] === 'T' && sz > 1) {
+	            const enc = b[off];
+	            const chunk = buffer.slice(off + 1, off + sz);
+	            let text = '';
+	            try {
+	                text = new TextDecoder(
+	                    enc === 0 ? 'iso-8859-1' : enc === 1 ? 'utf-16' : enc === 2 ? 'utf-16be' : 'utf-8'
+	                ).decode(chunk).replace(/\0/g, '').trim();
+	            } catch (_) {}
+	            tags[id] = text;
+	        }
+	        off += sz;
+	    }
+	    const meta = {
+	        title:  tags['TIT2'] || null,
+	        artist: tags['TPE1'] || null,
+	        album:  tags['TALB'] || null,
+	        year:   tags['TDRC'] || tags['TYER'] || null,
+	        genre:  tags['TCON'] ? tags['TCON'].replace(/^\(\d+\)/, '').trim() || tags['TCON'] : null,
+	    };
+	    return Object.values(meta).some(Boolean) ? meta : null;
+	}
+
+	async function updateTrackName(id, newName) {
+	    const db = await openMusicDB();
+	    return new Promise((resolve, reject) => {
+	        const tx = db.transaction('tracks', 'readwrite');
+	        const store = tx.objectStore('tracks');
+	        const req = store.get(id);
+	        req.onsuccess = () => {
+	            const put = store.put({ ...req.result, name: newName });
+	            put.onsuccess = () => resolve();
+	            put.onerror  = () => reject(put.error);
+	        };
+	        req.onerror = () => reject(req.error);
+	    });
+	}
+
 	async function getAllTracks() {
 		const db = await openMusicDB();
 		return new Promise((resolve, reject) => {
@@ -59,20 +113,20 @@
 	}
 
 	async function getAllTracksMeta() {
-		const db = await openMusicDB();
-		return new Promise((resolve, reject) => {
-			const results = [];
-			const req = db.transaction('tracks', 'readonly').objectStore('tracks').openCursor();
-			req.onsuccess = (e) => {
-				const cursor = e.target.result;
-				if (cursor) {
-					const { id, name, type, size } = cursor.value;
-					results.push({ id, name, type, size });
-					cursor.continue();
-				} else resolve(results);
-			};
-			req.onerror = () => reject(req.error);
-		});
+	    const db = await openMusicDB();
+	    return new Promise((resolve, reject) => {
+	        const results = [];
+	        const req = db.transaction('tracks', 'readonly').objectStore('tracks').openCursor();
+	        req.onsuccess = (e) => {
+	            const cursor = e.target.result;
+	            if (cursor) {
+	                const { id, name, type, size, meta } = cursor.value;
+	                results.push({ id, name, type, size, meta });
+	                cursor.continue();
+	            } else resolve(results);
+	        };
+	        req.onerror = () => reject(req.error);
+	    });
 	}
 
 	async function getTrack(id) {
@@ -84,16 +138,14 @@
 		});
 	}
 
-	async function addTrack(name, buffer, type) {
-		const db = await openMusicDB();
-		return new Promise((resolve, reject) => {
-			const req = db
-				.transaction('tracks', 'readwrite')
-				.objectStore('tracks')
-				.add({ name, buffer, type, size: buffer.byteLength });
-			req.onsuccess = () => resolve(req.result);
-			req.onerror = () => reject(req.error);
-		});
+	async function addTrack(name, buffer, type, meta) {
+	    const db = await openMusicDB();
+	    return new Promise((resolve, reject) => {
+	        const req = db.transaction('tracks', 'readwrite').objectStore('tracks')
+	            .add({ name, buffer, type, size: buffer.byteLength, meta: meta || null });
+	        req.onsuccess = () => resolve(req.result);
+	        req.onerror  = () => reject(req.error);
+	    });
 	}
 
 	async function deleteTrack(id) {
@@ -662,40 +714,90 @@
 	}
 
 	function renderCustomTracksList(tracks, container, musicSel) {
-		container.innerHTML = '';
-		tracks.forEach((track) => {
-			const row = document.createElement('div');
-			row.style.cssText =
-				'display:flex;justify-content:space-between;align-items:center;padding:6px 8px;margin-bottom:4px;background:var(--overlay-bg);border:1px solid var(--border-color);border-radius:2px;';
-
-			// Size badge
-			const sizeMB = track.size ? (track.size / 1024 / 1024).toFixed(1) : '?';
-			const name = document.createElement('span');
-			name.style.fontSize = '0.85em';
-			name.textContent = `${track.name}  (${sizeMB} MB)`;
-
-			const del = document.createElement('button');
-			del.textContent = 'delete';
-			del.className = 'small';
-			del.onclick = async () => {
-				const deletedKey = 'custom_' + track.id;
-				try {
-					await deleteTrack(track.id);
-				} catch (e) {
-					console.error('failed to delete track:', e);
-				}
-				_activeMusicKey = null; // always reset, not just when active track was deleted
-				if (musicSel && musicSel.value === deletedKey) {
-					musicSel.value = 'default';
-					onChange();
-				}
-				loadCustomMusicUI();
-			};
-
-			row.appendChild(name);
-			row.appendChild(del);
-			container.appendChild(row);
-		});
+	    container.innerHTML = '';
+	    tracks.forEach((track) => {
+	        const row = document.createElement('div');
+	        row.style.cssText = 'padding:8px;margin-bottom:6px;background:var(--overlay-bg);border:1px solid var(--border-color);border-radius:2px;';
+	
+	        const topRow = document.createElement('div');
+	        topRow.style.cssText = 'display:flex;justify-content:space-between;align-items:center;gap:8px;';
+	
+	        const nameEl = document.createElement('span');
+	        const sizeMB = track.size ? (track.size / 1024 / 1024).toFixed(1) : '?';
+	        nameEl.textContent = `${track.name}  (${sizeMB} MB)`;
+	        nameEl.style.cssText = 'font-size:0.85em;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;';
+	
+	        const actions = document.createElement('div');
+	        actions.style.cssText = 'display:flex;gap:4px;flex-shrink:0;';
+	
+	        const renameBtn = document.createElement('button');
+	        renameBtn.textContent = 'rename';
+	        renameBtn.className = 'small';
+	        renameBtn.onclick = () => {
+	            const input = document.createElement('input');
+	            input.type = 'text';
+	            input.value = track.name;
+	            input.style.cssText = 'font-size:0.85em;padding:2px 6px;flex:1;min-width:0;box-sizing:border-box;';
+	            nameEl.replaceWith(input);
+	            input.focus();
+	            input.select();
+	
+	            const commit = async () => {
+	                const newName = input.value.trim();
+	                if (newName && newName !== track.name) {
+	                    await updateTrackName(track.id, newName);
+	                    _activeMusicKey = null;
+	                }
+	                await loadCustomMusicUI();
+	            };
+	
+	            renameBtn.textContent = 'ok';
+	            renameBtn.onclick = commit;
+	            input.addEventListener('keydown', (e) => {
+	                if (e.key === 'Enter') commit();
+	                if (e.key === 'Escape') loadCustomMusicUI();
+	            });
+	        };
+	
+	        const del = document.createElement('button');
+	        del.textContent = 'delete';
+	        del.className = 'small';
+	        del.onclick = async () => {
+	            const key = 'custom_' + track.id;
+	            try { await deleteTrack(track.id); } catch (e) { console.error(e); }
+	            _activeMusicKey = null;
+	            if (musicSel && musicSel.value === key) {
+	                musicSel.value = 'default';
+	                onChange();
+	            }
+	            loadCustomMusicUI();
+	        };
+	
+	        actions.appendChild(renameBtn);
+	        actions.appendChild(del);
+	        topRow.appendChild(nameEl);
+	        topRow.appendChild(actions);
+	        row.appendChild(topRow);
+	
+	        if (track.meta) {
+	            const { title, artist, album, year, genre } = track.meta;
+	            const parts = [
+	                title  && title,
+	                artist && `by ${artist}`,
+	                album  && `· ${album}`,
+	                year   && `(${year})`,
+	                genre  && `[${genre}]`,
+	            ].filter(Boolean);
+	            if (parts.length) {
+	                const metaEl = document.createElement('div');
+	                metaEl.style.cssText = 'font-size:0.75em;opacity:0.4;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;';
+	                metaEl.textContent = parts.join('  ');
+	                row.appendChild(metaEl);
+	            }
+	        }
+	
+	        container.appendChild(row);
+	    });
 	}
 
 	function bindCustomMusicUpload() {
@@ -719,17 +821,19 @@
 
 			const reader = new FileReader();
 			reader.onload = async (ev) => {
-				try {
-					const trackName = file.name.replace(/\.[^/.]+$/, '');
-					await addTrack(trackName, ev.target.result, file.type);
-					_activeMusicKey = null; // force applyMusic to re-evaluate on next save
-					await loadCustomMusicUI();
-					upload.value = '';
-					window.showAlert('track uploaded!');
-				} catch (err) {
-					window.showAlert('error saving track: ' + err.message);
-					upload.value = '';
-				}
+			    try {
+			        const buf = ev.target.result;
+			        const meta = parseID3(buf);
+			        const defaultName = (meta && meta.title) || file.name.replace(/\.[^/.]+$/, '');
+			        await addTrack(defaultName, buf, file.type, meta);
+			        _activeMusicKey = null;
+			        await loadCustomMusicUI();
+			        upload.value = '';
+			        window.showAlert('track uploaded!');
+			    } catch (err) {
+			        window.showAlert('error saving track: ' + err.message);
+			        upload.value = '';
+			    }
 			};
 			reader.onerror = () => {
 				window.showAlert('error reading file');
