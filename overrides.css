@@ -317,11 +317,15 @@ body {
 }
 
 h2.lazy {
-	margin-bottom: 0.3em;
+	margin-bottom: 0.5em;
+}
+
+p.lazy {
+	margin-bottom: 0.4em;
 }
 
 p.lazy + p.lazy {
-	margin-bottom: 0;
+	margin-bottom: 0.6em;
 	opacity: 0.5;
 	font-size: 0.85em;
 }
@@ -331,13 +335,16 @@ body > a.lazy {
 	padding: 5px 12px;
 	border-radius: 20px;
 	border: 1px solid var(--border-color);
-	border-bottom: 1px solid var(--border-color);
 	background: var(--button-bg);
 	font-size: 0.82em;
 	opacity: 0.75;
-	margin: 2px 3px;
+	margin: 4px 3px;
 	letter-spacing: 0.03em;
 	transition: opacity 0.2s, background 0.2s, border-color 0.2s;
+}
+
+body > a.lazy:first-of-type {
+	margin-top: 10px;
 }
 
 body > a.lazy:hover {
