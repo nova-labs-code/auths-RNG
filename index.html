@@ -362,6 +362,10 @@ Last release date on nightly: ${nightlyRDate}`;
 							<p id="luckMultiplier">luck multiplier: 1.0x</p>
 							<p id="luckBreakdown" class="small"></p>
 						</div>
+						<div class="roll-toolbar">
+							<button id="autoRollBtn">auto roll (OFF)</button>
+							<div class="rarity-trail" id="rarityTrail"></div>
+						</div>
 					</div>
 
 					<div id="dailyContainer" class="lazy">
@@ -1166,40 +1170,81 @@ Last release date on nightly: ${nightlyRDate}`;
 		</div>
 
 		<script>
-			const toggleBtn = document.createElement('button');
-			toggleBtn.textContent = 'auto roll (OFF)';
-			toggleBtn.id = 'autoRollBtn';
-			document.body.appendChild(toggleBtn);
-
-			let autoRollInterval = null;
-
-			function getAutoRollDelay() {
-				// rollSpeed is the spinner duration (0.25s–1.0s).
-				// Add 200ms buffer for the spin animation + processing.
-				return Math.max(500, rollSpeed * 1000 + 400);
-			}
-
-			toggleBtn.addEventListener('click', () => {
-				toggleBtn.classList.toggle('active');
-				const isActive = toggleBtn.classList.contains('active');
-				toggleBtn.textContent = isActive ? 'auto roll (ON)' : 'auto roll (OFF)';
-
-				if (isActive) {
-					const tick = () => {
-						if (!document.hidden && !isCutscenePlaying) {
-							const rollBtn = document.getElementById('rollBtn');
-							if (rollBtn && !rollBtn.disabled) rollBtn.click();
-						}
-						if (toggleBtn.classList.contains('active')) {
-							autoRollInterval = setTimeout(tick, getAutoRollDelay());
-						}
-					};
-					autoRollInterval = setTimeout(tick, getAutoRollDelay());
-				} else {
-					clearTimeout(autoRollInterval);
-					autoRollInterval = null;
+			(function () {
+				const toggleBtn = document.getElementById('autoRollBtn');
+				let autoRollInterval = null;
+		
+				function getAutoRollDelay() {
+					return Math.max(500, (typeof rollSpeed !== 'undefined' ? rollSpeed : 1) * 1000 + 400);
 				}
-			});
+		
+				toggleBtn.addEventListener('click', () => {
+					toggleBtn.classList.toggle('active');
+					const isActive = toggleBtn.classList.contains('active');
+					toggleBtn.textContent = isActive ? 'auto roll (ON)' : 'auto roll (OFF)';
+		
+					if (isActive) {
+						const tick = () => {
+							if (!document.hidden && !(typeof isCutscenePlaying !== 'undefined' && isCutscenePlaying)) {
+								const rollBtn = document.getElementById('rollBtn');
+								if (rollBtn && !rollBtn.disabled) rollBtn.click();
+							}
+							if (toggleBtn.classList.contains('active')) {
+								autoRollInterval = setTimeout(tick, getAutoRollDelay());
+							}
+						};
+						autoRollInterval = setTimeout(tick, getAutoRollDelay());
+					} else {
+						clearTimeout(autoRollInterval);
+						autoRollInterval = null;
+					}
+				});
+		
+				const trail = document.getElementById('rarityTrail');
+				const TRAIL_GAP = 6;
+				const items = [];
+		
+				function addTrailItem(name, color) {
+					const pill = document.createElement('span');
+					pill.className = 'trail-pill';
+					pill.textContent = name;
+					if (color) pill.style.setProperty('--pill-color', color);
+					pill.style.left = '0px';
+					pill.style.opacity = '0';
+					trail.appendChild(pill);
+		
+					requestAnimationFrame(() => {
+						const pillWidth = pill.offsetWidth;
+		
+						items.forEach(item => {
+							item.offset += pillWidth + TRAIL_GAP;
+							item.el.style.left = item.offset + 'px';
+						});
+		
+						items.unshift({ el: pill, offset: 0 });
+		
+						requestAnimationFrame(() => {
+							pill.style.opacity = '1';
+						});
+		
+						const trailWidth = trail.offsetWidth;
+		
+						setTimeout(() => {
+							for (let i = items.length - 1; i >= 0; i--) {
+								const item = items[i];
+								const rect = item.el.getBoundingClientRect();
+								const trailRect = trail.getBoundingClientRect();
+								if (rect.left >= trailRect.right) {
+									item.el.remove();
+									items.splice(i, 1);
+								}
+							}
+						}, 450);
+					});
+				}
+		
+				window.addTrailItem = addTrailItem;
+			})();
 		</script>
 
 		<script>
