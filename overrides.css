@@ -110,6 +110,18 @@
 	100% { box-shadow: 0 0 6px 1px rgb(255 180 180 / 22%); }
 }
 
+@keyframes dot-morph-blur {
+	0% {
+		filter: blur(0px);
+	}
+	40% {
+		filter: blur(1.5px);
+	}
+	100% {
+		filter: blur(0px);
+	}
+}
+
 @keyframes checker-drift {
 	0% {
 		background-position: 0 0;
@@ -304,6 +316,42 @@ body {
 	position: relative;
 }
 
+h2.lazy {
+	margin-bottom: 0.3em;
+}
+
+p.lazy + p.lazy {
+	margin-bottom: 0;
+	opacity: 0.5;
+	font-size: 0.85em;
+}
+
+body > a.lazy {
+	display: inline-block;
+	padding: 5px 12px;
+	border-radius: 20px;
+	border: 1px solid var(--border-color);
+	border-bottom: 1px solid var(--border-color);
+	background: var(--button-bg);
+	font-size: 0.82em;
+	opacity: 0.75;
+	margin: 2px 3px;
+	letter-spacing: 0.03em;
+	transition: opacity 0.2s, background 0.2s, border-color 0.2s;
+}
+
+body > a.lazy:hover {
+	opacity: 1;
+	background: var(--button-hover);
+	border-color: var(--border-color);
+}
+
+body > p:has(+ a.lazy),
+body > br:has(+ p),
+body > p + br {
+	display: none;
+}
+
 body::before {
 	content: '';
 	position: fixed;
@@ -443,6 +491,20 @@ select {
 	animation: scale-up-center 0.5s ease forwards;
 }
 
+.roll-zone {
+	width: 100%;
+	max-width: 540px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 20px;
+	background: var(--panel-bg);
+	border: 1px solid var(--border-color);
+	border-radius: 4px;
+	margin-bottom: 24px;
+	gap: 0;
+}
+
 #rollBtn {
 	padding: 16px 24px;
 	font-size: 1.1em;
@@ -556,6 +618,31 @@ select {
 	font-size: 0.9em;
 	margin-bottom: 0.6em;
 	color: var(--text-color);
+}
+
+.roll-zone #rollBtn {
+	margin-bottom: 12px;
+}
+
+.roll-zone #spinnerContainer {
+	margin-bottom: 12px;
+}
+
+.roll-zone #totalRolls,
+.roll-zone #rollsSinceRare {
+	margin: 0 0 6px;
+	font-size: 0.88em;
+	opacity: 0.55;
+}
+
+.roll-zone #luckDisplay {
+	margin: 8px 0 0;
+	border: none;
+	border-top: 1px solid var(--border-color);
+	border-radius: 0;
+	padding: 12px 0 0;
+	width: 100%;
+	background: transparent;
 }
 
 #dailyContainer,
@@ -1279,13 +1366,6 @@ br + .image-column {
 	pointer-events: auto;
 }
 
-
-.shop-item-name {
-	font-size: 1em;
-	font-weight: bold;
-	color: var(--text-color);
-}
-
 .shop-item-level {
 	font-size: 0.85em;
 	opacity: 0.7;
@@ -1296,9 +1376,29 @@ br + .image-column {
 	background: var(--overlay-bg);
 	border: 1px solid var(--border-color);
 	padding: 20px;
-	margin-bottom: 20px;
-	border-radius: 2px;
+	margin-bottom: 14px;
+	border-radius: 4px;
 	width: 100%;
+	transition: border-color 0.2s;
+}
+
+.shop-item:hover {
+	border-color: #444;
+}
+
+.shop-item-name {
+	font-size: 1em;
+	font-weight: bold;
+	color: var(--text-color);
+	letter-spacing: 0.02em;
+}
+
+.shop-item-desc {
+	font-size: 0.83em;
+	opacity: 0.6;
+	margin-bottom: 14px;
+	color: var(--text-color);
+	line-height: 1.5;
 }
 
 .shop-item-header {
@@ -1306,13 +1406,6 @@ br + .image-column {
 	justify-content: space-between;
 	align-items: center;
 	margin-bottom: 10px;
-}
-
-.shop-item-desc {
-	font-size: 0.85em;
-	opacity: 0.7;
-	margin-bottom: 12px;
-	color: var(--text-color);
 }
 
 .shop-item-footer {
@@ -1498,6 +1591,14 @@ br + .image-column {
 	border-radius: 6px;
 	background: var(--border-color);
 	box-shadow: 0 0 6px rgb(200 160 255 / 20%);
+	animation: dot-morph-blur 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+#rollsSinceRare {
+	opacity: 0.5;
+	font-size: 0.9em;
+	margin-bottom: 0.6em;
+	color: var(--text-color);
 }
 
 .page-dot.active::after {
@@ -1974,19 +2075,45 @@ body.legacy-mode #legacySettingsBtn {
 	pointer-events: auto;
 }
 
+#pointsDisplay {
+	background: var(--panel-bg);
+	border: 1px solid var(--border-color);
+	padding: 16px;
+	border-radius: 3px;
+	margin-top: 24px;
+	margin-bottom: 24px;
+	font-size: 1.1em;
+	text-align: center;
+	color: var(--text-color);
+}
+
+#page-2 > h2 {
+	margin-bottom: 0.4em;
+}
+
 .potion-section {
 	margin-top: 32px;
 	padding-top: 28px;
-	border-top: 1px solid var(--border-color);
+	border-top: 2px solid var(--border-color);
+	position: relative;
+}
+
+.potion-section::before {
+	content: 'potions';
+	position: absolute;
+	top: -0.6em;
+	left: 50%;
+	transform: translateX(-50%);
+	background: var(--bg-color);
+	padding: 0 10px;
+	font-size: 0.72em;
+	opacity: 0.35;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
 }
 
 .potion-section-title {
-	font-size: 1em;
-	font-weight: bold;
-	margin-bottom: 20px;
-	text-align: center;
-	color: var(--text-color);
-	opacity: 0.9;
+	display: none;
 }
 
 .potion-grid {
