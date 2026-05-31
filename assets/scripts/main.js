@@ -1793,13 +1793,19 @@ function spinAndReveal(res) {
 	if (totalRolls > 0 && totalRolls % 100 === 0) startLuckBoost();
 
 	const finalize = () => {
-		totalRolls++;
-		updateTotalRolls();
-		addToInventory(res);
-		awardAnomalyIfEligible(res);
-		checkAchievements(res);
-		updateRollsSinceRare(res);
-		maybeFireConfettiAndCutscene(res);
+	    totalRolls++;
+	    updateTotalRolls();
+	    addToInventory(res);
+	    awardAnomalyIfEligible(res);
+	    checkAchievements(res);
+	    updateRollsSinceRare(res);
+	    maybeFireConfettiAndCutscene(res);
+	    if (typeof addTrailItem === 'function') {
+	        const pillColor = res.style
+	            ? (res.style.match(/color\s*:\s*(#[0-9a-fA-F]{3,8}|[a-z]+)/)?.[1] ?? null)
+	            : null;
+	        addTrailItem(res.name, pillColor);
+	    }
 	};
 
 	if (effectiveStyle === 'none' || effectiveStyle === 'fade') {
