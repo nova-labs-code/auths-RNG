@@ -21,6 +21,14 @@ nightly branch: https://nightly.authsrng.xyz (unstable, but with latest code and
 
 ---
 
+# misconceptions
+
+it's **auth's RNG**. not "Auth's RNG", or "authsrng", or "Auth RNG". lowercase "rng" is fine.
+
+and again: **NOT A ROBLOX GAME!!!!!!!**
+
+---
+
 # about
 
 auth's RNG is a web-based incremental RNG game built with raw HTML/CSS/JS with online features. roll for rarities, sell them out, buy upgrades, wish upon the wishing well, and collect as many rarities as possible!!!!!
@@ -65,14 +73,6 @@ git push origin <branch-name>
 the repo starts at `v9.0`, but the game has existed since `1.0` (originally on w3spaces and neocities). archives from `v5.5` onward (when auth's RNG went open source) can be found on the [Wayback Machine](https://archive.org) at `authsrng.neocities.org` or `authsrng.w3spaces.com`. personal archives by auth are [here](https://archive.org/details/@skunko_lee).
 
 if you thought the git log held all of auth's RNG development history... no it didn't
-
----
-
-# quick reminders
-
-it's **auth's RNG**. not "Auth's RNG", or "authsrng", or "Auth RNG". lowercase "rng" is fine.
-
-and again: **NOT A ROBLOX GAME!!!!!!!**
 
 ---
 
