@@ -28,7 +28,7 @@ export default [
 
 	{
 		files: ['assets/scripts/**/*.js', 'engine/**/*.js', 'service-worker.js'],
-		ignores: ['engine/epic/epic.js'],
+		ignores: ['assets/scripts/epic/epic.js'],
 		languageOptions: {
 			ecmaVersion: 2021,
 			sourceType: 'script',
@@ -45,7 +45,7 @@ export default [
 	},
 
 	{
-		files: ['engine/epic/epic.js'],
+		files: ['assets/scripts/engine/epic/epic.js'],
 		languageOptions: {
 			ecmaVersion: 2021,
 			sourceType: 'module',
