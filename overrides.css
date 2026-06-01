@@ -95,6 +95,7 @@
 	0% {
 		background-position: 0% 50%;
 	}
+
 	100% {
 		background-position: 300% 50%;
 	}
@@ -112,13 +113,15 @@
 
 @keyframes dot-morph-blur {
 	0% {
-		filter: blur(0px);
+		filter: blur(0);
 	}
+
 	40% {
 		filter: blur(1.5px);
 	}
+
 	100% {
-		filter: blur(0px);
+		filter: blur(0);
 	}
 }
 
@@ -126,6 +129,7 @@
 	0% {
 		background-position: 0 0;
 	}
+
 	100% {
 		background-position: -60px -60px;
 	}
@@ -572,7 +576,7 @@ select {
 	inset: 0;
 	background-image: repeating-linear-gradient(
 		45deg,
-		rgb(0 0 0 / 2%) 0px,
+		rgb(0 0 0 / 2%) 0,
 		rgb(0 0 0 / 2%) 2px,
 		transparent 2px,
 		transparent 6px
