@@ -1097,7 +1097,24 @@ Last release date on nightly: ${nightlyRDate}`;
 			<div id="luckFooter">4x luck</div>
 		</div>
 
-		<div id="devOverlayPanel"></div>
+		<div class="dev" id="devOverlayPanel" style="display:none;position:fixed;bottom:60px;right:10px;width:680px;max-width:calc(100vw - 20px);z-index:99999;">
+		  <div class="dev-bar">
+		    <span class="stat"><span class="stat-k">fps</span><span class="stat-v good" id="dc-fps">--</span></span>
+		    <span class="stat"><span class="stat-k">rolls</span><span class="stat-v" id="dc-rolls">0</span></span>
+		    <span class="stat"><span class="stat-k">pts</span><span class="stat-v" id="dc-pts">0</span></span>
+		    <span class="stat"><span class="stat-k">luck</span><span class="stat-v" id="dc-luck">1.0x</span></span>
+		    <span class="stat"><span class="stat-k">anomalies</span><span class="stat-v" id="dc-anom">0</span></span>
+		    <span class="stat"><span class="stat-k">mem</span><span class="stat-v" id="dc-mem">--</span></span>
+		    <span class="stat" style="margin-left:auto"><span class="stat-k">page</span><span class="stat-v" id="dc-page">1</span></span>
+		  </div>
+		  <div class="flags-row" id="dc-flags"></div>
+		  <div class="log" id="dc-log"></div>
+		  <div class="hint" id="dc-hint">type : to open console · :help for commands</div>
+		  <div class="input-row" style="display:none" id="dc-input-row">
+		    <span class="prompt">:</span>
+		    <input id="dc-input" autocomplete="off" spellcheck="false" placeholder="command...">
+		  </div>
+		</div>
 
 		<canvas id="seasonCanvas"></canvas>
 
