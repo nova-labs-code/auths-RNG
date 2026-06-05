@@ -343,16 +343,16 @@ function updateShopUI() {
 	}
 	const speedPips = document.getElementById('speedPips');
 	if (speedPips) {
-	  speedPips.querySelectorAll('.level-pip').forEach((pip, i) => {
-	    pip.classList.toggle('on', i < shopUpgrades.speed);
-	  });
+		speedPips.querySelectorAll('.level-pip').forEach((pip, i) => {
+			pip.classList.toggle('on', i < shopUpgrades.speed);
+		});
 	}
-	
+
 	const magnetPips = document.getElementById('magnetPips');
 	if (magnetPips) {
-	  magnetPips.querySelectorAll('.level-pip').forEach((pip, i) => {
-	    pip.classList.toggle('on', i < (shopUpgrades.magnet || 0));
-	  });
+		magnetPips.querySelectorAll('.level-pip').forEach((pip, i) => {
+			pip.classList.toggle('on', i < (shopUpgrades.magnet || 0));
+		});
 	}
 }
 
@@ -1806,19 +1806,19 @@ function spinAndReveal(res) {
 	if (totalRolls > 0 && totalRolls % 100 === 0) startLuckBoost();
 
 	const finalize = () => {
-	    totalRolls++;
-	    updateTotalRolls();
-	    addToInventory(res);
-	    awardAnomalyIfEligible(res);
-	    checkAchievements(res);
-	    updateRollsSinceRare(res);
-	    maybeFireConfettiAndCutscene(res);
-	    if (typeof addTrailItem === 'function') {
-	        const pillColor = res.style
-	            ? (res.style.match(/color\s*:\s*(#[0-9a-fA-F]{3,8}|[a-z]+)/)?.[1] ?? null)
-	            : null;
-	        addTrailItem(res.name, pillColor);
-	    }
+		totalRolls++;
+		updateTotalRolls();
+		addToInventory(res);
+		awardAnomalyIfEligible(res);
+		checkAchievements(res);
+		updateRollsSinceRare(res);
+		maybeFireConfettiAndCutscene(res);
+		if (typeof addTrailItem === 'function') {
+			const pillColor = res.style
+				? (res.style.match(/color\s*:\s*(#[0-9a-fA-F]{3,8}|[a-z]+)/)?.[1] ?? null)
+				: null;
+			addTrailItem(res.name, pillColor);
+		}
 	};
 
 	if (effectiveStyle === 'none' || effectiveStyle === 'fade') {
@@ -1943,38 +1943,38 @@ function startWellCooldownTimer() {
 const sortSelect = document.getElementById('sortSelect');
 
 rollBtn.addEventListener('click', () => {
-    if (isCutscenePlaying) return;
-    rollBtn.disabled = true;
+	if (isCutscenePlaying) return;
+	rollBtn.disabled = true;
 
-    try {
-        spinner.style.transition = 'none';
-        void spinner.offsetWidth;
-        spinner.style.transform = 'translateY(0)';
+	try {
+		spinner.style.transition = 'none';
+		void spinner.offsetWidth;
+		spinner.style.transform = 'translateY(0)';
 
-        const result = getRandomRarity();
-        const res = result.rarity;
+		const result = getRandomRarity();
+		const res = result.rarity;
 
-        if (result.wasPity) showAnomalyPopup('pity triggered!');
-        if (result.isHotPulse) rollBtn.classList.add('hot-pulse');
-        else rollBtn.classList.remove('hot-pulse');
+		if (result.wasPity) showAnomalyPopup('pity triggered!');
+		if (result.isHotPulse) rollBtn.classList.add('hot-pulse');
+		else rollBtn.classList.remove('hot-pulse');
 
-        const isMuted = checkMuteSettings();
-        if (!isMuted && backgroundMusic.paused && res.name !== 'Lunar') {
-            backgroundMusic.play().catch(() => {});
-        }
+		const isMuted = checkMuteSettings();
+		if (!isMuted && backgroundMusic.paused && res.name !== 'Lunar') {
+			backgroundMusic.play().catch(() => {});
+		}
 
-        setTimeout(() => {
-            try {
-                spinAndReveal(res);
-            } catch (e) {
-                console.error('spinAndReveal failed:', e);
-                rollBtn.disabled = false;
-            }
-        }, 100);
-    } catch (e) {
-        console.error('roll failed:', e);
-        rollBtn.disabled = false;
-    }
+		setTimeout(() => {
+			try {
+				spinAndReveal(res);
+			} catch (e) {
+				console.error('spinAndReveal failed:', e);
+				rollBtn.disabled = false;
+			}
+		}, 100);
+	} catch (e) {
+		console.error('roll failed:', e);
+		rollBtn.disabled = false;
+	}
 });
 
 document.addEventListener('visibilitychange', () => {
@@ -2629,14 +2629,14 @@ function throwIntoWell() {
 	wellData.timesThrown++;
 
 	if (won) {
-       const reward = amount * 2;
-       points += reward;
-       wellData.totalReceived += reward;
- 	   wellData.successes++;
- 	   updatePointsDisplay();
- 	   showWellResult(true, reward);
+		const reward = amount * 2;
+		points += reward;
+		wellData.totalReceived += reward;
+		wellData.successes++;
+		updatePointsDisplay();
+		showWellResult(true, reward);
 	} else {
-	    showWellResult(false, amount);
+		showWellResult(false, amount);
 	}
 
 	saveWellData();

@@ -266,8 +266,8 @@
 	// ── DOM ────────────────────────────────────────────────────────────────
 	// Using a sibling div for eq bars so they don't rotate with the disc
 	document.body.insertAdjacentHTML(
-	  'beforeend',
-	  `<div id="jukebox">
+		'beforeend',
+		`<div id="jukebox">
 	    <div id="jb-disc"></div>
 	    <div id="jb-eq">
 	      <div class="jb-bar"></div>
@@ -367,83 +367,92 @@
 	}
 
 	function formatTime(s) {
-	  if (!isFinite(s) || s < 0) return '0:00';
-	  return Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');
+		if (!isFinite(s) || s < 0) return '0:00';
+		return Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');
 	}
-	
+
 	function getDuration() {
-	  if (window.customAudioBuffer) return window.customAudioBuffer.duration;
-	  const a = window.backgroundMusic;
-	  return (a && isFinite(a.duration) && a.duration > 0) ? a.duration : 0;
+		if (window.customAudioBuffer) return window.customAudioBuffer.duration;
+		const a = window.backgroundMusic;
+		return a && isFinite(a.duration) && a.duration > 0 ? a.duration : 0;
 	}
-	
+
 	function getCurrentTime() {
-	  if (window.customAudioSource && window.audioContext != null && window.customAudioStartTime != null) {
-	    const elapsed = (window.audioContext.currentTime - window.customAudioStartTime) + (window.customAudioOffset || 0);
-	    const dur = getDuration();
-	    return dur ? elapsed % dur : elapsed;
-	  }
-	  const a = window.backgroundMusic;
-	  return (a && !a.paused) ? a.currentTime : 0;
+		if (
+			window.customAudioSource &&
+			window.audioContext != null &&
+			window.customAudioStartTime != null
+		) {
+			const elapsed =
+				window.audioContext.currentTime -
+				window.customAudioStartTime +
+				(window.customAudioOffset || 0);
+			const dur = getDuration();
+			return dur ? elapsed % dur : elapsed;
+		}
+		const a = window.backgroundMusic;
+		return a && !a.paused ? a.currentTime : 0;
 	}
-	
+
 	function seekTo(ratio) {
-	  const dur = getDuration();
-	  if (!dur) return;
-	  const target = Math.max(0, Math.min(dur, ratio * dur));
-	  if (window.customAudioSource && window.audioContext && window.customAudioBuffer) {
-	    try { window.customAudioSource.stop(); } catch (_) {}
-	    const src = window.audioContext.createBufferSource();
-	    src.buffer = window.customAudioBuffer;
-	    src.loop = true;
-	    src.connect(window.customAudioGain || window.audioContext.destination);
-	    src.start(0, target);
-	    window.customAudioSource = src;
-	    window.customAudioStartTime = window.audioContext.currentTime;
-	    window.customAudioOffset = target;
-	    return;
-	  }
-	  const a = window.backgroundMusic;
-	  if (a && isFinite(a.duration)) a.currentTime = target;
+		const dur = getDuration();
+		if (!dur) return;
+		const target = Math.max(0, Math.min(dur, ratio * dur));
+		if (window.customAudioSource && window.audioContext && window.customAudioBuffer) {
+			try {
+				window.customAudioSource.stop();
+			} catch (_) {}
+			const src = window.audioContext.createBufferSource();
+			src.buffer = window.customAudioBuffer;
+			src.loop = true;
+			src.connect(window.customAudioGain || window.audioContext.destination);
+			src.start(0, target);
+			window.customAudioSource = src;
+			window.customAudioStartTime = window.audioContext.currentTime;
+			window.customAudioOffset = target;
+			return;
+		}
+		const a = window.backgroundMusic;
+		if (a && isFinite(a.duration)) a.currentTime = target;
 	}
-	
+
 	function getVolume() {
-	  if (window.customAudioGain) return window.customAudioGain.gain.value;
-	  if (window.backgroundMusic) return window.backgroundMusic.volume;
-	  return 0.3;
+		if (window.customAudioGain) return window.customAudioGain.gain.value;
+		if (window.backgroundMusic) return window.backgroundMusic.volume;
+		return 0.3;
 	}
-	
+
 	function setVolume(v) {
-	  if (window.customAudioGain) window.customAudioGain.gain.value = v;
-	  if (window.backgroundMusic) window.backgroundMusic.volume = v;
+		if (window.customAudioGain) window.customAudioGain.gain.value = v;
+		if (window.backgroundMusic) window.backgroundMusic.volume = v;
 	}
 
 	// ── Render ─────────────────────────────────────────────────────────────
 	let seekDragging = false;
 	let volUserActive = false;
-	
+
 	function render() {
-	  const active = !isMuted();
-	  const playing = isPlaying() && active;
-	
-	  disc.classList.toggle('jb-active', active);
-	  disc.classList.toggle('jb-spinning', playing);
-	  btnPlay.innerHTML = isMuted() ? '&#9654;' : '&#9646;&#9646;';
-	  btnPlay.title = isMuted() ? 'play' : 'pause';
-	  nameEl.textContent = trackName();
-	
-	  const dur = getDuration();
-	  const cur = getCurrentTime();
-	  const fill = document.getElementById('jb-progress-fill');
-	  const timeEl = document.getElementById('jb-time');
-	  const volEl = document.getElementById('jb-vol');
-	
-	  if (fill && !seekDragging) {
-	    fill.classList.add('jb-smooth');
-	    fill.style.width = (dur ? (cur / dur) * 100 : 0) + '%';
-	  }
-	  if (timeEl) timeEl.textContent = dur ? formatTime(cur) + ' / ' + formatTime(dur) : '';
-	  if (volEl && !volUserActive) volEl.value = getVolume();
+		const active = !isMuted();
+		const playing = isPlaying() && active;
+
+		disc.classList.toggle('jb-active', active);
+		disc.classList.toggle('jb-spinning', playing);
+		btnPlay.innerHTML = isMuted() ? '&#9654;' : '&#9646;&#9646;';
+		btnPlay.title = isMuted() ? 'play' : 'pause';
+		nameEl.textContent = trackName();
+
+		const dur = getDuration();
+		const cur = getCurrentTime();
+		const fill = document.getElementById('jb-progress-fill');
+		const timeEl = document.getElementById('jb-time');
+		const volEl = document.getElementById('jb-vol');
+
+		if (fill && !seekDragging) {
+			fill.classList.add('jb-smooth');
+			fill.style.width = (dur ? (cur / dur) * 100 : 0) + '%';
+		}
+		if (timeEl) timeEl.textContent = dur ? formatTime(cur) + ' / ' + formatTime(dur) : '';
+		if (volEl && !volUserActive) volEl.value = getVolume();
 	}
 
 	// ── Panel open / close ─────────────────────────────────────────────────
@@ -468,69 +477,93 @@
 
 	// ── Button wiring ──────────────────────────────────────────────────────
 	btnPlay.addEventListener('click', (e) => {
-	  e.stopPropagation();
-	  togglePlay();
-	  render();
+		e.stopPropagation();
+		togglePlay();
+		render();
 	});
 	btnPrev.addEventListener('click', (e) => {
-	  e.stopPropagation();
-	  skip(-1);
-	  render();
+		e.stopPropagation();
+		skip(-1);
+		render();
 	});
 	btnNext.addEventListener('click', (e) => {
-	  e.stopPropagation();
-	  skip(1);
-	  render();
+		e.stopPropagation();
+		skip(1);
+		render();
 	});
-	
+
 	const progressWrap = document.getElementById('jb-progress-wrap');
 	const progressFill = document.getElementById('jb-progress-fill');
-	
+
 	if (progressWrap && progressFill) {
-	  function doSeek(clientX) {
-	    const rect = progressWrap.getBoundingClientRect();
-	    const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
-	    progressFill.classList.remove('jb-smooth');
-	    progressFill.style.width = (ratio * 100) + '%';
-	    seekTo(ratio);
-	  }
-	
-	  progressWrap.addEventListener('mousedown', (e) => {
-	    e.stopPropagation();
-	    seekDragging = true;
-	    doSeek(e.clientX);
-	  });
-	  document.addEventListener('mousemove', (e) => {
-	    if (!seekDragging) return;
-	    doSeek(e.clientX);
-	  });
-	  document.addEventListener('mouseup', () => {
-	    if (!seekDragging) return;
-	    seekDragging = false;
-	    progressFill.classList.add('jb-smooth');
-	  });
-	
-	  progressWrap.addEventListener('touchstart', (e) => {
-	    seekDragging = true;
-	    doSeek(e.touches[0].clientX);
-	  }, { passive: true });
-	  document.addEventListener('touchmove', (e) => {
-	    if (!seekDragging) return;
-	    doSeek(e.touches[0].clientX);
-	  }, { passive: true });
-	  document.addEventListener('touchend', () => {
-	    seekDragging = false;
-	    progressFill.classList.add('jb-smooth');
-	  });
+		function doSeek(clientX) {
+			const rect = progressWrap.getBoundingClientRect();
+			const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+			progressFill.classList.remove('jb-smooth');
+			progressFill.style.width = ratio * 100 + '%';
+			seekTo(ratio);
+		}
+
+		progressWrap.addEventListener('mousedown', (e) => {
+			e.stopPropagation();
+			seekDragging = true;
+			doSeek(e.clientX);
+		});
+		document.addEventListener('mousemove', (e) => {
+			if (!seekDragging) return;
+			doSeek(e.clientX);
+		});
+		document.addEventListener('mouseup', () => {
+			if (!seekDragging) return;
+			seekDragging = false;
+			progressFill.classList.add('jb-smooth');
+		});
+
+		progressWrap.addEventListener(
+			'touchstart',
+			(e) => {
+				seekDragging = true;
+				doSeek(e.touches[0].clientX);
+			},
+			{ passive: true }
+		);
+		document.addEventListener(
+			'touchmove',
+			(e) => {
+				if (!seekDragging) return;
+				doSeek(e.touches[0].clientX);
+			},
+			{ passive: true }
+		);
+		document.addEventListener('touchend', () => {
+			seekDragging = false;
+			progressFill.classList.add('jb-smooth');
+		});
 	}
-	
+
 	const volSlider = document.getElementById('jb-vol');
 	if (volSlider) {
-	  volSlider.addEventListener('mousedown', () => { volUserActive = true; });
-	  volSlider.addEventListener('touchstart', () => { volUserActive = true; }, { passive: true });
-	  volSlider.addEventListener('input', () => setVolume(parseFloat(volSlider.value)));
-	  volSlider.addEventListener('mouseup', () => setTimeout(() => { volUserActive = false; }, 1200));
-	  volSlider.addEventListener('touchend', () => setTimeout(() => { volUserActive = false; }, 1200));
+		volSlider.addEventListener('mousedown', () => {
+			volUserActive = true;
+		});
+		volSlider.addEventListener(
+			'touchstart',
+			() => {
+				volUserActive = true;
+			},
+			{ passive: true }
+		);
+		volSlider.addEventListener('input', () => setVolume(parseFloat(volSlider.value)));
+		volSlider.addEventListener('mouseup', () =>
+			setTimeout(() => {
+				volUserActive = false;
+			}, 1200)
+		);
+		volSlider.addEventListener('touchend', () =>
+			setTimeout(() => {
+				volUserActive = false;
+			}, 1200)
+		);
 	}
 
 	// ── Poll for external state changes ────────────────────────────────────

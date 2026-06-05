@@ -6,11 +6,11 @@ module.exports = {
 		},
 		assert: {
 			assertions: {
-				'categories:performance':    ['warn',  { minScore: 0.65 }],
-				'categories:accessibility':  ['error', { minScore: 0.75 }],
+				'categories:performance': ['warn', { minScore: 0.65 }],
+				'categories:accessibility': ['error', { minScore: 0.75 }],
 				'categories:best-practices': ['error', { minScore: 0.8 }],
-				'errors-in-console':         ['error', { maxLength: 0 }],
-				'uses-https':                'off',
+				'errors-in-console': ['error', { maxLength: 0 }],
+				'uses-https': 'off',
 			},
 		},
 		upload: {

@@ -778,8 +778,8 @@
 			'te-sa-wakeText',
 			'te-sa-speed',
 			'te-sa-skipOnReturn',
-      'te-sa-skipOnReturn',
-		  'te-sa-customCode',
+			'te-sa-skipOnReturn',
+			'te-sa-customCode',
 		];
 		ids.forEach((id) => {
 			const n = el(id);
@@ -879,8 +879,8 @@
 		const importBtn = el('importThemeBtn');
 		const exportBtn = el('exportThemeBtn');
 		const autoAdaptBtn = el('te-autoAdapt');
-    const previewAnimBtn = el('te-sa-preview-btn');
-    if (previewAnimBtn) previewAnimBtn.addEventListener('click', previewStartAnim);
+		const previewAnimBtn = el('te-sa-preview-btn');
+		if (previewAnimBtn) previewAnimBtn.addEventListener('click', previewStartAnim);
 		if (autoAdaptBtn) autoAdaptBtn.addEventListener('click', autoAdaptFromBackground);
 
 		if (!openBtn || !overlay) return;

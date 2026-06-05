@@ -237,7 +237,7 @@ Last release date on nightly: ${nightlyRDate}`;
 		</script>
 
 		<script src="assets/scripts/startanim.js" defer></script>
-		<script src="assets/scripts/screensaver.js" defer></script>
+		<!-- screensaver was here <3333 -->
 
 		<button id="legacyShopBtn">shop</button>
 		<button id="legacySettingsBtn">settings</button>
@@ -333,14 +333,14 @@ Last release date on nightly: ${nightlyRDate}`;
 		<!-- BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~  BITES AT YOU~ -->
 
 		<div class="site-header lazy">
-		  <div class="header-chip">update 9.4</div>
-		  <h1>welcome to auth's RNG!</h1>
-		  <p class="header-msg" id="randomMessage"></p>
-		  <div class="header-links">
-		    <a href="https://discord.gg/mTDw8jJYqX" class="header-link">discord</a>
-		    <a href="https://github.com/authsrng-game/auths-RNG/wiki" class="header-link">wiki</a>
-		    <a href="blog/blog.html" class="header-link">blog</a>
-		  </div>
+			<div class="header-chip">update 9.4</div>
+			<h1>welcome to auth's RNG!</h1>
+			<p class="header-msg" id="randomMessage"></p>
+			<div class="header-links">
+				<a href="https://discord.gg/mTDw8jJYqX" class="header-link">discord</a>
+				<a href="https://github.com/authsrng-game/auths-RNG/wiki" class="header-link">wiki</a>
+				<a href="blog/blog.html" class="header-link">blog</a>
+			</div>
 		</div>
 		<script src="assets/scripts/messages.js" defer></script>
 
@@ -417,212 +417,216 @@ Last release date on nightly: ${nightlyRDate}`;
 				</div>
 
 				<div class="page" id="page-2">
-				  <h2 style="margin-top:0">shop</h2>
-				
-				  <div id="pointsDisplay">
-				    <div class="points-chip-label">balance</div>
-				    <div class="points-amount"><span id="pointsValue">0</span></div>
-				  </div>
-				
-				  <div class="shop-divider"><span class="shop-divider-label">upgrades</span></div>
-				
-				  <div class="shop-item">
-				    <div class="shop-item-header">
-				      <div class="shop-item-name">luck boost</div>
-				      <div class="shop-item-level">lv <span id="luckLevel">0</span> / 100</div>
-				    </div>
-				    <div class="shop-item-desc">1.1x more luck per level (multiplicative)</div>
-				    <div class="shop-item-footer">
-				      <div class="shop-item-cost"><span id="luckCost">50</span> pts</div>
-				      <button id="buyLuckBtn" class="small">upgrade</button>
-				    </div>
-				  </div>
-				
-				  <div class="shop-item">
-				    <div class="shop-item-header">
-				      <div class="shop-item-name">roll speed</div>
-				      <div class="shop-item-level">lv <span id="speedLevel">0</span> / 3</div>
-				    </div>
-				    <div class="level-pips" id="speedPips">
-				      <div class="level-pip" style="flex:1"></div>
-				      <div class="level-pip" style="flex:1"></div>
-				      <div class="level-pip" style="flex:1"></div>
-				    </div>
-				    <div class="shop-item-desc" style="margin-top:8px">decrease roll time by 0.2s (min 0.25s)</div>
-				    <div class="shop-item-footer">
-				      <div class="shop-item-cost"><span id="speedCost">100</span> pts</div>
-				      <button id="buySpeedBtn" class="small">upgrade</button>
-				    </div>
-				  </div>
-				
-				  <div class="shop-item">
-				    <div class="shop-item-header">
-				      <div class="shop-item-name">point multiplier</div>
-				      <div class="shop-item-level">lv <span id="pointLevel">0</span> / 10</div>
-				    </div>
-				    <div class="shop-item-desc">decrease point divisor by 0.2 per level</div>
-				    <div class="shop-item-footer">
-				      <div class="shop-item-cost"><span id="pointCost">150</span> pts</div>
-				      <button id="buyPointBtn" class="small">upgrade</button>
-				    </div>
-				  </div>
-				
-				  <div class="shop-item">
-				    <div class="shop-item-header">
-				      <div class="shop-item-name">rarity magnet</div>
-				      <div class="shop-item-level">lv <span id="magnetLevel">0</span> / 5</div>
-				    </div>
-				    <div class="level-pips" id="magnetPips">
-				      <div class="level-pip" style="flex:1"></div>
-				      <div class="level-pip" style="flex:1"></div>
-				      <div class="level-pip" style="flex:1"></div>
-				      <div class="level-pip" style="flex:1"></div>
-				      <div class="level-pip" style="flex:1"></div>
-				    </div>
-				    <div class="shop-item-desc" style="margin-top:8px">1.1x boost to uncollected rarities per level</div>
-				    <div class="shop-item-footer">
-				      <div class="shop-item-cost"><span id="magnetCost">500</span> pts</div>
-				      <button id="buyMagnetBtn" class="small">upgrade</button>
-				    </div>
-				  </div>
-				
-				  <div class="shop-item">
-				    <div class="shop-item-header">
-				      <div class="shop-item-name">point printer</div>
-				      <div class="shop-item-level">lv <span id="printerLevel">0</span></div>
-				    </div>
-				    <div class="shop-item-desc">passive 1pt/sec per level</div>
-				    <div class="shop-item-footer">
-				      <div class="shop-item-cost"><span id="printerCost">1000</span> pts</div>
-				      <button id="buyPrinterBtn" class="small">upgrade</button>
-				    </div>
-				  </div>
-				
-				  <div class="shop-item">
-				    <div class="shop-item-header">
-				      <div class="shop-item-name">duplicate chance</div>
-				      <div class="shop-item-level">lv <span id="dupeLevel">0</span> / 10</div>
-				    </div>
-				    <div class="shop-item-desc">1% chance per level to get +1 extra on roll</div>
-				    <div class="shop-item-footer">
-				      <div class="shop-item-cost"><span id="dupeCost">800</span> pts</div>
-				      <button id="buyDupeBtn" class="small">upgrade</button>
-				    </div>
-				  </div>
-				
-				  <div class="shop-divider"><span class="shop-divider-label">potions</span></div>
-				
-				  <div class="potion-grid">
-				    <div class="potion-item" data-potion="luck2x">
-				      <div class="potion-emoji">✨</div>
-				      <div class="potion-name">2x luck</div>
-				      <div class="potion-effect">30s</div>
-				      <div class="potion-cost">2,000 pts</div>
-				      <div class="potion-owned">owned: <span id="potion-luck2x-count">0</span></div>
-				      <button class="small" onclick="buyPotion('luck2x')">buy</button>
-				      <button class="small" onclick="usePotion('luck2x')">use</button>
-				    </div>
-				
-				    <div class="potion-item" data-potion="luck4x">
-				      <div class="potion-emoji">💫</div>
-				      <div class="potion-name">4x luck</div>
-				      <div class="potion-effect">30s</div>
-				      <div class="potion-cost">5,000 pts</div>
-				      <div class="potion-owned">owned: <span id="potion-luck4x-count">0</span></div>
-				      <button class="small" onclick="buyPotion('luck4x')">buy</button>
-				      <button class="small" onclick="usePotion('luck4x')">use</button>
-				    </div>
-				
-				    <div class="potion-item" data-potion="luck10x">
-				      <div class="potion-emoji">🌟</div>
-				      <div class="potion-name">10x luck</div>
-				      <div class="potion-effect">30s</div>
-				      <div class="potion-cost">15,000 pts</div>
-				      <div class="potion-owned">owned: <span id="potion-luck10x-count">0</span></div>
-				      <button class="small" onclick="buyPotion('luck10x')">buy</button>
-				      <button class="small" onclick="usePotion('luck10x')">use</button>
-				    </div>
-				
-				    <div class="potion-item" data-potion="luck50x">
-				      <div class="potion-emoji">⭐</div>
-				      <div class="potion-name">50x luck</div>
-				      <div class="potion-effect">30s</div>
-				      <div class="potion-cost">30,000 pts</div>
-				      <div class="potion-owned">owned: <span id="potion-luck50x-count">0</span></div>
-				      <button class="small" onclick="buyPotion('luck50x')">buy</button>
-				      <button class="small" onclick="usePotion('luck50x')">use</button>
-				    </div>
-				
-				    <div class="potion-item" data-potion="luck100x">
-				      <div class="potion-emoji">🔥</div>
-				      <div class="potion-name">100x luck</div>
-				      <div class="potion-effect">30s</div>
-				      <div class="potion-cost">45,000 pts</div>
-				      <div class="potion-owned">owned: <span id="potion-luck100x-count">0</span></div>
-				      <button class="small" onclick="buyPotion('luck100x')">buy</button>
-				      <button class="small" onclick="usePotion('luck100x')">use</button>
-				    </div>
-				
-				    <div class="potion-item" data-potion="luck150x">
-				      <div class="potion-emoji">💥</div>
-				      <div class="potion-name">150x luck</div>
-				      <div class="potion-effect">30s</div>
-				      <div class="potion-cost">60,000 pts</div>
-				      <div class="potion-owned">owned: <span id="potion-luck150x-count">0</span></div>
-				      <button class="small" onclick="buyPotion('luck150x')">buy</button>
-				      <button class="small" onclick="usePotion('luck150x')">use</button>
-				    </div>
-				
-				    <div class="potion-item" data-potion="luck250x">
-				      <div class="potion-emoji">⚡</div>
-				      <div class="potion-name">250x luck</div>
-				      <div class="potion-effect">30s</div>
-				      <div class="potion-cost">80,000 pts</div>
-				      <div class="potion-owned">owned: <span id="potion-luck250x-count">0</span></div>
-				      <button class="small" onclick="buyPotion('luck250x')">buy</button>
-				      <button class="small" onclick="usePotion('luck250x')">use</button>
-				    </div>
-				
-				    <div class="potion-item" data-potion="luck300x">
-				      <div class="potion-emoji">💎</div>
-				      <div class="potion-name">OMEGA</div>
-				      <div class="potion-effect">30s</div>
-				      <div class="potion-cost">150,000 pts</div>
-				      <div class="potion-owned">owned: <span id="potion-luck300x-count">0</span></div>
-				      <button class="small" onclick="buyPotion('luck300x')">buy</button>
-				      <button class="small" onclick="usePotion('luck300x')">use</button>
-				    </div>
-				
-				    <div class="potion-item" data-potion="luck800x">
-				      <div class="potion-emoji">☁️</div>
-				      <div class="potion-name">HEAVENLY</div>
-				      <div class="potion-effect">20s</div>
-				      <div class="potion-cost">500,000 pts</div>
-				      <div class="potion-owned">owned: <span id="potion-luck800x-count">0</span></div>
-				      <button class="small" onclick="buyPotion('luck800x')">buy</button>
-				      <button class="small" onclick="usePotion('luck800x')">use</button>
-				    </div>
-				
-				    <div class="potion-item" data-potion="luck1500x">
-				      <div class="potion-emoji">🍀</div>
-				      <div class="potion-name">RAW LUCK</div>
-				      <div class="potion-effect">30s</div>
-				      <div class="potion-cost">1,500,000 pts</div>
-				      <div class="potion-owned">owned: <span id="potion-luck1500x-count">0</span></div>
-				      <button class="small" onclick="buyPotion('luck1500x')">buy</button>
-				      <button class="small" onclick="usePotion('luck1500x')">use</button>
-				    </div>
-				
-				    <div class="potion-item" data-potion="duplicate">
-				      <div class="potion-emoji">🎭</div>
-				      <div class="potion-name">duplicate</div>
-				      <div class="potion-effect">next 10 rolls x2</div>
-				      <div class="potion-cost">5,000 pts</div>
-				      <div class="potion-owned">owned: <span id="potion-duplicate-count">0</span></div>
-				      <button class="small" onclick="buyPotion('duplicate')">buy</button>
-				      <button class="small" onclick="usePotion('duplicate')">use</button>
-				    </div>
-				  </div>
+					<h2 style="margin-top: 0">shop</h2>
+
+					<div id="pointsDisplay">
+						<div class="points-chip-label">balance</div>
+						<div class="points-amount"><span id="pointsValue">0</span></div>
+					</div>
+
+					<div class="shop-divider"><span class="shop-divider-label">upgrades</span></div>
+
+					<div class="shop-item">
+						<div class="shop-item-header">
+							<div class="shop-item-name">luck boost</div>
+							<div class="shop-item-level">lv <span id="luckLevel">0</span> / 100</div>
+						</div>
+						<div class="shop-item-desc">1.1x more luck per level (multiplicative)</div>
+						<div class="shop-item-footer">
+							<div class="shop-item-cost"><span id="luckCost">50</span> pts</div>
+							<button id="buyLuckBtn" class="small">upgrade</button>
+						</div>
+					</div>
+
+					<div class="shop-item">
+						<div class="shop-item-header">
+							<div class="shop-item-name">roll speed</div>
+							<div class="shop-item-level">lv <span id="speedLevel">0</span> / 3</div>
+						</div>
+						<div class="level-pips" id="speedPips">
+							<div class="level-pip" style="flex: 1"></div>
+							<div class="level-pip" style="flex: 1"></div>
+							<div class="level-pip" style="flex: 1"></div>
+						</div>
+						<div class="shop-item-desc" style="margin-top: 8px">
+							decrease roll time by 0.2s (min 0.25s)
+						</div>
+						<div class="shop-item-footer">
+							<div class="shop-item-cost"><span id="speedCost">100</span> pts</div>
+							<button id="buySpeedBtn" class="small">upgrade</button>
+						</div>
+					</div>
+
+					<div class="shop-item">
+						<div class="shop-item-header">
+							<div class="shop-item-name">point multiplier</div>
+							<div class="shop-item-level">lv <span id="pointLevel">0</span> / 10</div>
+						</div>
+						<div class="shop-item-desc">decrease point divisor by 0.2 per level</div>
+						<div class="shop-item-footer">
+							<div class="shop-item-cost"><span id="pointCost">150</span> pts</div>
+							<button id="buyPointBtn" class="small">upgrade</button>
+						</div>
+					</div>
+
+					<div class="shop-item">
+						<div class="shop-item-header">
+							<div class="shop-item-name">rarity magnet</div>
+							<div class="shop-item-level">lv <span id="magnetLevel">0</span> / 5</div>
+						</div>
+						<div class="level-pips" id="magnetPips">
+							<div class="level-pip" style="flex: 1"></div>
+							<div class="level-pip" style="flex: 1"></div>
+							<div class="level-pip" style="flex: 1"></div>
+							<div class="level-pip" style="flex: 1"></div>
+							<div class="level-pip" style="flex: 1"></div>
+						</div>
+						<div class="shop-item-desc" style="margin-top: 8px">
+							1.1x boost to uncollected rarities per level
+						</div>
+						<div class="shop-item-footer">
+							<div class="shop-item-cost"><span id="magnetCost">500</span> pts</div>
+							<button id="buyMagnetBtn" class="small">upgrade</button>
+						</div>
+					</div>
+
+					<div class="shop-item">
+						<div class="shop-item-header">
+							<div class="shop-item-name">point printer</div>
+							<div class="shop-item-level">lv <span id="printerLevel">0</span></div>
+						</div>
+						<div class="shop-item-desc">passive 1pt/sec per level</div>
+						<div class="shop-item-footer">
+							<div class="shop-item-cost"><span id="printerCost">1000</span> pts</div>
+							<button id="buyPrinterBtn" class="small">upgrade</button>
+						</div>
+					</div>
+
+					<div class="shop-item">
+						<div class="shop-item-header">
+							<div class="shop-item-name">duplicate chance</div>
+							<div class="shop-item-level">lv <span id="dupeLevel">0</span> / 10</div>
+						</div>
+						<div class="shop-item-desc">1% chance per level to get +1 extra on roll</div>
+						<div class="shop-item-footer">
+							<div class="shop-item-cost"><span id="dupeCost">800</span> pts</div>
+							<button id="buyDupeBtn" class="small">upgrade</button>
+						</div>
+					</div>
+
+					<div class="shop-divider"><span class="shop-divider-label">potions</span></div>
+
+					<div class="potion-grid">
+						<div class="potion-item" data-potion="luck2x">
+							<div class="potion-emoji">✨</div>
+							<div class="potion-name">2x luck</div>
+							<div class="potion-effect">30s</div>
+							<div class="potion-cost">2,000 pts</div>
+							<div class="potion-owned">owned: <span id="potion-luck2x-count">0</span></div>
+							<button class="small" onclick="buyPotion('luck2x')">buy</button>
+							<button class="small" onclick="usePotion('luck2x')">use</button>
+						</div>
+
+						<div class="potion-item" data-potion="luck4x">
+							<div class="potion-emoji">💫</div>
+							<div class="potion-name">4x luck</div>
+							<div class="potion-effect">30s</div>
+							<div class="potion-cost">5,000 pts</div>
+							<div class="potion-owned">owned: <span id="potion-luck4x-count">0</span></div>
+							<button class="small" onclick="buyPotion('luck4x')">buy</button>
+							<button class="small" onclick="usePotion('luck4x')">use</button>
+						</div>
+
+						<div class="potion-item" data-potion="luck10x">
+							<div class="potion-emoji">🌟</div>
+							<div class="potion-name">10x luck</div>
+							<div class="potion-effect">30s</div>
+							<div class="potion-cost">15,000 pts</div>
+							<div class="potion-owned">owned: <span id="potion-luck10x-count">0</span></div>
+							<button class="small" onclick="buyPotion('luck10x')">buy</button>
+							<button class="small" onclick="usePotion('luck10x')">use</button>
+						</div>
+
+						<div class="potion-item" data-potion="luck50x">
+							<div class="potion-emoji">⭐</div>
+							<div class="potion-name">50x luck</div>
+							<div class="potion-effect">30s</div>
+							<div class="potion-cost">30,000 pts</div>
+							<div class="potion-owned">owned: <span id="potion-luck50x-count">0</span></div>
+							<button class="small" onclick="buyPotion('luck50x')">buy</button>
+							<button class="small" onclick="usePotion('luck50x')">use</button>
+						</div>
+
+						<div class="potion-item" data-potion="luck100x">
+							<div class="potion-emoji">🔥</div>
+							<div class="potion-name">100x luck</div>
+							<div class="potion-effect">30s</div>
+							<div class="potion-cost">45,000 pts</div>
+							<div class="potion-owned">owned: <span id="potion-luck100x-count">0</span></div>
+							<button class="small" onclick="buyPotion('luck100x')">buy</button>
+							<button class="small" onclick="usePotion('luck100x')">use</button>
+						</div>
+
+						<div class="potion-item" data-potion="luck150x">
+							<div class="potion-emoji">💥</div>
+							<div class="potion-name">150x luck</div>
+							<div class="potion-effect">30s</div>
+							<div class="potion-cost">60,000 pts</div>
+							<div class="potion-owned">owned: <span id="potion-luck150x-count">0</span></div>
+							<button class="small" onclick="buyPotion('luck150x')">buy</button>
+							<button class="small" onclick="usePotion('luck150x')">use</button>
+						</div>
+
+						<div class="potion-item" data-potion="luck250x">
+							<div class="potion-emoji">⚡</div>
+							<div class="potion-name">250x luck</div>
+							<div class="potion-effect">30s</div>
+							<div class="potion-cost">80,000 pts</div>
+							<div class="potion-owned">owned: <span id="potion-luck250x-count">0</span></div>
+							<button class="small" onclick="buyPotion('luck250x')">buy</button>
+							<button class="small" onclick="usePotion('luck250x')">use</button>
+						</div>
+
+						<div class="potion-item" data-potion="luck300x">
+							<div class="potion-emoji">💎</div>
+							<div class="potion-name">OMEGA</div>
+							<div class="potion-effect">30s</div>
+							<div class="potion-cost">150,000 pts</div>
+							<div class="potion-owned">owned: <span id="potion-luck300x-count">0</span></div>
+							<button class="small" onclick="buyPotion('luck300x')">buy</button>
+							<button class="small" onclick="usePotion('luck300x')">use</button>
+						</div>
+
+						<div class="potion-item" data-potion="luck800x">
+							<div class="potion-emoji">☁️</div>
+							<div class="potion-name">HEAVENLY</div>
+							<div class="potion-effect">20s</div>
+							<div class="potion-cost">500,000 pts</div>
+							<div class="potion-owned">owned: <span id="potion-luck800x-count">0</span></div>
+							<button class="small" onclick="buyPotion('luck800x')">buy</button>
+							<button class="small" onclick="usePotion('luck800x')">use</button>
+						</div>
+
+						<div class="potion-item" data-potion="luck1500x">
+							<div class="potion-emoji">🍀</div>
+							<div class="potion-name">RAW LUCK</div>
+							<div class="potion-effect">30s</div>
+							<div class="potion-cost">1,500,000 pts</div>
+							<div class="potion-owned">owned: <span id="potion-luck1500x-count">0</span></div>
+							<button class="small" onclick="buyPotion('luck1500x')">buy</button>
+							<button class="small" onclick="usePotion('luck1500x')">use</button>
+						</div>
+
+						<div class="potion-item" data-potion="duplicate">
+							<div class="potion-emoji">🎭</div>
+							<div class="potion-name">duplicate</div>
+							<div class="potion-effect">next 10 rolls x2</div>
+							<div class="potion-cost">5,000 pts</div>
+							<div class="potion-owned">owned: <span id="potion-duplicate-count">0</span></div>
+							<button class="small" onclick="buyPotion('duplicate')">buy</button>
+							<button class="small" onclick="usePotion('duplicate')">use</button>
+						</div>
+					</div>
 				</div>
 
 				<div class="page" id="page-3">
@@ -666,50 +670,56 @@ Last release date on nightly: ${nightlyRDate}`;
 				</div>
 
 				<div class="page" id="page-7">
-				  <h2 style="margin-top:0">wishing well</h2>
-				
-				  <div class="well-container">
-				    <div class="well-header">
-				      <div class="well-visual" id="wellVisual">🌊</div>
-				      <div class="well-title">ancient wishing well</div>
-				      <div class="well-subtitle">throw points in and make a wish...</div>
-				
-				      <div class="well-input-container">
-				        <input type="number" id="wellInput" class="well-input" placeholder="enter points..." min="1" />
-				        <div class="well-quick-btns">
-				          <button class="well-quick-btn small" onclick="setWellAmount(10)">10</button>
-				          <button class="well-quick-btn small" onclick="setWellAmount(50)">50</button>
-				          <button class="well-quick-btn small" onclick="setWellAmount(100)">100</button>
-				          <button class="well-quick-btn small" onclick="setWellAmount(500)">500</button>
-				        </div>
-				        <button id="throwWellBtn" class="well-throw-btn">throw points in</button>
-				      </div>
-				
-				      <div class="well-status" id="wellStatus">ready to accept your offering</div>
-				      <div class="well-timer" id="wellTimer"></div>
-				    </div>
-				
-				    <div class="well-stats">
-				      <div class="well-stat-card">
-				        <div class="well-stat-label">total thrown</div>
-				        <div class="well-stat-value" id="wellTotalThrown">0</div>
-				      </div>
-				      <div class="well-stat-card">
-				        <div class="well-stat-label">total received</div>
-				        <div class="well-stat-value" id="wellTotalReceived">0</div>
-				      </div>
-				      <div class="well-stat-card">
-				        <div class="well-stat-label">times thrown</div>
-				        <div class="well-stat-value" id="wellTimesThrown">0</div>
-				      </div>
-				      <div class="well-stat-card">
-				        <div class="well-stat-label">success rate</div>
-				        <div class="well-stat-value" id="wellSuccessRate">0%</div>
-				      </div>
-				    </div>
-				  </div>
+					<h2 style="margin-top: 0">wishing well</h2>
+
+					<div class="well-container">
+						<div class="well-header">
+							<div class="well-visual" id="wellVisual">🌊</div>
+							<div class="well-title">ancient wishing well</div>
+							<div class="well-subtitle">throw points in and make a wish...</div>
+
+							<div class="well-input-container">
+								<input
+									type="number"
+									id="wellInput"
+									class="well-input"
+									placeholder="enter points..."
+									min="1"
+								/>
+								<div class="well-quick-btns">
+									<button class="well-quick-btn small" onclick="setWellAmount(10)">10</button>
+									<button class="well-quick-btn small" onclick="setWellAmount(50)">50</button>
+									<button class="well-quick-btn small" onclick="setWellAmount(100)">100</button>
+									<button class="well-quick-btn small" onclick="setWellAmount(500)">500</button>
+								</div>
+								<button id="throwWellBtn" class="well-throw-btn">throw points in</button>
+							</div>
+
+							<div class="well-status" id="wellStatus">ready to accept your offering</div>
+							<div class="well-timer" id="wellTimer"></div>
+						</div>
+
+						<div class="well-stats">
+							<div class="well-stat-card">
+								<div class="well-stat-label">total thrown</div>
+								<div class="well-stat-value" id="wellTotalThrown">0</div>
+							</div>
+							<div class="well-stat-card">
+								<div class="well-stat-label">total received</div>
+								<div class="well-stat-value" id="wellTotalReceived">0</div>
+							</div>
+							<div class="well-stat-card">
+								<div class="well-stat-label">times thrown</div>
+								<div class="well-stat-value" id="wellTimesThrown">0</div>
+							</div>
+							<div class="well-stat-card">
+								<div class="well-stat-label">success rate</div>
+								<div class="well-stat-value" id="wellSuccessRate">0%</div>
+							</div>
+						</div>
+					</div>
 				</div>
-		
+
 				<div class="page" id="page-8">
 					<h2 style="margin-top: 0; margin-bottom: 20px">settings</h2>
 
@@ -738,16 +748,16 @@ Last release date on nightly: ${nightlyRDate}`;
 					<label style="display: block; margin-top: 12px">
 						<input type="checkbox" id="devOverlay" /> developer overlay
 					</label>
-          
-          <br>
-          
-						<button
-							id="erudaBtn"
-							class="small"
-							style="padding: 4px 12px; font-size: 0.8em; width: auto"
-						>
-							enable eruda once
-						</button>
+
+					<br />
+
+					<button
+						id="erudaBtn"
+						class="small"
+						style="padding: 4px 12px; font-size: 0.8em; width: auto"
+					>
+						enable eruda once
+					</button>
 
 					<hr class="sep" style="margin: 20px 0" />
 
@@ -1097,23 +1107,49 @@ Last release date on nightly: ${nightlyRDate}`;
 			<div id="luckFooter">4x luck</div>
 		</div>
 
-		<div class="dev" id="devOverlayPanel" style="display:none;position:fixed;bottom:60px;right:10px;width:680px;max-width:calc(100vw - 20px);z-index:99999;">
-		  <div class="dev-bar">
-		    <span class="stat"><span class="stat-k">fps</span><span class="stat-v good" id="dc-fps">--</span></span>
-		    <span class="stat"><span class="stat-k">rolls</span><span class="stat-v" id="dc-rolls">0</span></span>
-		    <span class="stat"><span class="stat-k">pts</span><span class="stat-v" id="dc-pts">0</span></span>
-		    <span class="stat"><span class="stat-k">luck</span><span class="stat-v" id="dc-luck">1.0x</span></span>
-		    <span class="stat"><span class="stat-k">anomalies</span><span class="stat-v" id="dc-anom">0</span></span>
-		    <span class="stat"><span class="stat-k">mem</span><span class="stat-v" id="dc-mem">--</span></span>
-		    <span class="stat" style="margin-left:auto"><span class="stat-k">page</span><span class="stat-v" id="dc-page">1</span></span>
-		  </div>
-		  <div class="flags-row" id="dc-flags"></div>
-		  <div class="log" id="dc-log"></div>
-		  <div class="hint" id="dc-hint">type : to open console · :help for commands</div>
-		  <div class="input-row" style="display:none" id="dc-input-row">
-		    <span class="prompt">:</span>
-		    <input id="dc-input" autocomplete="off" spellcheck="false" placeholder="command...">
-		  </div>
+		<div
+			class="dev"
+			id="devOverlayPanel"
+			style="
+				display: none;
+				position: fixed;
+				bottom: 60px;
+				right: 10px;
+				width: 680px;
+				max-width: calc(100vw - 20px);
+				z-index: 99999;
+			"
+		>
+			<div class="dev-bar">
+				<span class="stat"
+					><span class="stat-k">fps</span><span class="stat-v good" id="dc-fps">--</span></span
+				>
+				<span class="stat"
+					><span class="stat-k">rolls</span><span class="stat-v" id="dc-rolls">0</span></span
+				>
+				<span class="stat"
+					><span class="stat-k">pts</span><span class="stat-v" id="dc-pts">0</span></span
+				>
+				<span class="stat"
+					><span class="stat-k">luck</span><span class="stat-v" id="dc-luck">1.0x</span></span
+				>
+				<span class="stat"
+					><span class="stat-k">anomalies</span><span class="stat-v" id="dc-anom">0</span></span
+				>
+				<span class="stat"
+					><span class="stat-k">mem</span><span class="stat-v" id="dc-mem">--</span></span
+				>
+				<span class="stat" style="margin-left: auto"
+					><span class="stat-k">page</span><span class="stat-v" id="dc-page">1</span></span
+				>
+			</div>
+			<div class="flags-row" id="dc-flags"></div>
+			<div class="log" id="dc-log"></div>
+			<div class="hint" id="dc-hint">type : to open console · :help for commands</div>
+			<div class="input-row" style="display: none" id="dc-input-row">
+				<span class="prompt">:</span>
+				<input id="dc-input" autocomplete="off" spellcheck="false" placeholder="command..." />
+			</div>
 		</div>
 
 		<canvas id="seasonCanvas"></canvas>
@@ -1175,19 +1211,22 @@ Last release date on nightly: ${nightlyRDate}`;
 			(function () {
 				const toggleBtn = document.getElementById('autoRollBtn');
 				let autoRollInterval = null;
-		
+
 				function getAutoRollDelay() {
 					return Math.max(500, (typeof rollSpeed !== 'undefined' ? rollSpeed : 1) * 1000 + 400);
 				}
-		
+
 				toggleBtn.addEventListener('click', () => {
 					toggleBtn.classList.toggle('active');
 					const isActive = toggleBtn.classList.contains('active');
 					toggleBtn.textContent = isActive ? 'auto roll (ON)' : 'auto roll (OFF)';
-		
+
 					if (isActive) {
 						const tick = () => {
-							if (!document.hidden && !(typeof isCutscenePlaying !== 'undefined' && isCutscenePlaying)) {
+							if (
+								!document.hidden &&
+								!(typeof isCutscenePlaying !== 'undefined' && isCutscenePlaying)
+							) {
 								const rollBtn = document.getElementById('rollBtn');
 								if (rollBtn && !rollBtn.disabled) rollBtn.click();
 							}
@@ -1201,11 +1240,11 @@ Last release date on nightly: ${nightlyRDate}`;
 						autoRollInterval = null;
 					}
 				});
-		
+
 				const trail = document.getElementById('rarityTrail');
 				const TRAIL_GAP = 6;
 				const items = [];
-		
+
 				function addTrailItem(name, color) {
 					const pill = document.createElement('span');
 					pill.className = 'trail-pill';
@@ -1214,23 +1253,23 @@ Last release date on nightly: ${nightlyRDate}`;
 					pill.style.left = '0px';
 					pill.style.opacity = '0';
 					trail.appendChild(pill);
-		
+
 					requestAnimationFrame(() => {
 						const pillWidth = pill.offsetWidth;
-		
-						items.forEach(item => {
+
+						items.forEach((item) => {
 							item.offset += pillWidth + TRAIL_GAP;
 							item.el.style.left = item.offset + 'px';
 						});
-		
+
 						items.unshift({ el: pill, offset: 0 });
-		
+
 						requestAnimationFrame(() => {
 							pill.style.opacity = '1';
 						});
-		
+
 						const trailWidth = trail.offsetWidth;
-		
+
 						setTimeout(() => {
 							for (let i = items.length - 1; i >= 0; i--) {
 								const item = items[i];
@@ -1244,7 +1283,7 @@ Last release date on nightly: ${nightlyRDate}`;
 						}, 450);
 					});
 				}
-		
+
 				window.addTrailItem = addTrailItem;
 			})();
 		</script>

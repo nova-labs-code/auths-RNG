@@ -270,17 +270,16 @@ select {
 }
 
 #rollBtn.hot-pulse::before {
-	content: "";
+	content: '';
 	position: absolute;
 	inset: 0;
-	background-image:
-		repeating-linear-gradient(
-			45deg,
-			rgb(0 0 0 / 2%) 0px,
-			rgb(0 0 0 / 2%) 2px,
-			transparent 2px,
-			transparent 6px
-		);
+	background-image: repeating-linear-gradient(
+		45deg,
+		rgb(0 0 0 / 2%) 0px,
+		rgb(0 0 0 / 2%) 2px,
+		transparent 2px,
+		transparent 6px
+	);
 	opacity: 0.25;
 	mix-blend-mode: overlay;
 	animation: pattern-drift 8s linear infinite;
