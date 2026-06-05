@@ -960,6 +960,9 @@
 							window.customAudioGain.gain.value = volume;
 							src.connect(window.customAudioGain);
 							src.start(0);
+							window.customAudioBuffer = decoded;
+							window.customAudioStartTime = ctx.currentTime;
+							window.customAudioOffset = 0;
 							window.customAudioSource = src;
 							resolve();
 						},
