@@ -354,6 +354,25 @@ function updateShopUI() {
 			pip.classList.toggle('on', i < (shopUpgrades.magnet || 0));
 		});
 	}
+
+	const luckBarFill = document.getElementById('luckBarFill');
+	if (luckBarFill) {
+		luckBarFill.style.width = (shopUpgrades.luck / 100) * 100 + '%';
+	}
+
+	const pointPips = document.getElementById('pointPips');
+	if (pointPips) {
+		pointPips.querySelectorAll('.level-pip').forEach((pip, i) => {
+			pip.classList.toggle('on', i < (shopUpgrades.pointMult || 0));
+		});
+	}
+
+	const dupePips = document.getElementById('dupePips');
+	if (dupePips) {
+		dupePips.querySelectorAll('.level-pip').forEach((pip, i) => {
+			pip.classList.toggle('on', i < (shopUpgrades.duplicate || 0));
+		});
+	}
 }
 
 function updatePotionUI() {

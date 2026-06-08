@@ -190,4 +190,213 @@ console.log(performance.now());
 			setTimeout(() => input.focus(), 50);
 		});
 	};
+
+	// ─custom fucking dropdown
+  // bitch
+	// sorry
+	
+	const DD_WRAP_CSS =
+		'position:relative;display:inline-block;width:100%;font-family:monospace;font-size:0.85em;';
+	const DD_TRIGGER_CSS =
+		'width:100%;padding:4px 28px 4px 8px;background:var(--input-bg);' +
+		'border:1px solid var(--border-color);color:var(--text-color);border-radius:2px;' +
+		'cursor:pointer;text-align:left;font-family:monospace;font-size:1em;' +
+		'white-space:nowrap;overflow:hidden;text-overflow:ellipsis;';
+	const DD_ARROW_CSS =
+		'position:absolute;right:8px;top:50%;transform:translateY(-50%);' +
+		'pointer-events:none;opacity:0.5;font-size:0.8em;';
+	const DD_LIST_CSS =
+		'position:fixed;background:var(--panel-bg);border:1px solid var(--border-color);' +
+		'border-radius:2px;z-index:30000;max-height:260px;overflow-y:auto;' +
+		'box-shadow:0 4px 16px rgba(0,0,0,0.5);min-width:160px;';
+	const DD_ITEM_CSS =
+		'padding:7px 12px;cursor:pointer;font-family:monospace;font-size:0.85em;' +
+		'color:var(--text-color);text-align:left;white-space:nowrap;';
+	const DD_ITEM_ACTIVE_CSS = DD_ITEM_CSS + 'background:var(--button-hover);';
+	const DD_ITEM_SELECTED_CSS = DD_ITEM_CSS + 'opacity:1;font-weight:bold;';
+
+	let activeDropdown = null;
+
+	function closeActiveDropdown() {
+		if (activeDropdown) {
+			activeDropdown.remove();
+			activeDropdown = null;
+		}
+	}
+
+	document.addEventListener('pointerdown', (e) => {
+		if (activeDropdown && !activeDropdown.contains(e.target)) closeActiveDropdown();
+	});
+
+	document.addEventListener('keydown', (e) => {
+		if (e.key === 'Escape') closeActiveDropdown();
+	});
+
+	function initDropdown(select) {
+		if (select._ddInit) return;
+		select._ddInit = true;
+		select.style.display = 'none';
+
+		const wrap = document.createElement('div');
+		wrap.style.cssText = DD_WRAP_CSS;
+		// copy inline styles like width/margin-top from original
+		if (select.style.cssText) {
+			const w = select.style.width;
+			const mt = select.style.marginTop;
+			if (w) wrap.style.width = w;
+			if (mt) wrap.style.marginTop = mt;
+		}
+
+		const trigger = document.createElement('button');
+		trigger.style.cssText = DD_TRIGGER_CSS;
+		trigger.textContent = select.options[select.selectedIndex]?.text ?? '';
+
+		const arrow = document.createElement('span');
+		arrow.style.cssText = DD_ARROW_CSS;
+		arrow.textContent = '▾';
+
+		wrap.appendChild(trigger);
+		wrap.appendChild(arrow);
+		select.parentNode.insertBefore(wrap, select.nextSibling);
+
+		trigger.addEventListener('click', (e) => {
+			e.stopPropagation();
+
+			if (activeDropdown) {
+				closeActiveDropdown();
+				return;
+			}
+
+			const list = document.createElement('div');
+			list.style.cssText = DD_LIST_CSS;
+
+			Array.from(select.options).forEach((opt, i) => {
+				const item = document.createElement('div');
+				item.style.cssText = i === select.selectedIndex ? DD_ITEM_SELECTED_CSS : DD_ITEM_CSS;
+				item.textContent = opt.text;
+
+				item.addEventListener('pointerenter', () => {
+					item.style.cssText = DD_ITEM_ACTIVE_CSS;
+				});
+				item.addEventListener('pointerleave', () => {
+					item.style.cssText = i === select.selectedIndex ? DD_ITEM_SELECTED_CSS : DD_ITEM_CSS;
+				});
+				item.addEventListener('pointerdown', (ev) => {
+					ev.stopPropagation();
+					select.selectedIndex = i;
+					trigger.textContent = opt.text;
+					select.dispatchEvent(new Event('change', { bubbles: true }));
+					closeActiveDropdown();
+				});
+
+				list.appendChild(item);
+			});
+
+			// position below trigger
+			const rect = trigger.getBoundingClientRect();
+			list.style.top = (rect.bottom + 2) + 'px';
+			list.style.left = rect.left + 'px';
+			list.style.width = rect.width + 'px';
+
+			document.body.appendChild(list);
+			activeDropdown = list;
+
+			// scroll selected into view
+			const selectedItem = list.children[select.selectedIndex];
+			if (selectedItem) selectedItem.scrollIntoView({ block: 'nearest' });
+		});
+
+		// keep trigger text in sync if value changes programmatically
+		const observer = new MutationObserver(() => {
+			trigger.textContent = select.options[select.selectedIndex]?.text ?? '';
+		});
+		observer.observe(select, { attributes: true, childList: true, subtree: true });
+
+		// also sync on programmatic .value changes
+		const origSetter = Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype, 'value')?.set;
+		if (origSetter) {
+			const sel = select;
+			Object.defineProperty(sel, 'value', {
+				set(v) {
+					origSetter.call(sel, v);
+					trigger.textContent = sel.options[sel.selectedIndex]?.text ?? '';
+				},
+				get() {
+					return HTMLSelectElement.prototype.value.__proto__ ?
+						sel.value : Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype, 'value').get.call(sel);
+				},
+				configurable: true,
+			});
+		}
+	}
+
+	function initAllDropdowns() {
+		document.querySelectorAll('select').forEach(initDropdown);
+	}
+
+	// init on load, and watch for dynamically added selects
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', initAllDropdowns);
+	} else {
+		initAllDropdowns();
+	}
+
+	const ddObserver = new MutationObserver(() => {
+		document.querySelectorAll('select:not([_ddInit])').forEach(initDropdown);
+	});
+	ddObserver.observe(document.body, { childList: true, subtree: true });
+
+	// file input styliung
+
+	const FILE_BTN_CSS =
+		'padding:6px 12px;background:var(--button-bg);border:1px solid var(--border-color);' +
+		'color:var(--text-color);font-family:monospace;font-size:0.85em;border-radius:2px;' +
+		'cursor:pointer;display:inline-block;';
+	const FILE_NAME_CSS =
+		'font-size:0.8em;opacity:0.5;margin-left:8px;font-family:monospace;vertical-align:middle;';
+
+	function initFileInput(input) {
+		if (input._fileInit) return;
+		input._fileInit = true;
+		input.style.display = 'none';
+
+		const btn = document.createElement('button');
+		btn.style.cssText = FILE_BTN_CSS;
+		btn.textContent = 'choose file';
+
+		const nameSpan = document.createElement('span');
+		nameSpan.style.cssText = FILE_NAME_CSS;
+		nameSpan.textContent = 'no file chosen';
+
+		const wrapper = document.createElement('div');
+		wrapper.style.cssText = 'display:flex;align-items:center;margin-top:' +
+			(input.style.marginTop || '0');
+
+		btn.addEventListener('click', () => input.click());
+
+		input.addEventListener('change', () => {
+			const f = input.files?.[0];
+			nameSpan.textContent = f ? f.name : 'no file chosen';
+		});
+
+		input.parentNode.insertBefore(wrapper, input.nextSibling);
+		wrapper.appendChild(btn);
+		wrapper.appendChild(nameSpan);
+	}
+
+	function initAllFileInputs() {
+		document.querySelectorAll('input[type="file"]').forEach(initFileInput);
+	}
+
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', initAllFileInputs);
+	} else {
+		initAllFileInputs();
+	}
+
+	const fileObserver = new MutationObserver(() => {
+		document.querySelectorAll('input[type="file"]:not([_fileInit])').forEach(initFileInput);
+	});
+	fileObserver.observe(document.body, { childList: true, subtree: true });
+
 })();
