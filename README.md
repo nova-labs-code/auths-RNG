@@ -56,7 +56,8 @@ refer to `CONTRIBUTING.md` and especially `meta/TESTING.md` before diving in!
 
 # testing locally
 
-1. clone the repo: `git clone https://github.com/auth1ery/auths-RNG.git` and cd into it
+1. clone the repo: `git clone --branch nightly --single-branch https://github.com/authsrng-game/auths-RNG.git` and cd into it
+(clones nightly since it is the main development branch)
 2. create a branch: `git checkout -b <branch-name>`
 3. make your changes! no frameworks, no installs, just HTML/CSS/JS because boring = good. then open `index.html` or spin up a dev server to test
 4. push when ready:
