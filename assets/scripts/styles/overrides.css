@@ -1282,10 +1282,10 @@ select {
 }
 
 .potion-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 14px;
-    margin-bottom: 16px;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 14px;
+	margin-bottom: 16px;
 }
 
 @media (width <= 380px) {
@@ -1295,14 +1295,14 @@ select {
 }
 
 .shop-item:hover {
-    border-color: #444;
+	border-color: #444;
 }
 
 .shop-item-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 10px;
 }
 
 .well-header {
