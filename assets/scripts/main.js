@@ -259,7 +259,7 @@ function triggerConfetti() {
 // ── rolls since last rare ─────────────────────────────────────────────────
 let rollsSinceLastRare = 0;
 function updateRollsSinceRare(rolledRarity) {
-	const thresh = window.rareThreshold || 1000;
+	const thresh = window.rareThreshold ?? 1000;
 	const denom = Math.round(1 / rolledRarity.chance);
 	if (denom >= thresh) {
 		rollsSinceLastRare = 0;
@@ -506,15 +506,25 @@ function showConfirmModal(title, text, onConfirm) {
 
 	modalTitle.textContent = title;
 	modalText.textContent = text;
-	modal.style.display = 'flex'; // was already correct but CSS needed .show class
+	modal.style.display = 'flex';
 
 	const newConfirmBtn = confirmBtn.cloneNode(true);
 	const newCancelBtn = cancelBtn.cloneNode(true);
 	confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
 	cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
 
+	// clear any leftover handler from a previous invocation
+	if (modal._bgClickHandler) {
+		modal.removeEventListener('click', modal._bgClickHandler);
+		modal._bgClickHandler = null;
+	}
+
 	const close = () => {
 		modal.style.display = 'none';
+		if (modal._bgClickHandler) {
+			modal.removeEventListener('click', modal._bgClickHandler);
+			modal._bgClickHandler = null;
+		}
 	};
 
 	newConfirmBtn.addEventListener('click', () => {
@@ -524,11 +534,9 @@ function showConfirmModal(title, text, onConfirm) {
 	newCancelBtn.addEventListener('click', close);
 
 	const bgClickHandler = (e) => {
-		if (e.target === modal) {
-			close();
-			modal.removeEventListener('click', bgClickHandler);
-		}
+		if (e.target === modal) close();
 	};
+	modal._bgClickHandler = bgClickHandler;
 	modal.addEventListener('click', bgClickHandler);
 }
 
@@ -1153,11 +1161,14 @@ setInterval(() => {
 		points += shopUpgrades.printer;
 		updatePointsDisplay();
 
-		// Only rebuild the full shop UI when crossing an upgrade cost threshold
 		const luckCost = Math.floor(25 + shopUpgrades.luck * shopUpgrades.luck * 15);
 		const speedCost = Math.floor(50 + shopUpgrades.speed * shopUpgrades.speed * 55);
 		const pointCost = Math.floor(100 + shopUpgrades.pointMult * shopUpgrades.pointMult * 35);
-		const thresholds = [luckCost, speedCost, pointCost];
+		const magnetCost = 500 + (shopUpgrades.magnet || 0) * 1000;
+		const printerCost = 1000 + (shopUpgrades.printer || 0) * (shopUpgrades.printer || 0) * 500;
+		const dupeCost = 800 + (shopUpgrades.duplicate || 0) * (shopUpgrades.duplicate || 0) * 400;
+
+		const thresholds = [luckCost, speedCost, pointCost, magnetCost, printerCost, dupeCost];
 		const crossed = thresholds.some((t) => points >= t !== _lastShopUIPoints >= t);
 		if (crossed || _lastShopUIPoints < 0) updateShopUI();
 		_lastShopUIPoints = points;
@@ -1914,6 +1925,7 @@ function maybeFireConfettiAndCutscene(res) {
 	if (confettiThresh > 0 && denom >= confettiThresh) triggerConfetti();
 
 	const hasCutscene = !!cutsceneMap[res.name];
+	console.log('[cutscene]', { denom, thresh: window.cutsceneThreshold, hasCutscene });
 	const cutsceneAllowed = hasCutscene && (cutsceneThresh === 0 || denom >= cutsceneThresh);
 
 	const afterReveal = () => {

@@ -647,6 +647,23 @@ select {
 	flex-direction: column;
 }
 
+.points-amount {
+	font-size: 2.1em;
+	color: var(--points-color, #ffb86b);
+	letter-spacing: 0.01em;
+}
+
+.shop-item-cost {
+	font-size: 0.82em;
+	color: var(--points-color, #ffb86b);
+}
+
+.potion-cost {
+	font-size: 0.78em;
+	color: var(--points-color, #ffb86b);
+	margin-bottom: 3px;
+}
+
 #totalRolls {
 	opacity: 0.65;
 	font-size: 0.95em;

@@ -778,7 +778,6 @@
 			'te-sa-wakeText',
 			'te-sa-speed',
 			'te-sa-skipOnReturn',
-			'te-sa-skipOnReturn',
 			'te-sa-customCode',
 		];
 		ids.forEach((id) => {

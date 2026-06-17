@@ -232,18 +232,6 @@
 		}
 	}
 
-	async function saveChanges() {
-		const current = getCurrentSettings();
-		applyVisuals(current);
-		await applyMusic(current);
-		syncUIToSettings(current);
-		savedSettings = current;
-		try {
-			localStorage.setItem('userSettings', JSON.stringify(current));
-		} catch (_) {}
-		hidePendingBar();
-	}
-
 	function discardChanges() {
 		applyVisuals(savedSettings);
 		syncUIToSettings(savedSettings);
@@ -508,6 +496,16 @@
 		const commands = {
 			off() {
 				closeConsole();
+				const panel = document.getElementById('devOverlayPanel');
+				if (panel) panel.style.display = 'none';
+				if (typeof saveAllData === 'function') {
+					// reflect in settings
+				}
+				const devCb = document.getElementById('devOverlay');
+				if (devCb) {
+					devCb.checked = false;
+					devCb.dispatchEvent(new Event('change'));
+				}
 			},
 			help() {
 				dcLog('commands:', 'info');
@@ -1054,6 +1052,7 @@
 		window.rollSoundSetting = settings.rollSound || 'none';
 		window.rareThreshold = settings.rareThreshold ?? 1000;
 		window.autoSellThreshold = settings.autoSellThreshold || 0;
+		window.cutsceneThreshold = settings.cutsceneThreshold || 0;
 
 		const luckBreak = el('luckBreakdown');
 		if (luckBreak) luckBreak.style.display = settings.hideLuckBreakdown ? 'none' : '';
@@ -1108,11 +1107,22 @@
 			autoSellThreshold: parseInt((el('autoSellThreshold') || {}).value || 0, 10),
 		};
 	}
-	// ── onChange — fires on every UI interaction ──────────────────────────
-	// Only applies visuals (safe). Music is NOT touched until save. We will not make the stupid fucking bug once again.
+
 	function onChange() {
-		applyVisuals(getCurrentSettings());
+		applyVisuals({ ...savedSettings, ...getCurrentSettings() });
 		showPendingBar();
+	}
+
+	async function saveChanges() {
+		const current = { ...savedSettings, ...getCurrentSettings() };
+		applyVisuals(current);
+		await applyMusic(current);
+		syncUIToSettings(current);
+		savedSettings = current;
+		try {
+			localStorage.setItem('userSettings', JSON.stringify(current));
+		} catch (_) {}
+		hidePendingBar();
 	}
 
 	// ── Event binding ─────────────────────────────────────────────────────
@@ -1664,7 +1674,6 @@
 	async function init() {
 		console.log('[settings] initializing...');
 		createPendingBar();
-		bindSettings();
 		bindCustomMusicUpload();
 		bindTransfer();
 		bindLegacyMode();
@@ -1715,8 +1724,9 @@
 
 		savedSettings = { ...defaults, ...loaded };
 		applyVisuals(savedSettings);
-		applyMusic(savedSettings);
-		syncUIToSettings(savedSettings);
+		await applyMusic(savedSettings);
+		syncUIToSettings(savedSettings); // sync UI first
+		bindSettings(); // THEN bind, so no spurious change events fireeee
 		console.log('[settings] initialized.');
 	}
 
