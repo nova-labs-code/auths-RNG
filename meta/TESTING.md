@@ -4,7 +4,7 @@ this document is for contributors who want to test features without grinding for
 
 ## wait, this isnt for finding bugs?
 
-no! this isn't for finding bugs. this is mainly for testers who wanna get ahead and test their new features and other stuff out. finding bugs and problems is handled with the smoke, lighthouse, ESLint, stylelint, HTMLLint checks that happens and checks with EVERY commit.
+no! this isn't for finding bugs. this is mainly for testers who wanna get ahead and test their new features and other stuff out. finding bugs and problems is handled with the automatic cleanups (smoke, lighthouse, ESLint, stylelint, HTMLHint) made by bots.
 
 ## quick start
 
