@@ -46,7 +46,7 @@ test.describe('auths-RNG smoke tests', () => {
 	});
 
 	test('styles.css loads', async ({ page }) => {
-		const res = await page.goto(`${BASE_URL}/styles.css`);
+		const res = await page.goto(`${BASE_URL}/assets/scripts/styles/styles.css`);
 		expect(res.status()).toBe(200);
 	});
 
@@ -56,4 +56,15 @@ test.describe('auths-RNG smoke tests', () => {
 		const body = await res.text();
 		expect(() => JSON.parse(body)).not.toThrow();
 	});
+
+	// Generated code starts here on 2026-06-18T00:28:00Z:
+	test('devOverlayPanel is a singleton', async ({ page }) => {
+		await page.goto(BASE_URL);
+		const count = await page.evaluate(() => {
+			/* global document */
+			return document.querySelectorAll('#devOverlayPanel').length;
+		});
+		expect(count).toBe(1);
+	});
+	// Generated code ends here on 2026-06-18T00:28:00Z:
 });

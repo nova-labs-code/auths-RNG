@@ -3,6 +3,8 @@
 	"rules": {
 		"selector-id-pattern": null,
 		"keyframes-name-pattern": null,
-		"property-no-vendor-prefix": null
+		"property-no-vendor-prefix": null,
+		"no-descending-specificity": null,
+		"no-duplicate-selectors": null
 	}
 }
