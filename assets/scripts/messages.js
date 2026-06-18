@@ -910,7 +910,7 @@ const messages = [
 	'a room without books is like a body without a soul - someone named marcus',
 	'highschool jackpot labeled dangerously yang padding',
 	'diy is everything',
-	'take it away, shelly!'
+	'take it away, shelly!',
 ];
 
 const randomIndex = Math.floor(Math.random() * messages.length);
