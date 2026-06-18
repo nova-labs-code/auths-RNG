@@ -617,199 +617,173 @@ Last release date on nightly: ${nightlyRDate}`;
 				</div>
 
 				<div class="page" id="page-8">
-					<h2 style="margin-top: 0; margin-bottom: 20px">settings</h2>
+  			<h2 style="margin-top: 0">settings</h2>
+				<div class="settings-wrap">
+					<div class="settings-group">
+						<div class="settings-group-label">appearance</div>
 
-					<button id="openThemeEditorBtn" style="width: 100%; margin-top: 12px; padding: 10px">
-						open theme editor
-					</button>
-					<div
-						id="activeThemeName"
-						style="font-size: 0.8em; opacity: 0.5; margin-top: 6px; text-align: center"
-					>
-						current: default
-					</div>
-					<small class="helper" style="margin-top: 4px"
-						>if you wanna customize every little piece of your auth's RNG, this is where you go!
-						<strong
-							>CHANGES ONLY AFFECT THE MAIN GAME AND NOT OTHER PARTS OF THE SITE (leaderboard page,
-							credits page, etc)</strong
-						></small
-					>
-					<small class="helper" style="margin-top: 4px"
-						>some presets may be broken so use them at your own risk!</small
-					>
+						<div class="setting-row">
+							<div class="setting-info">
+								<span class="setting-name">theme editor</span>
+								<span class="setting-desc">customize colors, fonts, layout</span>
+							</div>
+							<button id="openThemeEditorBtn" class="setting-btn">open <i>›</i></button>
+						</div>
 
-					<hr class="sep" style="margin: 20px 0" />
+						<div class="setting-row">
+							<div class="setting-info">
+								<span class="setting-name">legacy layout</span>
+								<span class="setting-desc">single-page view with popup shop</span>
+							</div>
+							<label class="pill-toggle">
+								<input type="checkbox" id="legacyMode" />
+								<span class="pill-track"></span>
+							</label>
+						</div>
 
-					<label style="display: block; margin-top: 12px">
-						<input type="checkbox" id="devOverlay" /> developer overlay
-					</label>
-
-					<br />
-
-					<button
-						id="erudaBtn"
-						class="small"
-						style="padding: 4px 12px; font-size: 0.8em; width: auto"
-					>
-						enable eruda once
-					</button>
-
-					<hr class="sep" style="margin: 20px 0" />
-
-					<label style="display: block; margin-top: 8px"
-						><input type="checkbox" id="muteMusic" /> mute music</label
-					>
-					<label style="display: block; margin-top: 8px"
-						><input type="checkbox" id="legacyMode" /> legacy layout</label
-					>
-					<label style="display: block; margin-top: 8px"
-						><input type="checkbox" id="rawNumbers" /> raw numbers (no abbreviation)</label
-					>
-
-					<hr class="sep" style="margin: 20px 0" />
-
-					<label style="display: block; margin-top: 12px">background music:</label>
-					<select id="musicSelect" style="width: 100%; margin-top: 4px">
-						<option value="default">Toby Fox - WELCOME TO THE CITY (default)</option>
-						<option value="wavelocity">leon chang - wavelocity</option>
-						<option value="nocturne">Chopin - Nocturne op.9 No.2</option>
-						<option value="fallout">tsubi club - ( fallout )</option>
-					</select>
-
-					<label style="display: block; margin-top: 16px">upload custom music:</label>
-					<input
-						type="file"
-						id="customMusicUpload"
-						accept="audio/*"
-						style="width: 100%; margin-top: 4px; padding: 4px"
-					/>
-					<small class="helper" style="margin-top: 4px"
-						>max 100MB total -- not uploaded to a server!</small
-					>
-
-					<div id="customMusicList" style="margin-top: 12px; display: none">
-						<label style="display: block; margin-bottom: 8px">your custom tracks:</label>
-						<div id="customTracksList"></div>
-					</div>
-
-					<hr class="sep" style="margin: 20px 0" />
-
-					<label style="display: block; margin-top: 12px">roll sound:</label>
-					<select id="rollSound" style="width: 100%; margin-top: 4px">
-						<option value="none">none (default)</option>
-						<option value="click">click</option>
-						<option value="whoosh">whoosh</option>
-						<option value="coin">coin</option>
-					</select>
-
-					<label style="display: block; margin-top: 16px">"rare" threshold (1/X and rarer):</label>
-					<input
-						type="number"
-						id="rareThreshold"
-						min="0"
-						value="1000"
-						style="width: 100%; margin-top: 4px; padding: 8px"
-					/>
-					<small class="helper"
-						>defines what counts as "rare" — used for highlights, confetti, and the rolls-since-rare
-						counter</small
-					>
-
-					<label style="display: block; margin-top: 16px"
-						>auto-sell threshold (sell rarities below 1/X, 0 = off):</label
-					>
-					<input
-						type="number"
-						id="autoSellThreshold"
-						min="0"
-						value="0"
-						style="width: 100%; margin-top: 4px; padding: 8px"
-					/>
-					<small class="helper"
-						>automatically sells any rarity with denominator below this value for points</small
-					>
-
-					<hr class="sep" style="margin: 20px 0" />
-
-					<div id="settingsTransferContainer" style="margin-top: 20px">
-						<div style="margin-bottom: 6px; opacity: 0.7">settings transfer</div>
-						<div
-							id="settingsTransferCode"
-							style="
-								font-size: 0.75em;
-								word-break: break-all;
-								background: var(--overlay-bg);
-								border: 1px solid var(--border-color);
-								padding: 6px 8px;
-								border-radius: 3px;
-								max-height: 3.5em;
-								overflow: hidden;
-								margin-bottom: 6px;
-								user-select: all;
-								opacity: 0.6;
-								transition: max-height 0.2s ease;
-							"
-						></div>
-						<div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center">
-							<button class="small" id="exportSettingsBtn">copy</button>
-							<button class="small" id="downloadSettingsBtn">download</button>
-							<button class="small" id="refreshSettingsBtn">refresh</button>
-							<button class="small" id="importSettingsBtn">import</button>
-							<button class="small" id="showMoreSettingsBtn" style="opacity: 0.5; display: none">
-								show more
-							</button>
+						<div class="setting-row">
+							<div class="setting-info">
+								<span class="setting-name">raw numbers</span>
+								<span class="setting-desc">disable abbreviation (1k → 1000)</span>
+							</div>
+							<label class="pill-toggle">
+								<input type="checkbox" id="rawNumbers" />
+								<span class="pill-track"></span>
+							</label>
 						</div>
 					</div>
 
-					<div id="saveTransferContainer" style="margin-top: 14px">
-						<div style="margin-bottom: 6px; opacity: 0.7">save data transfer</div>
-						<div
-							id="saveTransferCode"
-							style="
-								font-size: 0.75em;
-								word-break: break-all;
-								background: var(--overlay-bg);
-								border: 1px solid var(--border-color);
-								padding: 6px 8px;
-								border-radius: 3px;
-								max-height: 3.5em;
-								overflow: hidden;
-								margin-bottom: 6px;
-								user-select: all;
-								opacity: 0.6;
-								transition: max-height 0.2s ease;
-							"
-						></div>
-						<div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center">
-							<button class="small" id="exportSaveBtn">copy</button>
-							<button class="small" id="downloadSaveBtn">download</button>
-							<button class="small" id="refreshSaveBtn">refresh</button>
-							<button class="small" id="importSaveBtn">import</button>
-							<button class="small" id="showMoreSaveBtn" style="opacity: 0.5; display: none">
-								show more (do not press)
-							</button>
+					<div class="settings-group">
+						<div class="settings-group-label">audio</div>
+
+						<div class="setting-row">
+							<div class="setting-info">
+								<span class="setting-name">mute music</span>
+							</div>
+							<label class="pill-toggle">
+								<input type="checkbox" id="muteMusic" />
+								<span class="pill-track"></span>
+							</label>
+						</div>
+
+						<div class="setting-row setting-row--stacked">
+							<span class="setting-name">background music</span>
+							<select id="musicSelect" class="setting-select">
+								<option value="default">Toby Fox — WELCOME TO THE CITY</option>
+								<option value="wavelocity">leon chang — wavelocity</option>
+								<option value="nocturne">Chopin — Nocturne op.9 No.2</option>
+								<option value="fallout">tsubi club — ( fallout )</option>
+							</select>
+						</div>
+
+						<div class="setting-row setting-row--stacked">
+							<span class="setting-name">roll sound</span>
+							<select id="rollSound" class="setting-select">
+								<option value="none">none</option>
+								<option value="click">click</option>
+								<option value="whoosh">whoosh</option>
+								<option value="coin">coin</option>
+							</select>
+						</div>
+
+						<div class="setting-row setting-row--stacked">
+							<span class="setting-name">custom music <span class="setting-badge">max 100mb</span></span>
+							<input type="file" id="customMusicUpload" accept="audio/*" class="setting-file" />
+						</div>
+
+						<div id="customMusicList" style="display:none">
+							<div id="customTracksList"></div>
 						</div>
 					</div>
 
-					<hr class="sep" style="margin: 20px 0" />
+					<div class="settings-group">
+						<div class="settings-group-label">gameplay</div>
 
-					<div style="margin-bottom: 6px; opacity: 0.7">cloud backups</div>
-					<div id="cloudBackupSection"></div>
+						<div class="setting-row setting-row--stacked">
+							<div class="setting-info">
+								<span class="setting-name">"rare" threshold</span>
+								<span class="setting-desc">1/X and rarer · used for highlights and the rolls-since-rare counter</span>
+							</div>
+							<input type="number" id="rareThreshold" min="0" value="1000" class="setting-input" />
+						</div>
 
-					<hr class="sep" style="margin: 20px 0" />
-					<div style="margin-bottom: 6px; opacity: 0.7">leaderboard</div>
-					<div id="leaderboardSection"></div>
+						<div class="setting-row setting-row--stacked">
+							<div class="setting-info">
+								<span class="setting-name">auto-sell threshold</span>
+								<span class="setting-desc">sell rarities below 1/X for points automatically · 0 = off</span>
+							</div>
+							<input type="number" id="autoSellThreshold" min="0" value="0" class="setting-input" />
+						</div>
+					</div>
+
+					<div class="settings-group">
+						<div class="settings-group-label">developer</div>
+
+						<div class="setting-row">
+							<div class="setting-info">
+								<span class="setting-name">dev overlay</span>
+							</div>
+							<label class="pill-toggle">
+								<input type="checkbox" id="devOverlay" />
+								<span class="pill-track"></span>
+							</label>
+						</div>
+
+						<div class="setting-row">
+							<div class="setting-info">
+								<span class="setting-name">eruda console</span>
+								<span class="setting-desc">load once per session</span>
+							</div>
+							<button id="erudaBtn" class="setting-btn small">enable</button>
+						</div>
+					</div>
+
+					<div class="settings-group">
+						<div class="settings-group-label">data</div>
+
+						<div class="settings-transfer-block">
+							<div class="transfer-label">settings</div>
+							<div id="settingsTransferCode" class="transfer-code"></div>
+							<div class="transfer-actions">
+								<button class="small" id="exportSettingsBtn">copy</button>
+								<button class="small" id="downloadSettingsBtn">download</button>
+								<button class="small" id="refreshSettingsBtn">refresh</button>
+								<button class="small" id="importSettingsBtn">import</button>
+							</div>
+						</div>
+
+						<div class="settings-transfer-block">
+							<div class="transfer-label">save data</div>
+							<div id="saveTransferCode" class="transfer-code"></div>
+							<div class="transfer-actions">
+								<button class="small" id="exportSaveBtn">copy</button>
+								<button class="small" id="downloadSaveBtn">download</button>
+								<button class="small" id="refreshSaveBtn">refresh</button>
+								<button class="small" id="importSaveBtn">import</button>
+							</div>
+						</div>
+					</div>
+
+					<div class="settings-group">
+						<div class="settings-group-label">cloud</div>
+						<div id="cloudBackupSection"></div>
+					</div>
+
+					<div class="settings-group">
+						<div class="settings-group-label">leaderboard</div>
+						<div id="leaderboardSection"></div>
+					</div>
 				</div>
+			</div>
 
 				<div class="page" id="page-9">
 					<h2 style="margin-top: 0">links and more</h2>
 
 					<!--
-  <button id="rankedModeBtn" class="lazy" style="margin-bottom: 20px; width: 100%; max-width: 400px; font-size: 1.1em; padding: 12px; background: linear-gradient(90deg, #ff6b6b, #4ecdc4); color: #000; border: none; font-weight: bold;">
-    ranked mode
-  </button>
--->
+					<button id="rankedModeBtn" class="lazy" style="margin-bottom: 20px; width: 100%; max-width: 400px; font-size: 1.1em; padding: 12px; background: linear-gradient(90deg, #ff6b6b, #4ecdc4); color: #000; border: none; font-weight: bold;">
+						ranked mode
+					</button>
+				-->
 
 					<script>
 						const rankedBtn = document.getElementById('rankedModeBtn');
