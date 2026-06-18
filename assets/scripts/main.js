@@ -2003,7 +2003,9 @@ rollBtn.addEventListener('click', () => {
 
 		setTimeout(() => {
 			try {
+				if (window._perfMarkRollStart) window._perfMarkRollStart();
 				spinAndReveal(res);
+				if (window._perfMarkRollEnd) window._perfMarkRollEnd();
 			} catch (e) {
 				console.error('spinAndReveal failed:', e);
 				rollBtn.disabled = false;

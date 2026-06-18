@@ -337,22 +337,27 @@
 
 	// ── Dev overlay ───────────────────────────────────────────────────────
 	function startDevOverlay(settings) {
+		if (window.__devOverlayStarted) return;
+		window.__devOverlayStarted = true;
+
 		const panel = document.getElementById('devOverlayPanel');
-		const toggleBtn = document.getElementById('devOverlayToggle');
 		if (!panel) return;
+
 		clearInterval(devInterval);
 		devInterval = null;
+
 		if (!settings.dev) {
 			panel.style.display = 'none';
-			if (toggleBtn) toggleBtn.style.display = 'none';
 			return;
 		}
+
 		panel.style.display = 'block';
-		if (toggleBtn) toggleBtn.style.display = 'none';
+
 		if (!panel._dcInit) {
 			panel._dcInit = true;
 			initDevConsole(panel);
 		}
+
 		devInterval = setInterval(() => updateDevStats(panel, settings), 500);
 	}
 
@@ -434,6 +439,324 @@
 				flagsRow.appendChild(btn);
 			});
 		}
+
+		// ── Tabs ──────────────────────────────────────────────────────────────
+		document.querySelectorAll('.dev-tab').forEach((btn) => {
+			btn.addEventListener('click', () => {
+				document.querySelectorAll('.dev-tab').forEach((b) => b.classList.remove('active'));
+				document.querySelectorAll('.dev-tab-content').forEach((c) => (c.style.display = 'none'));
+				btn.classList.add('active');
+				document.getElementById('dct-' + btn.dataset.tab).style.display = 'block';
+				if (btn.dataset.tab === 'storage') renderStorage();
+				if (btn.dataset.tab === 'perf') startPerfTab();
+				if (btn.dataset.tab === 'network') renderNetwork();
+				if (btn.dataset.tab === 'watch') renderWatchList();
+			});
+		});
+
+		// ── Storage tab ────────────────────────────────────────────────────────
+		let storageEditKey = null;
+
+		function renderStorage(filter) {
+			const list = document.getElementById('dc-storage-list');
+			const search = document.getElementById('dc-storage-search');
+			const sizeEl = document.getElementById('dc-storage-size');
+			if (!list) return;
+			const q = (filter ?? search?.value ?? '').toLowerCase();
+			let totalBytes = 0;
+			const rows = [];
+			for (let i = 0; i < localStorage.length; i++) {
+				const k = localStorage.key(i);
+				const v = localStorage.getItem(k);
+				totalBytes += k.length + v.length;
+				if (q && !k.toLowerCase().includes(q)) continue;
+				rows.push({ k, size: v.length });
+			}
+			rows.sort((a, b) => b.size - a.size);
+			if (sizeEl) sizeEl.textContent = (totalBytes / 1024).toFixed(1) + 'KB total';
+			list.innerHTML = '';
+			rows.forEach(({ k, size }) => {
+				const row = document.createElement('div');
+				row.className = 'dc-stor-row';
+				row.innerHTML = `<span class="dc-stor-key">${k}</span><span class="dc-stor-size">${(size / 1024).toFixed(1)}KB</span>`;
+				row.addEventListener('click', () => openStorageEdit(k));
+				list.appendChild(row);
+			});
+		}
+
+		function openStorageEdit(key) {
+			storageEditKey = key;
+			const editEl = document.getElementById('dc-storage-edit');
+			const keyEl = document.getElementById('dc-storage-edit-key');
+			const valEl = document.getElementById('dc-storage-edit-val');
+			if (!editEl || !keyEl || !valEl) return;
+			keyEl.textContent = key;
+			valEl.value = localStorage.getItem(key) || '';
+			editEl.style.display = 'block';
+		}
+
+		document
+			.getElementById('dc-storage-search')
+			?.addEventListener('input', (e) => renderStorage(e.target.value));
+		document.getElementById('dc-storage-refresh')?.addEventListener('click', () => renderStorage());
+		document.getElementById('dc-storage-save')?.addEventListener('click', () => {
+			if (!storageEditKey) return;
+			localStorage.setItem(storageEditKey, document.getElementById('dc-storage-edit-val').value);
+			document.getElementById('dc-storage-edit').style.display = 'none';
+			renderStorage();
+		});
+		document.getElementById('dc-storage-delete')?.addEventListener('click', () => {
+			if (!storageEditKey) return;
+			localStorage.removeItem(storageEditKey);
+			storageEditKey = null;
+			document.getElementById('dc-storage-edit').style.display = 'none';
+			renderStorage();
+		});
+		document.getElementById('dc-storage-cancel')?.addEventListener('click', () => {
+			document.getElementById('dc-storage-edit').style.display = 'none';
+			storageEditKey = null;
+		});
+
+		// ── Network tab ────────────────────────────────────────────────────────
+		const netLog = [];
+		const _origFetch = window.fetch;
+		let netPaused = false;
+
+		window.fetch = function (...args) {
+			const url = typeof args[0] === 'string' ? args[0] : args[0]?.url || '?';
+			const method = args[1]?.method || 'GET';
+			const entry = { url, method, status: null, ms: null, ts: Date.now(), pending: true };
+			if (!netPaused) netLog.unshift(entry);
+			if (netLog.length > 200) netLog.pop();
+			const start = performance.now();
+			return _origFetch
+				.apply(this, args)
+				.then((res) => {
+					entry.status = res.status;
+					entry.ms = Math.round(performance.now() - start);
+					entry.pending = false;
+					if (!netPaused) renderNetwork();
+					return res;
+				})
+				.catch((err) => {
+					entry.status = 'ERR';
+					entry.ms = Math.round(performance.now() - start);
+					entry.pending = false;
+					if (!netPaused) renderNetwork();
+					throw err;
+				});
+		};
+
+		function renderNetwork() {
+			const list = document.getElementById('dc-net-list');
+			if (!list) return;
+			list.innerHTML = '';
+			netLog.forEach((e) => {
+				const row = document.createElement('div');
+				row.className = 'dc-net-row';
+				const statusCls = e.pending
+					? 'dc-net-pending'
+					: e.status >= 200 && e.status < 300
+						? 'dc-net-ok'
+						: 'dc-net-err';
+				const shortUrl = e.url.replace(/https?:\/\/[^/]+/, '').slice(0, 60) || e.url.slice(0, 60);
+				row.innerHTML = `
+            <span class="${statusCls}">${e.pending ? '...' : e.status}</span>
+            <span class="dc-net-method">${e.method}</span>
+            <span class="dc-net-url" title="${e.url}">${shortUrl}</span>
+            <span class="dc-net-time">${e.pending ? '' : e.ms + 'ms'}</span>
+        `;
+				list.appendChild(row);
+			});
+		}
+
+		document.getElementById('dc-net-clear')?.addEventListener('click', () => {
+			netLog.length = 0;
+			renderNetwork();
+		});
+		document.getElementById('dc-net-pause')?.addEventListener('change', (e) => {
+			netPaused = e.target.checked;
+		});
+
+		// ── Perf tab ───────────────────────────────────────────────────────────
+		const perfSamples = { fps: [], rollMs: [] };
+		let perfTabActive = false;
+		let perfRAF = null;
+
+		window._perfMarkRollStart = function () {
+			window._rollPerfStart = performance.now();
+		};
+		window._perfMarkRollEnd = function () {
+			if (window._rollPerfStart) {
+				perfSamples.rollMs.push(Math.round(performance.now() - window._rollPerfStart));
+				if (perfSamples.rollMs.length > 60) perfSamples.rollMs.shift();
+			}
+		};
+
+		function startPerfTab() {
+			perfTabActive = true;
+			drawPerf();
+		}
+
+		function drawPerf() {
+			if (!perfTabActive) return;
+			const canvas = document.getElementById('dc-perf-canvas');
+			const statsEl = document.getElementById('dc-perf-stats');
+			if (!canvas) return;
+
+			canvas.width = canvas.offsetWidth;
+			const ctx = canvas.getContext('2d');
+			const w = canvas.width,
+				h = canvas.height;
+			ctx.fillStyle = '#0a0a0a';
+			ctx.fillRect(0, 0, w, h);
+
+			// fps samples
+			if (window._devFPS) {
+				perfSamples.fps.push(window._devFPS);
+				if (perfSamples.fps.length > w) perfSamples.fps.shift();
+			}
+
+			function drawLine(samples, color, max) {
+				if (samples.length < 2) return;
+				ctx.beginPath();
+				ctx.strokeStyle = color;
+				ctx.lineWidth = 1;
+				samples.forEach((v, i) => {
+					const x = (i / (samples.length - 1)) * w;
+					const y = h - (v / max) * h;
+					i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+				});
+				ctx.stroke();
+			}
+
+			drawLine(perfSamples.fps, '#5d5', 120);
+			drawLine(perfSamples.rollMs, '#fa6', 2000);
+
+			// legend
+			ctx.font = '10px monospace';
+			ctx.fillStyle = '#5d5';
+			ctx.fillText('fps', 4, 12);
+			ctx.fillStyle = '#fa6';
+			ctx.fillText('roll ms', 30, 12);
+
+			// stats
+			const avg = (arr) =>
+				arr.length ? Math.round(arr.reduce((a, b) => a + b, 0) / arr.length) : 0;
+			const max = (arr) => (arr.length ? Math.max(...arr) : 0);
+			const min = (arr) => (arr.length ? Math.min(...arr) : 0);
+
+			if (statsEl) {
+				const mem = performance.memory
+					? (performance.memory.usedJSHeapSize / 1024 / 1024).toFixed(1) + 'MB'
+					: 'n/a';
+				statsEl.innerHTML = `
+            <span style="color:#555">fps avg</span><span style="color:#5d5">${avg(perfSamples.fps)}</span>
+            <span style="color:#555">fps min</span><span style="color:#5d5">${min(perfSamples.fps)}</span>
+            <span style="color:#555">roll avg</span><span style="color:#fa6">${avg(perfSamples.rollMs)}ms</span>
+            <span style="color:#555">roll max</span><span style="color:#fa6">${max(perfSamples.rollMs)}ms</span>
+            <span style="color:#555">heap</span><span style="color:#ccc">${mem}</span>
+            <span style="color:#555">ls keys</span><span style="color:#ccc">${localStorage.length}</span>
+        `;
+			}
+
+			perfRAF = setTimeout(drawPerf, 1000);
+		}
+
+		// stop FUCKING drawing when the tab is FUCKING hidden
+		document.addEventListener('visibilitychange', () => {
+			if (document.hidden) {
+				perfTabActive = false;
+				clearTimeout(perfRAF);
+			}
+		});
+
+		// ── Watch tab ────────────────────────────────────────────────────────── why do i love em fdashessssssssss
+		const watchExprs = [];
+
+		function evalWatch(expr) {
+			try {
+				return String(Function(`"use strict"; return (${expr})`)());
+			} catch (e) {
+				return 'err';
+			}
+		}
+
+		function renderWatchList() {
+			const list = document.getElementById('dc-watch-list');
+			if (!list) return;
+			list.innerHTML = '';
+			watchExprs.forEach((w, i) => {
+				const val = evalWatch(w.expr);
+				const changed = val !== w.last;
+				if (changed) w.last = val;
+				const row = document.createElement('div');
+				row.className = 'dc-watch-row';
+				row.innerHTML = `
+            <span class="dc-watch-expr">${w.expr}</span>
+            <span class="dc-watch-val ${changed ? 'dc-watch-changed' : ''}">${val}</span>
+            <button class="dc-watch-del" data-i="${i}">×</button>
+        `;
+				list.appendChild(row);
+			});
+			list.querySelectorAll('.dc-watch-del').forEach((btn) => {
+				btn.addEventListener('click', () => {
+					watchExprs.splice(parseInt(btn.dataset.i), 1);
+					renderWatchList();
+				});
+			});
+		}
+
+		document.getElementById('dc-watch-add')?.addEventListener('click', () => {
+			const inp = document.getElementById('dc-watch-input');
+			const expr = inp?.value.trim();
+			if (!expr) return;
+			watchExprs.push({ expr, last: null });
+			inp.value = '';
+			renderWatchList();
+		});
+
+		document.getElementById('dc-watch-input')?.addEventListener('keydown', (e) => {
+			if (e.key === 'Enter') document.getElementById('dc-watch-add')?.click();
+		});
+
+		setInterval(() => {
+			const watchTab = document.getElementById('dct-watch');
+			if (watchTab && watchTab.style.display !== 'none' && watchExprs.length) renderWatchList();
+		}, 500);
+
+		// dragging to moving
+		(function () {
+			const panel = document.getElementById('devOverlayPanel');
+			const dragbar = document.getElementById('dc-dragbar');
+			if (!panel || !dragbar) return;
+
+			let dragging = false,
+				ox = 0,
+				oy = 0;
+
+			dragbar.addEventListener('mousedown', (e) => {
+				dragging = true;
+				const rect = panel.getBoundingClientRect();
+				ox = e.clientX - rect.left;
+				oy = e.clientY - rect.top;
+				panel.style.right = 'auto';
+				panel.style.bottom = 'auto';
+				e.preventDefault();
+			});
+
+			document.addEventListener('mousemove', (e) => {
+				if (!dragging) return;
+				const x = Math.max(0, Math.min(window.innerWidth - panel.offsetWidth, e.clientX - ox));
+				const y = Math.max(0, Math.min(window.innerHeight - panel.offsetHeight, e.clientY - oy));
+				panel.style.left = x + 'px';
+				panel.style.top = y + 'px';
+			});
+
+			document.addEventListener('mouseup', () => {
+				dragging = false;
+			});
+		})();
 
 		function toggleDcFlag(name) {
 			dcFlags[name] = !dcFlags[name];
