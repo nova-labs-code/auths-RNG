@@ -2,6 +2,11 @@
 (function () {
 	'use strict';
 
+	// Generated code starts here on 2026-06-18T00:35:00Z:
+	if (window.__settingsLoaded) return;
+	window.__settingsLoaded = true;
+	// Generated code ends here on 2026-06-18T00:35:00Z:
+
 	console.log(performance.now());
 
 	function el(id) {
@@ -336,18 +341,17 @@
 	}
 
 	// ── Dev overlay ───────────────────────────────────────────────────────
+	// Generated code starts here on 2026-06-18T00:35:00Z:
 	function startDevOverlay(settings) {
-		if (window.__devOverlayStarted) return;
-		window.__devOverlayStarted = true;
-
 		const panel = document.getElementById('devOverlayPanel');
 		if (!panel) return;
 
-		clearInterval(devInterval);
-		devInterval = null;
-
 		if (!settings.dev) {
 			panel.style.display = 'none';
+			if (devInterval) {
+				clearInterval(devInterval);
+				devInterval = null;
+			}
 			return;
 		}
 
@@ -358,8 +362,11 @@
 			initDevConsole(panel);
 		}
 
-		devInterval = setInterval(() => updateDevStats(panel, settings), 500);
+		if (!devInterval) {
+			devInterval = setInterval(() => updateDevStats(panel, settings), 500);
+		}
 	}
+	// Generated code ends here on 2026-06-18T00:35:00Z:
 
 	function updateDevStats(panel, settings) {
 		const fps = window._devFPS || '--';
