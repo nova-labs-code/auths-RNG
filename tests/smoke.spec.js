@@ -60,7 +60,10 @@ test.describe('auths-RNG smoke tests', () => {
 	// Generated code starts here on 2026-06-18T00:28:00Z:
 	test('devOverlayPanel is a singleton', async ({ page }) => {
 		await page.goto(BASE_URL);
-		const count = await page.evaluate(() => document.querySelectorAll('#devOverlayPanel').length);
+		const count = await page.evaluate(() => {
+			/* global document */
+			return document.querySelectorAll('#devOverlayPanel').length;
+		});
 		expect(count).toBe(1);
 	});
 	// Generated code ends here on 2026-06-18T00:28:00Z:
