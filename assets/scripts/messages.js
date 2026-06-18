@@ -905,6 +905,12 @@ const messages = [
 	'🫥',
 	'🫥',
 	'🫥',
+	'you wouldnt steal a car! dont pirate kids',
+	'dont dox people kids',
+	'a room without books is like a body without a soul - someone named marcus',
+	'highschool jackpot labeled dangerously yang padding',
+	'diy is everything',
+	'take it away, shelly!'
 ];
 
 const randomIndex = Math.floor(Math.random() * messages.length);
