@@ -911,6 +911,7 @@ const messages = [
 	'highschool jackpot labeled dangerously yang padding',
 	'diy is everything',
 	'take it away, shelly!',
+ 'SCREAMING'
 ];
 
 const randomIndex = Math.floor(Math.random() * messages.length);
