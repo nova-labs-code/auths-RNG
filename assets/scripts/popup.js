@@ -241,16 +241,22 @@ console.log(performance.now());
 	const DD_ITEM_SELECTED_CSS = DD_ITEM_CSS + 'opacity:1;font-weight:bold;';
 
 	let activeDropdown = null;
+	let activeTrigger = null;
+	let suppressNextOpen = null;
 
 	function closeActiveDropdown() {
 		if (activeDropdown) {
 			activeDropdown.remove();
 			activeDropdown = null;
+			activeTrigger = null;
 		}
 	}
 
 	document.addEventListener('pointerdown', (e) => {
-		if (activeDropdown && !activeDropdown.contains(e.target)) closeActiveDropdown();
+		if (activeDropdown && !activeDropdown.contains(e.target)) {
+			if (e.target === activeTrigger) suppressNextOpen = activeTrigger;
+			closeActiveDropdown();
+		}
 	});
 
 	document.addEventListener('keydown', (e) => {
@@ -287,6 +293,11 @@ console.log(performance.now());
 		trigger.addEventListener('click', (e) => {
 			e.stopPropagation();
 
+			if (suppressNextOpen === trigger) {
+				suppressNextOpen = null;
+				return;
+			}
+
 			if (activeDropdown) {
 				closeActiveDropdown();
 				return;
@@ -316,7 +327,6 @@ console.log(performance.now());
 				list.appendChild(item);
 			});
 
-			// position below trigger
 			const rect = trigger.getBoundingClientRect();
 			list.style.top = rect.bottom + 2 + 'px';
 			list.style.left = rect.left + 'px';
@@ -324,8 +334,8 @@ console.log(performance.now());
 
 			document.body.appendChild(list);
 			activeDropdown = list;
+			activeTrigger = trigger;
 
-			// scroll selected into view
 			const selectedItem = list.children[select.selectedIndex];
 			if (selectedItem) selectedItem.scrollIntoView({ block: 'nearest' });
 		});
@@ -414,4 +424,53 @@ console.log(performance.now());
 		document.querySelectorAll('input[type="file"]:not([_fileInit])').forEach(initFileInput);
 	});
 	fileObserver.observe(document.body, { childList: true, subtree: true });
+
+	const TEXT_WRAP_CSS = 'position:relative;display:inline-block;width:100%;font-family:monospace;';
+	const TEXT_INPUT_CSS =
+		'width:100%;padding:6px 10px;background:var(--input-bg);' +
+		'border:1px solid var(--border-color);color:var(--text-color);' +
+		'font-family:monospace;font-size:0.85em;border-radius:2px;' +
+		'box-sizing:border-box;outline:none;transition:border-color 0.15s;';
+	const TEXT_INPUT_FOCUS_CSS =
+		TEXT_INPUT_CSS + 'border-color:var(--accent-color, var(--text-color));';
+
+	function initTextInput(input) {
+		if (input._txtInit) return;
+		input._txtInit = true;
+
+		const wrap = document.createElement('div');
+		wrap.style.cssText = TEXT_WRAP_CSS;
+		if (input.style.width) wrap.style.width = input.style.width;
+		if (input.style.marginTop) wrap.style.marginTop = input.style.marginTop;
+		if (input.style.marginBottom) wrap.style.marginBottom = input.style.marginBottom;
+
+		input.parentNode.insertBefore(wrap, input);
+		wrap.appendChild(input);
+
+		input.style.cssText = TEXT_INPUT_CSS;
+
+		input.addEventListener('focus', () => {
+			input.style.cssText = TEXT_INPUT_FOCUS_CSS;
+		});
+		input.addEventListener('blur', () => {
+			input.style.cssText = TEXT_INPUT_CSS;
+		});
+	}
+
+	function initAllTextInputs() {
+		document
+			.querySelectorAll('input[type="text"]:not([_txtInit]), input[type="number"]:not([_txtInit])')
+			.forEach(initTextInput);
+	}
+
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', initAllTextInputs);
+	} else {
+		initAllTextInputs();
+	}
+
+	const textObserver = new MutationObserver(() => {
+		initAllTextInputs();
+	});
+	textObserver.observe(document.body, { childList: true, subtree: true });
 })();
