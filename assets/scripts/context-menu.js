@@ -271,7 +271,6 @@
 	document.body.appendChild(menu);
 
 	function makeItem(icon, label, badge, onClick, opts = {}) {
-		console.log('[ctx-menu] item created:', label, opts);
 		const el = document.createElement('div');
 		el.className =
 			'_ctx-item' + (opts.disabled ? ' _ctx-disabled' : '') + (opts.danger ? ' _ctx-danger' : '');

@@ -1922,7 +1922,6 @@ function maybeFireConfettiAndCutscene(res) {
 	if (confettiThresh > 0 && denom >= confettiThresh) triggerConfetti();
 
 	const hasCutscene = !!cutsceneMap[res.name];
-	console.log('[cutscene]', { denom, thresh: window.cutsceneThreshold, hasCutscene });
 	const cutsceneAllowed = hasCutscene && (cutsceneThresh === 0 || denom >= cutsceneThresh);
 
 	const afterReveal = () => {
