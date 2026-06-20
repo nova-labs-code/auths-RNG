@@ -84,15 +84,8 @@ console.log(performance.now());
 		let lastSnapshot = null;
 
 		window.updateActivePotionsDisplay = function () {
-			let ap = null;
-			let dup = null;
-			try {
-				ap = typeof activePotions !== 'undefined' ? activePotions : null;
-				dup = typeof duplicateRollsLeft !== 'undefined' ? duplicateRollsLeft : null;
-			} catch (e) {
-				ap = null;
-				dup = null;
-			}
+			const ap = typeof activePotions !== 'undefined' ? activePotions : null;
+			const dup = typeof duplicateRollsLeft !== 'undefined' ? duplicateRollsLeft : null;
 
 			if (ap === null || dup === null) {
 				orig.apply(this, arguments);
