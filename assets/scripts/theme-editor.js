@@ -933,7 +933,7 @@
 		if (autoAdaptBtn) autoAdaptBtn.addEventListener('click', autoAdaptFromBackground);
 
 		syncGlowUI();
-		
+
 		if (!openBtn || !overlay) return;
 
 		let snapshotBeforeOpen = null;
