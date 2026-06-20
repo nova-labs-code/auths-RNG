@@ -1,12 +1,12 @@
 # auth's RNG
 the repository for the web game, auth's RNG!
 
-![Version](https://img.shields.io/github/v/release/auth1ery/auths-RNG)
-![Repo Size](https://img.shields.io/github/repo-size/auth1ery/auths-RNG)
-![Last Commit](https://img.shields.io/github/last-commit/auth1ery/auths-RNG)
-![License](https://img.shields.io/github/license/auth1ery/auths-RNG)
-![Code Size](https://img.shields.io/github/languages/code-size/auth1ery/auths-RNG)
-![Top Language](https://img.shields.io/github/languages/top/auth1ery/auths-RNG)
+![Version](https://img.shields.io/github/v/release/authsrng-game/auths-RNG)
+![Repo Size](https://img.shields.io/github/repo-size/authsrng-game/auths-RNG)
+![Last Commit](https://img.shields.io/github/last-commit/authsrng-game/auths-RNG)
+![License](https://img.shields.io/github/license/authsrng-game/auths-RNG)
+![Code Size](https://img.shields.io/github/languages/code-size/authsrng-game/auths-RNG)
+![Top Language](https://img.shields.io/github/languages/top/authsrng-game/auths-RNG)
 
 <p align="center">
   <img src="assets/repo1.png" width="30%" />
@@ -77,7 +77,7 @@ if you thought the git log held all of auth's RNG development history... no it d
 
 ---
 
-[![Stargazers over time](https://starchart.cc/auth1ery/auths-RNG.svg?variant=adaptive)](https://starchart.cc/auth1ery/auths-RNG)
+[![Stargazers over time](https://starchart.cc/authsrng-game/auths-RNG.svg?variant=adaptive)](https://starchart.cc/authsrng-game/auths-RNG)
 
 ---
 

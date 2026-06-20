@@ -399,7 +399,7 @@
 			);
 		});
 
-		makeSep() && menu.appendChild(makeSep());
+		menu.appendChild(makeSep());
 
 		menu.appendChild(makeHeader('actions'));
 
@@ -454,7 +454,7 @@
 			})
 		);
 
-		makeSep() && menu.appendChild(makeSep());
+		menu.appendChild(makeSep());
 
 		menu.appendChild(makeHeader('copy'));
 
@@ -528,7 +528,7 @@
 
 		menu.appendChild(
 			makeItem('📰', 'open github', '', () => {
-				window.open('https://github.com/auth1ery/auths-RNG', '_blank');
+				window.open('https://github.com/authsrng-game/auths-RNG', '_blank');
 			})
 		);
 
@@ -555,8 +555,8 @@
 		const vw = window.innerWidth;
 		const vh = window.innerHeight;
 
-		menu.style.left = Math.min(x, vw - mw - 8) + 'px';
-		menu.style.top = Math.min(y, vh - mh - 8) + 'px';
+		menu.style.left = Math.max(8, Math.min(x, vw - mw - 8)) + 'px';
+		menu.style.top = Math.max(8, Math.min(y, vh - mh - 8)) + 'px';
 	}
 
 	menu.addEventListener('pointerdown', (e) => {
@@ -564,12 +564,14 @@
 	});
 
 	document.addEventListener('contextmenu', (e) => {
+		const tag = e.target.tagName;
+		if (tag === 'INPUT' || tag === 'TEXTAREA' || e.target.isContentEditable) return;
 		e.preventDefault();
 		open(e.clientX, e.clientY);
 	});
 
 	document.addEventListener('pointerdown', (e) => {
-		if (_justOpened) console.log('[ctx-menu] ignored pointerdown (just opened)');
+		if (_justOpened) return;
 		close();
 	});
 

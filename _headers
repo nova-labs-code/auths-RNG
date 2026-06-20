@@ -121,3 +121,6 @@
 /sw.js
   Cache-Control: no-store
   Service-Worker-Allowed: /
+
+/*
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()

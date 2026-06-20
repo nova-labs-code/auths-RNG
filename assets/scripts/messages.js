@@ -265,7 +265,7 @@ const messages = [
 	'mosquitos bite but what if they would just LEAVE US ALONE',
 	'ive ran out of content',
 	"consuming your browser's memory usage circa 2025!",
-	'github.com/auth1ery/auths-RNG',
+	'github.com/authsrng-game/auths-RNG',
 	'why not check out asterisk? (located in links and more)',
 	"we've been trying to reach you about your car's extended warranty",
 	'nuiscance...',

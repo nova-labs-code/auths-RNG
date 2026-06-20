@@ -110,7 +110,12 @@ console.log(performance.now());
 			if (titleEl) box.appendChild(titleEl);
 			box.appendChild(makeMessage(message));
 
+			function handler(e) {
+				if (e.key === 'Enter' || e.key === 'Escape') close();
+			}
+
 			const close = () => {
+				document.removeEventListener('keydown', handler);
 				overlay.remove();
 				resolve();
 			};
@@ -120,12 +125,7 @@ console.log(performance.now());
 			overlay.addEventListener('click', (e) => {
 				if (e.target === overlay) close();
 			});
-			document.addEventListener('keydown', function handler(e) {
-				if (e.key === 'Enter' || e.key === 'Escape') {
-					document.removeEventListener('keydown', handler);
-					close();
-				}
-			});
+			document.addEventListener('keydown', handler);
 
 			mount(overlay, box);
 		});
@@ -140,7 +140,13 @@ console.log(performance.now());
 			if (titleEl) box.appendChild(titleEl);
 			box.appendChild(makeMessage(message));
 
+			function handler(e) {
+				if (e.key === 'Enter') finish(true);
+				if (e.key === 'Escape') finish(false);
+			}
+
 			const finish = (result) => {
+				document.removeEventListener('keydown', handler);
 				overlay.remove();
 				resolve(result);
 			};
@@ -155,16 +161,7 @@ console.log(performance.now());
 			overlay.addEventListener('click', (e) => {
 				if (e.target === overlay) finish(false);
 			});
-			document.addEventListener('keydown', function handler(e) {
-				if (e.key === 'Enter') {
-					document.removeEventListener('keydown', handler);
-					finish(true);
-				}
-				if (e.key === 'Escape') {
-					document.removeEventListener('keydown', handler);
-					finish(false);
-				}
-			});
+			document.addEventListener('keydown', handler);
 
 			mount(overlay, box);
 		});

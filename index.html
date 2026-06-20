@@ -16,6 +16,8 @@
 		<link rel="canonical" href="https://authsrng.xyz/" />
 		<link rel="preconnect" href="https://cdnjs.cloudflare.com" />
 		<link rel="dns-prefetch" href="//cdnjs.cloudflare.com" />
+		<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+		<link rel="dns-prefetch" href="//cdn.jsdelivr.net" />
 		<meta
 			name="description"
 			content="a free browser RNG game with incremental progression and rare collectible rolls"
@@ -57,11 +59,6 @@
 		<link rel="icon" sizes="192x192" href="https://authsrng.xyz/assets/images/authsRNG.png" />
 		<link rel="manifest" href="manifest.json" />
 
-		<meta
-			http-equiv="Permissions-Policy"
-			content="camera=(), microphone=(), geolocation=(), payment=()"
-		/>
-		<meta name="format-detection" content="telephone=no, email=no, address=no" />
 		<meta name="google" content="notranslate" />
 
 		<!-- for future contributors, and a note to myself: the duplicate preload is for safety, sometimes native doesnt work so we do the normal way-->
@@ -95,6 +92,7 @@
 			src="//instant.page/5.2.0"
 			type="module"
 			integrity="sha384-jnZyxPjiipYXnSU0ygqeac2q7CVYMbh84q0uHVRRxEtvFPiQYbXWUorga2aqZJ0z"
+			crossorigin="anonymous"
 			defer
 		></script>
 
@@ -161,13 +159,13 @@
 				let el = document.getElementById('nightly-info');
 				try {
 					let [mainC, nightlyC, releases] = await Promise.all([
-						fetch('https://api.github.com/repos/auth1ery/auths-RNG/commits/main').then((r) =>
+						fetch('https://api.github.com/repos/authsrng-game/auths-RNG/commits/main').then((r) =>
 							r.status === 403 ? { rate: 1 } : r.json()
 						),
-						fetch('https://api.github.com/repos/auth1ery/auths-RNG/commits/nightly').then((r) =>
-							r.status === 403 ? { rate: 1 } : r.json()
+						fetch('https://api.github.com/repos/authsrng-game/auths-RNG/commits/nightly').then(
+							(r) => (r.status === 403 ? { rate: 1 } : r.json())
 						),
-						fetch('https://api.github.com/repos/auth1ery/auths-RNG/releases').then((r) =>
+						fetch('https://api.github.com/repos/authsrng-game/auths-RNG/releases').then((r) =>
 							r.status === 403 ? { rate: 1 } : r.json()
 						),
 					]);
@@ -835,7 +833,7 @@ Last release date on nightly: ${nightlyRDate}`;
 
 					<p>join us on...</p>
 					<div class="image-column">
-						<a href="https://github.com/auth1ery/auths-RNG" class="image-link">
+						<a href="https://github.com/authsrng-game/auths-RNG" class="image-link">
 							<span class="link-text">github</span>
 						</a>
 						<a href="https://discord.gg/mTDw8jJYqX" class="image-link">
@@ -1640,7 +1638,7 @@ Last release date on nightly: ${nightlyRDate}`;
 				const SEEN_KEY = 'seenReleaseTag';
 				try {
 					const res = await fetch(
-						'https://api.github.com/repos/auth1ery/auths-RNG/releases/latest'
+						'https://api.github.com/repos/authsrng-game/auths-RNG/releases/latest'
 					);
 					if (!res.ok) return;
 					const data = await res.json();
