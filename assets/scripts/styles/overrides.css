@@ -543,6 +543,9 @@ select {
 	margin-bottom: 1.4em;
 	position: relative;
 	overflow: hidden;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	animation: scale-up-center 0.5s ease forwards;
 	animation-fill-mode: forwards;
 	animation-iteration-count: 1;

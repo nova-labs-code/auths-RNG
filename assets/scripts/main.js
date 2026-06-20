@@ -1896,7 +1896,9 @@ function spinAndReveal(res) {
 		if (idx === items.length - 1) _resultSpinDiv = d;
 	});
 
-	const h = 48,
+	// measure the actual rendered height instead of guessing — this was
+	// landing the spinner on a random decoy item instead of your real result
+	const h = _resultSpinDiv.offsetHeight,
 		total = items.length,
 		scroll = h * (total - 1);
 	const duration = rollSpeed;

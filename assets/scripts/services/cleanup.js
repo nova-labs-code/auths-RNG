@@ -46,12 +46,16 @@ console.log(performance.now());
 		if (!spinner || !rollBtn) return;
 		if (rollBtn.disabled) return;
 		if (spinner.children.length > STALE_SPINNER_CHILD_THRESHOLD) {
+			// keep whatever is currently displayed (always the last child)
+			// so the cleanup only trims the dead decoy items, not your result
+			const current = spinner.lastElementChild;
 			spinner.innerHTML = '';
+			if (current) spinner.appendChild(current);
 			spinner.style.transition = 'none';
 			spinner.style.transform = 'translateY(0)';
 		}
 	}
-
+	
 	function cleanOrphanedCanvases() {
 		document.querySelectorAll('canvas').forEach((c) => {
 			if (!c.id && c.style.position === 'fixed') {
