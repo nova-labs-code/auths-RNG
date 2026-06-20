@@ -281,16 +281,16 @@
 				bgGradientAngle: intVal('te-bgGradientAngle', 135),
 				bgGradientType: val('te-bgGradientType') || 'linear',
 				startAnim: {
-					enabled: el('te-sa-enabled').checked,
-					preset: el('te-sa-preset').value,
-					bgColor: el('te-sa-bgColor').value,
-					fgColor: el('te-sa-fgColor').value,
-					customBg: el('te-sa-customBg').value,
-					customFg: el('te-sa-customFg').value,
-					wakeText: el('te-sa-wakeText').value,
-					speed: el('te-sa-speed').value,
-					skipOnReturn: el('te-sa-skipOnReturn').checked,
-					customCode: el('te-sa-customCode')?.value ?? '',
+					enabled: el('te-sa-enabled') ? el('te-sa-enabled').checked : true,
+					preset: el('te-sa-preset') ? el('te-sa-preset').value : 'default',
+					bgColor: el('te-sa-bgColor') ? el('te-sa-bgColor').value : 'theme',
+					fgColor: el('te-sa-fgColor') ? el('te-sa-fgColor').value : 'theme',
+					customBg: el('te-sa-customBg') ? el('te-sa-customBg').value : '#0e0e0e',
+					customFg: el('te-sa-customFg') ? el('te-sa-customFg').value : '#dcdcdc',
+					wakeText: el('te-sa-wakeText') ? el('te-sa-wakeText').value : 'click/tap to wake up...',
+					speed: el('te-sa-speed') ? el('te-sa-speed').value : 'normal',
+					skipOnReturn: el('te-sa-skipOnReturn') ? el('te-sa-skipOnReturn').checked : false,
+					customCode: el('te-sa-customCode') ? el('te-sa-customCode').value : '',
 				},
 			},
 		};
@@ -955,7 +955,7 @@
 			const json = JSON.stringify({ name: 'exported', ...d }, null, 2);
 			navigator.clipboard
 				.writeText(json)
-				.then(() => alert('theme json copied!'))
+				.then(() => window.showAlert('theme json copied!'))
 				.catch(() => {
 					const a = document.createElement('a');
 					a.href = URL.createObjectURL(new Blob([json], { type: 'application/json' }));

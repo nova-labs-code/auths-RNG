@@ -1694,18 +1694,6 @@ select {
 	color: var(--text-color);
 }
 
-.gauntlet-tier {
-	background: var(--overlay-bg);
-	border: 1px solid var(--border-color);
-	border-radius: 4px;
-	padding: 14px 16px;
-	margin-bottom: 10px;
-	transition: opacity 0.2s;
-	content-visibility: auto;
-	contain-intrinsic-size: auto 160px;
-	width: 100%;
-}
-
 .gauntlet-tier-header {
 	display: flex;
 	justify-content: space-between;
@@ -1742,45 +1730,11 @@ select {
 	color: #8c8;
 }
 
-.gauntlet-bar-wrap {
-	background: var(--button-bg);
-	border: 1px solid var(--border-color);
-	border-radius: 2px;
-	height: 3px;
-	margin-bottom: 10px;
-	overflow: hidden;
-}
-
-.gauntlet-bar {
-	height: 100%;
-	background: var(--border-color);
-	transition: width 0.4s ease;
-	border-radius: 2px;
-}
-
 .gauntlet-chip-grid {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 4px;
 	margin-bottom: 12px;
-}
-
-.gauntlet-chip {
-	font-size: 0.68em;
-	padding: 3px 7px;
-	border: 1px solid var(--border-color);
-	border-radius: 20px;
-	background: var(--button-bg);
-}
-
-.chip-has {
-	border-color: #2a4a2a;
-	color: #8c8;
-	background: rgb(40 80 40 / 15%);
-}
-
-.chip-missing {
-	opacity: 0.28;
 }
 
 .upgrade-bar-wrap {
@@ -3076,17 +3030,6 @@ body.legacy-mode #legacySettingsBtn {
 	color: #fa6;
 }
 
-.gauntlet-tier {
-	background: rgb(255 255 255 / 2%);
-	border: 1px solid #1f1f1f;
-	border-radius: 4px;
-	padding: 16px 18px;
-	margin-bottom: 14px;
-	transition: opacity 0.2s;
-	content-visibility: auto;
-	contain-intrinsic-size: auto 160px;
-}
-
 .gauntlet-hr {
 	border: none;
 	border-top: 1px solid #1e1e1e;
@@ -3249,9 +3192,28 @@ body.legacy-mode #legacySettingsBtn {
 	margin: 4px 0 3px;
 }
 
+.gauntlet-chip-grid {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
+	margin-bottom: 4px;
+}
+
+.gauntlet-tier {
+	background: var(--overlay-bg);
+	border: 1px solid var(--border-color);
+	border-radius: 4px;
+	padding: 16px 18px;
+	margin-bottom: 14px;
+	transition: opacity 0.2s;
+	content-visibility: auto;
+	contain-intrinsic-size: auto 160px;
+	width: 100%;
+}
+
 .gauntlet-bar-wrap {
-	background: rgb(255 255 255 / 5%);
-	border: 1px solid #222;
+	background: var(--button-bg);
+	border: 1px solid var(--border-color);
 	border-radius: 2px;
 	height: 4px;
 	margin-bottom: 8px;
@@ -3260,23 +3222,17 @@ body.legacy-mode #legacySettingsBtn {
 
 .gauntlet-bar {
 	height: 100%;
-	background: #668;
+	background: var(--border-color);
 	transition: width 0.3s ease;
 	border-radius: 2px;
-}
-
-.gauntlet-chip-grid {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 4px;
-	margin-bottom: 4px;
 }
 
 .gauntlet-chip {
 	font-size: 0.7em;
 	padding: 3px 6px;
-	border: 1px solid #2a2a2a;
-	border-radius: 2px;
+	border: 1px solid var(--border-color);
+	border-radius: 20px;
+	background: var(--button-bg);
 }
 
 .chip-has {
@@ -3286,7 +3242,7 @@ body.legacy-mode #legacySettingsBtn {
 }
 
 .chip-missing {
-	opacity: 0.35;
+	opacity: 0.3;
 }
 
 .gauntlet-reward-label {

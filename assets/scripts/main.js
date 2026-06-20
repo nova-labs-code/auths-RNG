@@ -82,6 +82,7 @@ let playerPotions = {
 	luck300x: 0,
 	luck800x: 0,
 	luck1500x: 0,
+	luck3000x: 0,
 	duplicate: 0,
 };
 
@@ -406,7 +407,7 @@ function buyPotion(potionType) {
 }
 
 function usePotion(potionType) {
-	if (playerPotions[potionType] <= 0) {
+	if (!(playerPotions[potionType] > 0)) {
 		window.showAlert(`you don't have any ${potionData[potionType].name} potions!`);
 		return;
 	}
@@ -422,7 +423,6 @@ function usePotion(potionType) {
 		return;
 	}
 
-	// Luck potions
 	const endTime = Date.now() + data.duration;
 	activePotions.push({
 		type: potionType,
@@ -1037,7 +1037,7 @@ function updateTotalRolls() {
 	totalRollsEl.textContent = `total rolls: ${formatNum(totalRolls)}`;
 }
 
-function addToInventory(o) {
+function addToInventory(o, skipAutoSell = false) {
 	rarityTimestamps.set(o.name, Date.now());
 	if (typeof window.tryDropRune === 'function') window.tryDropRune(o);
 
@@ -1047,7 +1047,6 @@ function addToInventory(o) {
 		updateItem(d);
 	} else {
 		const li = document.createElement('li');
-		// set data BEFORE updateItem so liElement exists fully
 		inventoryData.set(o.name, { rarityObj: o, count: 1, liElement: li });
 		const d = inventoryData.get(o.name);
 		updateItem(d);
@@ -1060,7 +1059,6 @@ function addToInventory(o) {
 
 	updateCollectedCounter();
 
-	// rare highlight
 	const rareThresh = window.rareThreshold || 1000;
 	const d = inventoryData.get(o.name);
 	if (d) {
@@ -1068,7 +1066,6 @@ function addToInventory(o) {
 		d.liElement.classList.toggle('item-rare', denom >= rareThresh);
 	}
 
-	// duplicate upgrade proc (before auto-sell so counts are stable)
 	if (shopUpgrades.duplicate > 0) {
 		const dupeChance = shopUpgrades.duplicate / 100;
 		if (Beacon.float() < dupeChance) {
@@ -1081,7 +1078,6 @@ function addToInventory(o) {
 		}
 	}
 
-	// duplicate potion
 	if (duplicateRollsLeft > 0) {
 		const d2 = inventoryData.get(o.name);
 		if (d2) {
@@ -1093,7 +1089,8 @@ function addToInventory(o) {
 		debouncedSave();
 	}
 
-	// auto-sell — runs last so count is fully settled
+	if (skipAutoSell) return;
+
 	const autoSellThresh = window.autoSellThreshold || 0;
 	if (autoSellThresh > 0) {
 		const denom = Math.round(1 / o.chance);
@@ -1114,6 +1111,46 @@ function addToInventory(o) {
 			}
 		}
 	}
+}
+
+function showRollChoice(res, onDone) {
+	const modal = document.getElementById('rollChoiceModal');
+	const denom = Math.round(1 / res.chance);
+	const pts = calculateRarityPoints(res);
+
+	document.getElementById('rollChoiceRarity').textContent = res.name;
+	document.getElementById('rollChoiceChance').textContent = `1/${denom.toLocaleString()}`;
+	document.getElementById('rollChoiceSellAmt').textContent = `sell value: ${formatNum(pts)} pts`;
+	modal.style.display = 'flex';
+
+	const cleanup = (fn) => {
+		modal.style.display = 'none';
+		fn();
+		onDone();
+	};
+
+	document.getElementById('rollChoiceSell').onclick = () =>
+		cleanup(() => {
+			addToInventory(res, true);
+			const currentData = inventoryData.get(res.name);
+			if (currentData) {
+				soldOutRarities.set(res.name, { count: currentData.count });
+			}
+			points += pts;
+			updatePointsDisplay();
+			updateShopUI();
+			showAnomalyPopup(`sold ${res.name} for ${formatNum(pts)} pts`);
+		});
+
+	document.getElementById('rollChoiceKeep').onclick = () =>
+		cleanup(() => {
+			addToInventory(res, true);
+		});
+
+	document.getElementById('rollChoicePass').onclick = () =>
+		cleanup(() => {
+			showAnomalyPopup(`passed on ${res.name}`);
+		});
 }
 
 document.getElementById('buyLuckBtn').addEventListener('click', () => {
@@ -1703,6 +1740,7 @@ async function resetInventory() {
 		luck300x: 0,
 		luck800x: 0,
 		luck1500x: 0,
+		luck3000x: 0,
 		duplicate: 0,
 	};
 	activePotions = [];
@@ -1786,47 +1824,6 @@ function checkMuteSettings() {
 		}
 	} catch (e) {}
 	return false;
-}
-
-function showRollChoice(res, onDone) {
-	const modal = document.getElementById('rollChoiceModal');
-	const denom = Math.round(1 / res.chance);
-	const pts = calculateRarityPoints(res);
-
-	document.getElementById('rollChoiceRarity').textContent = res.name;
-	document.getElementById('rollChoiceChance').textContent = `1/${denom.toLocaleString()}`;
-	document.getElementById('rollChoiceSellAmt').textContent = `sell value: ${formatNum(pts)} pts`;
-	modal.style.display = 'flex';
-
-	const cleanup = (fn) => {
-		modal.style.display = 'none';
-		fn();
-		onDone();
-	};
-
-	document.getElementById('rollChoiceSell').onclick = () =>
-		cleanup(() => {
-			// add to inventory first so count is correct, THEN mark as sold
-			addToInventory(res);
-			const currentData = inventoryData.get(res.name);
-			if (currentData) {
-				soldOutRarities.set(res.name, { count: currentData.count });
-			}
-			points += pts;
-			updatePointsDisplay();
-			updateShopUI();
-			showAnomalyPopup(`sold ${res.name} for ${formatNum(pts)} pts`);
-		});
-
-	document.getElementById('rollChoiceKeep').onclick = () =>
-		cleanup(() => {
-			addToInventory(res);
-		});
-
-	document.getElementById('rollChoicePass').onclick = () =>
-		cleanup(() => {
-			showAnomalyPopup(`passed on ${res.name}`);
-		});
 }
 
 function spinAndReveal(res) {

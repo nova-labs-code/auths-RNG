@@ -455,7 +455,12 @@
 				btn.classList.add('active');
 				document.getElementById('dct-' + btn.dataset.tab).style.display = 'block';
 				if (btn.dataset.tab === 'storage') renderStorage();
-				if (btn.dataset.tab === 'perf') startPerfTab();
+				if (btn.dataset.tab === 'perf') {
+					startPerfTab();
+				} else {
+					perfTabActive = false;
+					clearTimeout(perfRAF);
+				}
 				if (btn.dataset.tab === 'network') renderNetwork();
 				if (btn.dataset.tab === 'watch') renderWatchList();
 			});
@@ -1168,7 +1173,7 @@
 					dcLog('usage: :del <key>', 'err');
 					return;
 				}
-				if (!args[1] === '--confirm') {
+				if (args[1] !== '--confirm') {
 					dcLog(`run :del ${k} --confirm to proceed`, 'warn');
 					return;
 				}
