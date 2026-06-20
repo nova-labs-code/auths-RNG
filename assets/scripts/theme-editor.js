@@ -153,6 +153,145 @@
 	const STORAGE_KEY = 'themeEditorPresets';
 	const ACTIVE_KEY = 'themeEditorActive';
 
+	const PRESET_SCHEMA_VERSION = 2;
+
+	const PRESET_DEFAULTS = {
+		vars: {
+			bgColor: '#0e0e0e',
+			textColor: '#dcdcdc',
+			panelBg: '#111111',
+			overlayBg: '#0a0a0a',
+			borderColor: '#2a2a2a',
+			buttonBg: '#1a1a1a',
+			accentColor: '#dcdcdc',
+			pointsColor: '#ffb86b',
+			achievementBg: '#1a2a1a',
+			achievementBorder: '#2a4a2a',
+		},
+		settings: {
+			radius: 2,
+			borderWidth: 1,
+			textSize: 16,
+			font: 'default',
+			inventoryStyle: 'compact',
+			spinnerStyle: 'slot',
+			rollBtnSize: 'normal',
+			customRollText: '',
+			bgPattern: 'none',
+			season: 'none',
+			particleDensity: 'medium',
+			blurPanels: false,
+			blurIntensity: 10,
+			blurSaturate: 140,
+			blurPanelOpacity: 55,
+			blurBorderOpacity: 8,
+			compactMode: false,
+			hideCursor: false,
+			hideLuckBreakdown: false,
+			reduceMotion: false,
+			highContrast: false,
+			largeTargets: false,
+			rgb: false,
+			wacky: false,
+			chaos: false,
+			confettiThreshold: 0,
+			rareThreshold: 1000,
+			cutsceneThreshold: 0,
+			bgType: 'color',
+			bgGradientFrom: '#0e0e0e',
+			bgGradientTo: '#1a1a2e',
+			bgGradientAngle: 135,
+			bgGradientType: 'linear',
+			glowEnabled: false,
+			glowColor: '#dcdcdc',
+			glowCount: 3,
+			glowSize: 300,
+			glowOpacity: 20,
+			glowSpeed: 20,
+			startAnim: {
+				enabled: true,
+				preset: 'default',
+				bgColor: 'theme',
+				fgColor: 'theme',
+				customBg: '#0e0e0e',
+				customFg: '#dcdcdc',
+				wakeText: 'click/tap to wake up...',
+				speed: 'normal',
+				skipOnReturn: false,
+				customCode: '',
+			},
+		},
+	};
+
+	function deepMerge(base, patch) {
+		if (Array.isArray(base) || typeof base !== 'object' || base === null) {
+			return patch === undefined ? base : patch;
+		}
+		const out = { ...base };
+		if (patch && typeof patch === 'object') {
+			for (const k of Object.keys(patch)) {
+				out[k] = deepMerge(base[k], patch[k]);
+			}
+		}
+		return out;
+	}
+
+	function migratePreset(preset) {
+		const version = preset.__v ?? 1;
+		let p = preset;
+
+		if (version < 2) {
+			p = {
+				...p,
+				vars: { ...p.vars },
+				settings: { ...p.settings },
+			};
+			if (p.settings && p.settings.glow !== undefined) {
+				p.settings.glowEnabled = !!p.settings.glow;
+				delete p.settings.glow;
+			}
+		}
+
+		const merged = {
+			name: p.name,
+			__v: PRESET_SCHEMA_VERSION,
+			vars: deepMerge(PRESET_DEFAULTS.vars, p.vars || {}),
+			settings: deepMerge(PRESET_DEFAULTS.settings, p.settings || {}),
+		};
+		return merged;
+	}
+
+	function relativeLuminance(hex) {
+		const rgb = hexToRgb(hex);
+		if (!rgb) return null;
+		const toLinear = (c) => {
+			const s = c / 255;
+			return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+		};
+		const r = toLinear(rgb.r);
+		const g = toLinear(rgb.g);
+		const b = toLinear(rgb.b);
+		return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+	}
+
+	function contrastRatio(hexA, hexB) {
+		const lA = relativeLuminance(hexA);
+		const lB = relativeLuminance(hexB);
+		if (lA === null || lB === null) return null;
+		const lighter = Math.max(lA, lB);
+		const darker = Math.min(lA, lB);
+		return (lighter + 0.05) / (darker + 0.05);
+	}
+
+	function contrastLabel(ratio) {
+		if (ratio === null) return { text: 'invalid color', cls: 'ctr-fail' };
+		const r = ratio.toFixed(2);
+		if (ratio >= 7) return { text: `${r}:1 — AAA`, cls: 'ctr-pass' };
+		if (ratio >= 4.5) return { text: `${r}:1 — AA`, cls: 'ctr-pass' };
+		if (ratio >= 3) return { text: `${r}:1 — AA large text only`, cls: 'ctr-warn' };
+		return { text: `${r}:1 — fails`, cls: 'ctr-fail' };
+	}
+
 	function hexToRgb(hex) {
 		const r = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 		return r ? { r: parseInt(r[1], 16), g: parseInt(r[2], 16), b: parseInt(r[3], 16) } : null;
@@ -205,21 +344,107 @@
 	}
 
 	function getUserPresets() {
+		let raw;
 		try {
-			return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+			raw = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
 		} catch (_) {
 			return [];
 		}
+		if (!Array.isArray(raw)) return [];
+
+		let migratedAny = false;
+		const migrated = raw.map((p) => {
+			if (p.__v === PRESET_SCHEMA_VERSION) return p;
+			migratedAny = true;
+			return migratePreset(p);
+		});
+
+		if (migratedAny) saveUserPresets(migrated);
+		return migrated;
 	}
 
 	function saveUserPresets(arr) {
 		try {
-			localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+			const stamped = arr.map((p) => ({ ...p, __v: PRESET_SCHEMA_VERSION }));
+			localStorage.setItem(STORAGE_KEY, JSON.stringify(stamped));
 		} catch (_) {}
 	}
 
 	function getAllPresets() {
 		return [...BUILT_IN_PRESETS, ...getUserPresets()];
+	}
+
+	const CONTRAST_PAIRS = [
+		{ fg: 'te-textColor', bg: 'te-bgColor', label: 'text on background' },
+		{ fg: 'te-textColor', bg: 'te-panelBg', label: 'text on panel' },
+		{ fg: 'te-textColor', bg: 'te-buttonBg', label: 'text on button' },
+		{ fg: 'te-pointsColor', bg: 'te-bgColor', label: 'points on background' },
+	];
+
+	function ensureContrastBadge(afterId, key) {
+		const id = 'te-ctr-' + key;
+		let badge = el(id);
+		if (badge) return badge;
+		const anchor = el(afterId);
+		if (!anchor) return null;
+		badge = document.createElement('div');
+		badge.id = id;
+		badge.className = 'te-contrast-badge';
+		anchor.parentNode.insertBefore(badge, anchor.nextSibling);
+		return badge;
+	}
+
+	function updateContrastBadges() {
+		CONTRAST_PAIRS.forEach((pair, i) => {
+			const fgEl = el(pair.fg);
+			const bgEl = el(pair.bg);
+			if (!fgEl || !bgEl) return;
+			const badge = ensureContrastBadge(pair.bg, i);
+			if (!badge) return;
+			const ratio = contrastRatio(fgEl.value, bgEl.value);
+			const { text, cls } = contrastLabel(ratio);
+			badge.textContent = `${pair.label}: ${text}`;
+			badge.className = 'te-contrast-badge ' + cls;
+		});
+	}
+
+	const UNDO_LIMIT = 50;
+	let undoStack = [];
+	let undoDebounceTimer = null;
+	let suppressUndoCapture = false;
+
+	function snapshotEditorState() {
+		return JSON.stringify(readEditor());
+	}
+
+	function pushUndoSnapshot() {
+		if (suppressUndoCapture) return;
+		const snap = snapshotEditorState();
+		if (undoStack.length && undoStack[undoStack.length - 1] === snap) return;
+		undoStack.push(snap);
+		if (undoStack.length > UNDO_LIMIT) undoStack.shift();
+		syncUndoButton();
+	}
+
+	function pushUndoSnapshotDebounced() {
+		clearTimeout(undoDebounceTimer);
+		undoDebounceTimer = setTimeout(pushUndoSnapshot, 300);
+	}
+
+	function popUndoSnapshot() {
+		if (undoStack.length < 2) return null;
+		undoStack.pop();
+		return undoStack[undoStack.length - 1];
+	}
+
+	function syncUndoButton() {
+		const btn = el('te-undo');
+		if (btn) btn.disabled = undoStack.length < 2;
+	}
+
+	function resetUndoStack() {
+		undoStack = [snapshotEditorState()];
+		syncUndoButton();
 	}
 
 	function readEditor() {
@@ -420,6 +645,7 @@
 			el('te-blurBorderOpacity').value = s.blurBorderOpacity ?? 8;
 			el('te-blurBorderOpacityVal').textContent = s.blurBorderOpacity ?? 8;
 		}
+		updateContrastBadges();
 	}
 
 	function applyCSSVars(vars, borderWidth, settings) {
@@ -609,7 +835,7 @@
 		const presetDesc = el('te-sa-preset-desc');
 		if (presetDesc) {
 			const DESCS = {
-				none: 'no animation — game loads instantly.',
+				none: 'no animation > game loads instantly.',
 				default: 'a line expands horizontally then vertically and fades out.',
 				fade: 'plain fullscreen fade. click to dismiss.',
 				glitch: 'title text with rgb glitch effect.',
@@ -755,6 +981,7 @@
 			);
 
 		livePreview();
+		updateContrastBadges();
 	}
 
 	function bindEditorInputs() {
@@ -837,9 +1064,14 @@
 				if (id === 'te-glowOpacity') el('te-glowOpacityVal').textContent = n.value;
 				if (id === 'te-glowSpeed') el('te-glowSpeedVal').textContent = n.value;
 				if (id === 'te-glowEnabled') syncGlowUI();
+				if (id.endsWith('Color') || id.endsWith('Bg')) updateContrastBadges();
 				livePreview();
+				pushUndoSnapshotDebounced();
 			});
-			n.addEventListener('change', livePreview);
+			n.addEventListener('change', () => {
+				livePreview();
+				pushUndoSnapshot();
+			});
 		});
 
 		const bgTypeEl = el('te-bgType');
@@ -895,6 +1127,7 @@
 			btn.addEventListener('click', () => {
 				writeEditor(preset);
 				livePreview();
+				resetUndoStack();
 			});
 
 			if (!isBuiltIn) {
@@ -923,6 +1156,7 @@
 		const overlay = el('themeEditorOverlay');
 		const closeBtn = el('themeEditorClose');
 		const applyBtn = el('te-apply');
+		const undoBtn = el('te-undo');
 		const discardBtn = el('te-discard');
 		const savePresetBtn = el('saveThemeBtn');
 		const importBtn = el('importThemeBtn');
@@ -960,6 +1194,7 @@
 			refreshBgImagePreview();
 
 			renderPresets();
+			resetUndoStack();
 			overlay.style.display = 'block';
 			document.body.style.overflow = 'hidden';
 		});
@@ -982,6 +1217,21 @@
 			closeEditor();
 		});
 
+		if (undoBtn) {
+			undoBtn.addEventListener('click', () => {
+				const prev = popUndoSnapshot();
+				if (!prev) return;
+				suppressUndoCapture = true;
+				try {
+					writeEditor(JSON.parse(prev));
+					livePreview();
+				} finally {
+					suppressUndoCapture = false;
+				}
+				syncUndoButton();
+			});
+		}
+
 		applyBtn.addEventListener('click', () => {
 			const d = readEditor();
 			applyAndSave(d, null);
@@ -993,11 +1243,11 @@
 			if (!name || !name.trim()) return;
 			const trimmed = name.trim().toLowerCase();
 			if (BUILT_IN_PRESETS.some((p) => p.name === trimmed)) {
-				await window.showAlert('that name is reserved');
+				await window.showAlert('that name is reserved!');
 				return;
 			}
 			const arr = getUserPresets().filter((p) => p.name !== trimmed);
-			arr.push({ name: trimmed, ...readEditor() });
+			arr.push({ name: trimmed, __v: PRESET_SCHEMA_VERSION, ...readEditor() });
 			saveUserPresets(arr);
 			renderPresets();
 		});
@@ -1025,8 +1275,10 @@
 					window.showAlert('invalid theme json');
 					return;
 				}
-				writeEditor(parsed);
+				const migrated = migratePreset(parsed);
+				writeEditor(migrated);
 				livePreview();
+				resetUndoStack();
 			} catch (_) {
 				window.showAlert('invalid json');
 			}

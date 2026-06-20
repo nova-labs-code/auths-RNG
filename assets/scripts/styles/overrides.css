@@ -4176,3 +4176,31 @@ body.blur-panels .starmap-market-item {
 .page-dot.dot-unlocking {
 	animation: dotPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
+
+.te-contrast-badge {
+	font-size: 0.72em;
+	padding: 3px 8px;
+	margin: -4px 0 10px;
+	border-radius: 3px;
+	border: 1px solid var(--border-color);
+	display: inline-block;
+	font-family: monospace;
+}
+
+.te-contrast-badge.ctr-pass {
+	color: #8c8;
+	border-color: #3a5a3a;
+	background: rgb(40 90 40 / 10%);
+}
+
+.te-contrast-badge.ctr-warn {
+	color: #fa6;
+	border-color: #6a5a2a;
+	background: rgb(120 100 40 / 10%);
+}
+
+.te-contrast-badge.ctr-fail {
+	color: #f66;
+	border-color: #6a2a2a;
+	background: rgb(120 40 40 / 10%);
+}
