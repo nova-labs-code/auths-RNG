@@ -7,6 +7,7 @@ the repository for the web game, auth's RNG!
 ![License](https://img.shields.io/github/license/authsrng-game/auths-RNG)
 ![Code Size](https://img.shields.io/github/languages/code-size/authsrng-game/auths-RNG)
 ![Top Language](https://img.shields.io/github/languages/top/authsrng-game/auths-RNG)
+![trans rights](https://pride-badges.pony.workers.dev/static/v1?label=trans%20rights&stripeWidth=6&stripeColors=5BCEFA,F5A9B8,FFFFFF,F5A9B8,5BCEFA)
 
 <p align="center">
   <img src="assets/repo1.png" width="30%" />
@@ -78,6 +79,12 @@ if you thought the git log held all of auth's RNG development history... no it d
 ---
 
 [![Stargazers over time](https://starchart.cc/authsrng-game/auths-RNG.svg?variant=adaptive)](https://starchart.cc/authsrng-game/auths-RNG)
+
+<a href="https://github.com/authsrng-game/auths-RNG/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=authsrng-game/auths-RNG" />
+</a>
+
+Made with [contrib.rocks](https://contrib.rocks).
 
 ---
 
