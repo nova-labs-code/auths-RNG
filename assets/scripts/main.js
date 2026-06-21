@@ -1770,7 +1770,9 @@ function startLuckBoost() {
 	luckBoostEndTime = Date.now() + 60000;
 	recalcLuckMultiplier();
 
-	document.getElementById('luckBoostOverlay').style.display = 'flex';
+	const badge = document.getElementById('luckBoostBadge');
+	if (badge) badge.style.display = 'block';
+	updateLuckTimer();
 
 	localStorage.setItem(
 		LUCK_KEY,
@@ -1786,6 +1788,7 @@ function startLuckBoost() {
 
 function updateLuckTimer() {
 	const timerEl = document.getElementById('luckTimer');
+	const badge = document.getElementById('luckBoostBadge');
 
 	const msLeft = luckBoostEndTime - Date.now();
 
@@ -1794,7 +1797,9 @@ function updateLuckTimer() {
 		return;
 	}
 
-	timerEl.textContent = Math.ceil(msLeft / 1000);
+	const secondsLeft = Math.ceil(msLeft / 1000);
+	if (timerEl) timerEl.textContent = secondsLeft;
+	if (badge) badge.textContent = `4x luck active — ${secondsLeft}s left`;
 }
 
 function endLuckBoost() {
@@ -1802,7 +1807,8 @@ function endLuckBoost() {
 	luckBoostEndTime = 0;
 	recalcLuckMultiplier();
 
-	document.getElementById('luckBoostOverlay').style.display = 'none';
+	const badge = document.getElementById('luckBoostBadge');
+	if (badge) badge.style.display = 'none';
 
 	if (luckInterval) clearInterval(luckInterval);
 
@@ -2049,6 +2055,7 @@ updatePotionUI();
 recalcLuckMultiplier();
 updatePointsDisplay();
 updateShopUI();
+
 const ls = localStorage.getItem(LUCK_KEY);
 if (ls) {
 	try {
@@ -2056,7 +2063,9 @@ if (ls) {
 		if (obj.active && obj.endTime > Date.now()) {
 			luckBoostActive = true;
 			luckBoostEndTime = obj.endTime;
-			document.getElementById('luckBoostOverlay').style.display = 'flex';
+			const badge = document.getElementById('luckBoostBadge');
+			if (badge) badge.style.display = 'block';
+			updateLuckTimer();
 			luckInterval = setInterval(updateLuckTimer, 200);
 		} else {
 			localStorage.removeItem(LUCK_KEY);
