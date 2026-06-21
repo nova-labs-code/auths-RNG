@@ -1868,11 +1868,24 @@ function spinAndReveal(res) {
 		checkAchievements(res);
 		updateRollsSinceRare(res);
 		maybeFireConfettiAndCutscene(res);
+		if (window.setCursorRolling) window.setCursorRolling(false);
+
+		const pillColor = res.style
+			? (res.style.match(/color\s*:\s*(#[0-9a-fA-F]{3,8}|[a-z]+)/)?.[1] ?? null)
+			: null;
+
 		if (typeof addTrailItem === 'function') {
-			const pillColor = res.style
-				? (res.style.match(/color\s*:\s*(#[0-9a-fA-F]{3,8}|[a-z]+)/)?.[1] ?? null)
-				: null;
 			addTrailItem(res.name, pillColor);
+		}
+
+		const denom = Math.round(1 / res.chance);
+		const thresh = window.rareThreshold || 1000;
+
+		if (denom >= thresh) {
+			if (window.rainbowSweepCursor) window.rainbowSweepCursor();
+			if (window.pulseCursorForRarity) {
+				window.pulseCursorForRarity(pillColor && pillColor.startsWith('#') ? pillColor : '#ffd700');
+			}
 		}
 	};
 
@@ -2005,6 +2018,7 @@ const sortSelect = document.getElementById('sortSelect');
 rollBtn.addEventListener('click', () => {
 	if (isCutscenePlaying) return;
 	rollBtn.disabled = true;
+	if (window.setCursorRolling) window.setCursorRolling(true);
 
 	try {
 		spinner.style.transition = 'none';
@@ -2032,11 +2046,13 @@ rollBtn.addEventListener('click', () => {
 			} catch (e) {
 				console.error('spinAndReveal failed:', e);
 				rollBtn.disabled = false;
+				if (window.setCursorRolling) window.setCursorRolling(false);
 			}
 		}, 100);
 	} catch (e) {
 		console.error('roll failed:', e);
 		rollBtn.disabled = false;
+		if (window.setCursorRolling) window.setCursorRolling(false);
 	}
 });
 

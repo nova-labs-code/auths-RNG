@@ -1318,18 +1318,27 @@ Last release date on nightly: ${nightlyRDate}`;
 
 		<script>
 			// the custom cursor design is stupid
-			if (window.matchMedia('(pointer: fine)').matches) {
+			(function () {
+				if (!window.matchMedia('(pointer: fine)').matches) {
+					const cursor = document.getElementById('custom-cursor');
+					if (cursor) cursor.style.display = 'none';
+					document.body.style.cursor = '';
+					return;
+				}
+
 				const cursor = document.getElementById('custom-cursor');
 				const plus = cursor.querySelector('.plus');
 
 				let rotatePositive = true;
+				let holdThresholdTimer = null;
+				let isPointerDown = false;
 
 				window.addEventListener('mousemove', (e) => {
 					cursor.style.left = e.clientX + 'px';
 					cursor.style.top = e.clientY + 'px';
 				});
 
-				function animateClick() {
+				function playClickFlash() {
 					cursor.style.transform = 'translate(-50%, -50%) scale(1.3)';
 					cursor.classList.add('glow');
 
@@ -1347,12 +1356,88 @@ Last release date on nightly: ${nightlyRDate}`;
 					}, 148);
 				}
 
-				window.addEventListener('mousedown', animateClick);
-			} else {
-				const cursor = document.getElementById('custom-cursor');
-				if (cursor) cursor.style.display = 'none';
-				document.body.style.cursor = '';
-			}
+				function onPointerDown() {
+					isPointerDown = true;
+					playClickFlash();
+
+					clearTimeout(holdThresholdTimer);
+					holdThresholdTimer = setTimeout(() => {
+						if (isPointerDown) cursor.classList.add('holding');
+					}, 180);
+				}
+
+				function onPointerUp() {
+					isPointerDown = false;
+					clearTimeout(holdThresholdTimer);
+					cursor.classList.remove('holding');
+				}
+
+				window.addEventListener('pointerdown', onPointerDown);
+				window.addEventListener('pointerup', onPointerUp);
+				window.addEventListener('pointercancel', onPointerUp);
+				window.addEventListener('blur', onPointerUp);
+
+				function luckTier(mult) {
+					if (mult >= 100)
+						return {
+							ring: 'rgb(255 100 255 / 55%)',
+							dot: '#ff66ff',
+							plus: 'rgb(255 100 255 / 70%)',
+						};
+					if (mult >= 20)
+						return {
+							ring: 'rgb(255 184 107 / 55%)',
+							dot: '#ffb86b',
+							plus: 'rgb(255 184 107 / 70%)',
+						};
+					if (mult >= 5)
+						return { ring: 'rgb(255 215 0 / 45%)', dot: '#ffd700', plus: 'rgb(255 215 0 / 65%)' };
+					if (mult > 1)
+						return {
+							ring: 'rgb(140 220 140 / 40%)',
+							dot: '#8cdc8c',
+							plus: 'rgb(140 220 140 / 60%)',
+						};
+					return { ring: 'rgb(220 220 220 / 30%)', dot: '#dcdcdc', plus: 'rgb(220 220 220 / 50%)' };
+				}
+
+				function syncLuckColors() {
+					const mult =
+						typeof window.globalLuckMultiplier === 'number' ? window.globalLuckMultiplier : 1;
+					const tier = luckTier(mult);
+					cursor.style.setProperty('--cursor-ring-color', tier.ring);
+					cursor.style.setProperty('--cursor-dot-color', tier.dot);
+					cursor.style.setProperty('--cursor-plus-color', tier.plus);
+				}
+
+				syncLuckColors();
+				setInterval(syncLuckColors, 1000);
+
+				window.setCursorRolling = function (isRolling) {
+					cursor.classList.toggle('rolling', isRolling);
+				};
+
+				window.pulseCursorForRarity = function (rarityColorHex) {
+					if (rarityColorHex) {
+						cursor.style.setProperty('--cursor-rare-color', rarityColorHex + '99');
+					}
+					cursor.classList.remove('rare-pulse');
+					void cursor.offsetWidth;
+					cursor.classList.add('rare-pulse');
+					setTimeout(() => cursor.classList.remove('rare-pulse'), 900);
+				};
+
+				window.rainbowSweepCursor = function () {
+					if (document.body.classList.contains('reduce-motion')) return;
+					cursor.classList.remove('rainbow-active');
+					void cursor.offsetWidth;
+					cursor.classList.add('rainbow-active');
+					setTimeout(() => cursor.classList.remove('rainbow-active'), 1000);
+				};
+			})();
+
+			// TODO: add holding animation for when the cursor spins when holding
+			// i dont wanna do it now because its a hell fire to implement
 		</script>
 
 		<script>
