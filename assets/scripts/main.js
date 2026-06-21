@@ -1814,7 +1814,7 @@ function updateLuckTimer() {
 
 	const secondsLeft = Math.ceil(msLeft / 1000);
 	if (timerEl) timerEl.textContent = secondsLeft;
-	if (badge) badge.textContent = `4x luck active — ${secondsLeft}s left`;
+	if (badge) badge.textContent = `4x luck active > ${secondsLeft}s left`;
 }
 
 function endLuckBoost() {
