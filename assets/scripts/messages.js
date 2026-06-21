@@ -912,6 +912,13 @@ const messages = [
 	'diy is everything',
 	'take it away, shelly!',
 	'SCREAMING',
+	'bites at you',
+	'baldis basics was nightmare fuel for me back then',
+	'Identifier expected.',
+	'better off.',
+	'wooooooooooooooooooooooooooo',
+	'i heart auths rng',
+	'crack a bottle of water'
 ];
 
 const randomIndex = Math.floor(Math.random() * messages.length);
