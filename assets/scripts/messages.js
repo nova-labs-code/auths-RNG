@@ -924,7 +924,7 @@ const messages = [
 	'dailyBtn jan lacking yes yes yes',
 	'speaking true facts right here you hear me',
 	'You are in: authsrng.xyz',
-	'there are padding :thumbsup:'
+	'there are padding :thumbsup:',
 ];
 
 const randomIndex = Math.floor(Math.random() * messages.length);
