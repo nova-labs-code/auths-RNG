@@ -918,7 +918,13 @@ const messages = [
 	'better off.',
 	'wooooooooooooooooooooooooooo',
 	'i heart auths rng',
-	'crack a bottle of water'
+	'crack a bottle of water',
+	'would you buy an auths RNG premium subscription',
+	'SHUT UP GERALD',
+	'dailyBtn jan lacking yes yes yes',
+	'speaking true facts right here you hear me',
+	'You are in: authsrng.xyz',
+	'there are padding :thumbsup:'
 ];
 
 const randomIndex = Math.floor(Math.random() * messages.length);
