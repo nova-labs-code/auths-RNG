@@ -728,7 +728,7 @@ const rarities = [
 	{ name: 'Plasmasphere', chance: 1 / 3650 },
 	{ name: 'Photosphere', chance: 1 / 3625 },
 	{ name: 'Wanderer', chance: 1 / 3600 },
-	{ name: 'Radiative', chance: 1 / 3575 },
+	{ name: 'gone', chance: 1 / 3575 },
 	{ name: 'Convective', chance: 1 / 3550 },
 	{ name: 'Tachocline', chance: 1 / 3525 },
 	{ name: 'Corpulence', chance: 1 / 3500 },
