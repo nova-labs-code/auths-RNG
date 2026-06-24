@@ -129,7 +129,7 @@
 		</div>
 
 		<script>
-			if (window.location.hostname !== 'https://nova-labs-code.github.io/auths-RNG/') {
+			if (window.location.hostname !== 'nova-labs-code.github.io/auths-RNG/') {
 				document.getElementById('unstable-banner').style.display = 'none';
 			} else {
 				document.getElementById('unstable-banner').addEventListener('click', function () {
@@ -154,7 +154,7 @@
 		></div>
 		<script>
 			(async () => {
-				if (location.hostname !== 'https://nova-labs-code.github.io/auths-RNG/') return;
+				if (location.hostname !== 'nova-labs-code.github.io/auths-RNG/') return;
 				let el = document.getElementById('nightly-info');
 				try {
 					let [mainC, nightlyC, releases] = await Promise.all([
@@ -162,10 +162,10 @@
 							r.status === 403 ? { rate: 1 } : r.json()
 						),
 						fetch(
-							'https://api.github.com/repos/authsrng-gamehttps://nova-labs-code.github.io/auths-RNG//commits/nightly'
+							'https://api.github.com/repos/authsrng-gamenova-labs-code.github.io/auths-RNG//commits/nightly'
 						).then((r) => (r.status === 403 ? { rate: 1 } : r.json())),
 						fetch(
-							'https://api.github.com/repos/authsrng-gamehttps://nova-labs-code.github.io/auths-RNG//releases'
+							'https://api.github.com/repos/authsrng-gamenova-labs-code.github.io/auths-RNG//releases'
 						).then((r) => (r.status === 403 ? { rate: 1 } : r.json())),
 					]);
 
@@ -202,7 +202,7 @@ Last release date on nightly: ${nightlyRDate}`;
 			const _sid = Math.random().toString(36).slice(2);
 			const _hb = () => fetch('https://authsrng.xyz/api/ccu?sid=' + _sid, { method: 'POST' });
 
-			if (location.hostname !== 'https://nova-labs-code.github.io/auths-RNG/') {
+			if (location.hostname !== 'nova-labs-code.github.io/auths-RNG/') {
 				_hb();
 				setInterval(_hb, 60_000);
 			}
@@ -254,7 +254,7 @@ Last release date on nightly: ${nightlyRDate}`;
 			<p class="header-msg" id="randomMessage"></p>
 			<div class="header-links">
 				<a
-					href="https://github.com/authsrng-gamehttps://nova-labs-code.github.io/auths-RNG//wiki"
+					href="https://github.com/authsrng-gamenova-labs-code.github.io/auths-RNG//wiki"
 					class="header-link"
 					>wiki</a
 				>
@@ -835,7 +835,7 @@ Last release date on nightly: ${nightlyRDate}`;
 					<a class="lazy" href="http://authsrng.web.fc2.com/">lite version</a>
 					<a
 						class="lazy"
-						href="https://github.com/authsrng-gamehttps://nova-labs-code.github.io/auths-RNG//wiki"
+						href="https://github.com/authsrng-gamenova-labs-code.github.io/auths-RNG//wiki"
 						>wiki</a
 					>
 
@@ -844,7 +844,7 @@ Last release date on nightly: ${nightlyRDate}`;
 					<p>join us on...</p>
 					<div class="image-column">
 						<a
-							href="https://github.com/authsrng-gamehttps://nova-labs-code.github.io/auths-RNG/"
+							href="https://github.com/authsrng-gamenova-labs-code.github.io/auths-RNG/"
 							class="image-link"
 						>
 							<span class="link-text">github</span>
@@ -882,7 +882,7 @@ Last release date on nightly: ${nightlyRDate}`;
 						<a href="https://authguy.nekoweb.org" class="image-link">
 							<span class="link-text">about me</span>
 						</a>
-						<a href="https://https://nova-labs-code.github.io/auths-RNG/" class="image-link">
+						<a href="https://nova-labs-code.github.io/auths-RNG/" class="image-link">
 							<span class="link-text">stable build</span>
 						</a>
 						<a href="https://git.authsrng.xyz" class="image-link">
@@ -1743,7 +1743,7 @@ Last release date on nightly: ${nightlyRDate}`;
 				const SEEN_KEY = 'seenReleaseTag';
 				try {
 					const res = await fetch(
-						'https://api.github.com/repos/authsrng-gamehttps://nova-labs-code.github.io/auths-RNG//releases/latest'
+						'https://api.github.com/repos/authsrng-gamenova-labs-code.github.io/auths-RNG//releases/latest'
 					);
 					if (!res.ok) return;
 					const data = await res.json();
