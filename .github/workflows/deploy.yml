@@ -1,0 +1,26 @@
+name: Deploy Nightly
+
+on:
+  push:
+    branches:
+      - nightly
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout nightly
+        uses: actions/checkout@v4
+
+      - name: Deploy to gh-pages/nightly
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: .
+          destination_dir: nightly
+          keep_files: true
