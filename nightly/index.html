@@ -5,7 +5,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<!-- <link rel="stylesheet" href="/assets/scripts/styles/styles.css" /> -->
-		<link rel="stylesheet" href="/assets/scripts/styles/overrides.css" />
+		<link rel="stylesheet" href="./assets/scripts/styles/overrides.css" />
 		<meta
 			name="viewport"
 			content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
@@ -62,7 +62,7 @@
 		<meta name="google" content="notranslate" />
 
 		<!-- for future contributors, and a note to myself: the duplicate preload is for safety, sometimes native doesnt work so we do the normal way-->
-		<link rel="preload" as="image" href="/assets/images/authsRNG.png" />
+		<link rel="preload" as="image" href="./assets/images/authsRNG.png" />
 		<link rel="preload" as="image" href="https://authsrng.xyz/assets/images/authsRNG.png" />
 
 		<meta name="color-scheme" content="dark" />
@@ -103,9 +103,9 @@
 	</head>
 
 	<body>
-		<script src="assets/scripts/legal-popup.js" defer></script>
+		<script src="./assets/scripts/legal-popup.js" defer></script>
 
-		<script src="/assets/scripts/warn.js" defer></script>
+		<script src="./assets/scripts/warn.js" defer></script>
 
 		<div
 			id="unstable-banner"
@@ -233,7 +233,7 @@ Last release date on nightly: ${nightlyRDate}`;
 			// relic from the good ol neocities days :heart:
 		</script>
 
-		<script src="assets/scripts/startanim.js" defer></script>
+		<script src="./assets/scripts/startanim.js" defer></script>
 		<!-- screensaver was here <3333 -->
 
 		<button id="legacyShopBtn">shop</button>
@@ -253,12 +253,11 @@ Last release date on nightly: ${nightlyRDate}`;
 			<h1>welcome to auth's RNG!</h1>
 			<p class="header-msg" id="randomMessage"></p>
 			<div class="header-links">
-				<a href="https://discord.gg/mTDw8jJYqX" class="header-link">discord</a>
 				<a href="https://github.com/authsrng-game/auths-RNG/wiki" class="header-link">wiki</a>
 				<a href="blog/blog.html" class="header-link">blog</a>
 			</div>
 		</div>
-		<script src="assets/scripts/messages.js" defer></script>
+		<script src="./assets/scripts/messages.js" defer></script>
 
 		<div class="page-wrapper">
 			<div class="page-container">
@@ -813,7 +812,7 @@ Last release date on nightly: ${nightlyRDate}`;
 						}
 					</script>
 
-					<a class="lazy" href="/assets/frontend/leaderboard.html">LEADERBOARD!</a>
+					<a class="lazy" href="./assets/frontend/leaderboard.html">LEADERBOARD!</a>
 
 					<div id="resetContainer" class="lazy">
 						<button id="resetBtn">reset data...</button>
@@ -827,7 +826,7 @@ Last release date on nightly: ${nightlyRDate}`;
 
 					<br /><br />
 
-					<a class="lazy" href="/assets/frontend/credits.html">credits</a>
+					<a class="lazy" href="./assets/frontend/credits.html">credits</a>
 
 					<a class="lazy" href="http://authsrng.web.fc2.com/">lite version</a>
 					<a class="lazy" href="https://github.com/authsrng-game/auths-RNG/wiki">wiki</a>
@@ -932,24 +931,24 @@ Last release date on nightly: ${nightlyRDate}`;
 		<div class="swipe-indicator">swipe to navigate!!!</div>
 
 		<!-- big ahh block hahahahhaah -->
-		<script src="/assets/scripts/engine/xoshiro256ss.js" defer></script>
-		<script src="/assets/scripts/engine/pity.js" defer></script>
-		<script src="/assets/scripts/engine/streak.js" defer></script>
-		<script src="/assets/scripts/engine/rng.js" defer></script>
-		<script src="/assets/scripts/engine/roller.js" defer></script>
-		<script src="/assets/scripts/engine/bcore.js" defer></script>
-		<script src="assets/scripts/popup.js"></script>
+		<script src="./assets/scripts/engine/xoshiro256ss.js" defer></script>
+		<script src="./assets/scripts/engine/pity.js" defer></script>
+		<script src="./assets/scripts/engine/streak.js" defer></script>
+		<script src="./assets/scripts/engine/rng.js" defer></script>
+		<script src="./assets/scripts/engine/roller.js" defer></script>
+		<script src="./assets/scripts/engine/bcore.js" defer></script>
+		<script src="./assets/scripts/popup.js"></script>
 		<!-- sad fucker oh god i swear too much -->
-		<script src="assets/scripts/rarities.js" defer></script>
-		<script src="assets/scripts/rarityStyle.js" defer></script>
-		<script src="assets/scripts/main.js" defer></script>
-		<script src="assets/scripts/context-menu.js" defer></script>
-		<script src="assets/scripts/cloud-backup.js" defer></script>
-		<script src="assets/scripts/leaderboard-submit.js" defer></script>
-		<script src="assets/scripts/theme-editor.js" defer></script>
-		<script src="assets/scripts/systems/labs.js" defer></script>
-		<script src="assets/scripts/services/cleanup.js" defer></script>
-		<script src="assets/scripts/services/rescue.js" defer></script>
+		<script src="./assets/scripts/rarities.js" defer></script>
+		<script src="./assets/scripts/rarityStyle.js" defer></script>
+		<script src="./assets/scripts/main.js" defer></script>
+		<script src="./assets/scripts/context-menu.js" defer></script>
+		<script src="./assets/scripts/cloud-backup.js" defer></script>
+		<script src="./assets/scripts/leaderboard-submit.js" defer></script>
+		<script src="./assets/scripts/theme-editor.js" defer></script>
+		<script src="./assets/scripts/systems/labs.js" defer></script>
+		<script src="./assets/scripts/services/cleanup.js" defer></script>
+		<script src="./assets/scripts/services/rescue.js" defer></script>
 
 		<!-- Notification Center -->
 		<button id="notifBell" title="notifications" aria-label="open notifications">
@@ -969,8 +968,8 @@ Last release date on nightly: ${nightlyRDate}`;
 			<div id="notifEmpty" class="notif-empty">all caught up! no notifications yet :)</div>
 		</div>
 
-		<script src="assets/scripts/settings.js" defer></script>
-		<script src="assets/scripts/jukebox.js" defer></script>
+		<script src="./assets/scripts/settings.js" defer></script>
+		<script src="./assets/scripts/jukebox.js" defer></script>
 
 		<div id="cutsceneOverlay">
 			<video id="cutsceneVideo" preload="none"></video>
@@ -1651,10 +1650,10 @@ Last release date on nightly: ${nightlyRDate}`;
 			})();
 		</script>
 
-		<script src="assets/scripts/systems/gauntlets.js" defer></script>
-		<script src="assets/scripts/systems/starmap.js" defer></script>
-		<script src="assets/scripts/systems/runes.js" defer></script>
-		<script src="assets/scripts/systems/mutations.js" defer></script>
+		<script src="./assets/scripts/systems/gauntlets.js" defer></script>
+		<script src="./assets/scripts/systems/starmap.js" defer></script>
+		<script src="./assets/scripts/systems/runes.js" defer></script>
+		<script src="./assets/scripts/systems/mutations.js" defer></script>
 
 		<script>
 			// TAGS
@@ -2556,7 +2555,7 @@ container.addEventListener('click', () => {
 			})();
 		</script>
 
-		<script src="assets/scripts/trust-cosmetics.js" defer></script>
+		<script src="./assets/scripts/trust-cosmetics.js" defer></script>
 		<!-- a lone ugly ass soul-->
 
 		<script>
