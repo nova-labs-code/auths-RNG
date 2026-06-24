@@ -44,6 +44,10 @@ auth's RNG is also disgustingly customizable, and you can make auth's RNG truely
 
 check out the [official wiki](https://github.com/authsrng-game/auths-RNG/wiki) for how to play and how everything works.
 
+official wiki all about auth's RNG, how it works, and how to play it!!
+                ↓↓↓↓↓↓  
+https://github.com/authsrng-game/auths-RNG/wiki
+
 ---
 
 ## misconceptions
