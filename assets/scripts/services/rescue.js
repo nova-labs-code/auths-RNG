@@ -87,7 +87,7 @@
 			try {
 				location.reload();
 			} catch (e) {
-				window.location.href = window.location.href;
+				window.location.assign(window.location.href);
 			}
 		}, 50);
 	}
