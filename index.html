@@ -154,7 +154,7 @@
 		></div>
 		<script>
 			(async () => {
-				if (location.hostname !== '/auths-RNG/nightly') return;
+				if (location.hostname !== './nightly') return;
 				let el = document.getElementById('nightly-info');
 				try {
 					let [mainC, nightlyC, releases] = await Promise.all([
@@ -202,7 +202,7 @@ Last release date on nightly: ${nightlyRDate}`;
 			const _sid = Math.random().toString(36).slice(2);
 			const _hb = () => fetch('https://authsrng.xyz/api/ccu?sid=' + _sid, { method: 'POST' });
 
-			if (location.hostname !== '/auths-RNG/nightly') {
+			if (location.hostname !== './nightly') {
 				_hb();
 				setInterval(_hb, 60_000);
 			}
@@ -872,7 +872,7 @@ Last release date on nightly: ${nightlyRDate}`;
 						<a href="https://authguy.nekoweb.org" class="image-link">
 							<span class="link-text">about me</span>
 						</a>
-						<a href="https:///auths-RNG/nightly" class="image-link">
+						<a href="https://./nightly" class="image-link">
 							<span class="link-text">nightly build</span>
 						</a>
 						<a href="https://git.authsrng.xyz" class="image-link">
