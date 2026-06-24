@@ -1,36 +1,48 @@
 # auth's RNG
+
 the repository for the web game, auth's RNG!
 
-![Version](https://img.shields.io/github/v/release/auth1ery/auths-RNG)
-![Repo Size](https://img.shields.io/github/repo-size/auth1ery/auths-RNG)
-![Last Commit](https://img.shields.io/github/last-commit/auth1ery/auths-RNG)
-![License](https://img.shields.io/github/license/auth1ery/auths-RNG)
-![Code Size](https://img.shields.io/github/languages/code-size/auth1ery/auths-RNG)
-![Top Language](https://img.shields.io/github/languages/top/auth1ery/auths-RNG)
+![Version](https://img.shields.io/github/v/release/authsrng-game/auths-RNG)
+![Repo Size](https://img.shields.io/github/repo-size/authsrng-game/auths-RNG)
+![Last Commit](https://img.shields.io/github/last-commit/authsrng-game/auths-RNG)
+![License](https://img.shields.io/github/license/authsrng-game/auths-RNG)
+![Code Size](https://img.shields.io/github/languages/code-size/authsrng-game/auths-RNG)
+![Top Language](https://img.shields.io/github/languages/top/authsrng-game/auths-RNG)
+[![Open Issues](https://img.shields.io/github/issues/authsrng-game/auths-RNG?color=5BCEFA)](https://github.com/authsrng-game/auths-RNG/issues)
+[![Open PRs](https://img.shields.io/github/issues-pr/authsrng-game/auths-RNG?color=F5A9B8)](https://github.com/authsrng-game/auths-RNG/pulls)
+![trans rights](https://pride-badges.pony.workers.dev/static/v1?label=trans%20rights&stripeWidth=6&stripeColors=5BCEFA,F5A9B8,FFFFFF,F5A9B8,5BCEFA)
+[![Discord](https://img.shields.io/discord/1443019622109675682?color=5BCEFA)](https://discord.gg/mTDw8jJYqX)
+![Visitors](https://komarev.com/ghpvc/?username=authsrng-game&repo=auths-RNG&label=visitors)
+[![CI](https://img.shields.io/github/actions/workflow/status/authsrng-game/auths-RNG/autofix.yml?branch=nightly&label=autofix&color=5BCEFA)](https://github.com/authsrng-game/auths-RNG/actions/workflows/autofix.yml)
+![Status](https://img.shields.io/badge/status-actively%20developed-5BCEFA)
 
-<p align="center">
+<!-- RELEASE-NOTES:START -->
+<!-- RELEASE-NOTES:END -->
+
+<p>
   <img src="assets/repo1.png" width="30%" />
   <img src="assets/repo2.png" width="30%" />
   <img src="assets/repo3.png" width="30%" />
 </p>
 
-main branch: https://authsrng.xyz (main stable site)   
+[![Play Stable](https://img.shields.io/badge/▶_PLAY-stable-5BCEFA)](https://authsrng.xyz)
+[![Play Nightly](https://img.shields.io/badge/▶_PLAY-nightly-F5A9B8)](https://nightly.authsrng.xyz)
 
-nightly branch: https://nightly.authsrng.xyz (unstable testing branch, but contains the latest code. updates every commit)
-
->made with ♥ in canada 🇨🇦
+> made with ♥ in canada! 🇨🇦
 
 ---
 
-# about auth's RNG
+## about
 
-auth's RNG is a web-based, incremental RNG game!
+auth's RNG is a web-based incremental RNG game built with raw HTML/CSS/JS with online features. roll for rarities, sell them out, buy upgrades, wish upon the wishing well, and collect as many rarities as possible!!!!!
 
-it includes many unique features, has many depths of gameplay, features an absurdly long playtime to binge on, and is overall pretty addicting.
+> roll > sell > upgrade > unlock deeper systems > repeat!
 
-roll for rarities, sell-out those rarities, buy upgrades, wish upon the wishing well, and collect the most rarities possible!
+inspired by Roblox RNG games like Sol's RNG and Juke's RNG, but to clarify: this is **not** a Roblox game, and never will obviously be.
 
-auth's RNG is inspired by RNG games on the platform Roblox, such as Sol's RNG and Juke's RNG
+auth's RNG is also disgustingly customizable, and you can make auth's RNG truely yours. new customization features are released every update, and the limit just keeps getting higher.
+
+check out the [official wiki](https://github.com/authsrng-game/auths-RNG/wiki) for how to play and how everything works.
 
 official wiki all about auth's RNG, how it works, and how to play it!!
                 ↓↓↓↓↓↓  
@@ -38,29 +50,73 @@ https://github.com/authsrng-game/auths-RNG/wiki
 
 ---
 
-# versioning notes
+## misconceptions
 
-this repository starts at version `9.0`. however, the game has been updated since 1.0. this means that not all releases of the game are here, since the start of the game was hosted on w3spaces and neocities.
+it's **auth's RNG**. not "Auth's RNG", or "authsrng", or "Auth RNG". lowercase "rng" is fine.
 
-- site archives can be found at https://archive.org with the wayback machine. you can search https://authsrng.neocities.org or https://authsrng.w3spaces.com
+and again:
 
-- personal, found archives (by me, auth) are at https://archive.org/details/@skunko_lee
-
-the earliest archive can be found on version `5.5`, which is exactly when auth's RNG became open source.
-
----
-
-# starchart
-
-[![Stargazers over time](https://starchart.cc/auth1ery/auths-RNG.svg?variant=adaptive)](https://starchart.cc/auth1ery/auths-RNG)
+> [!IMPORTANT]
+> **NOT A ROBLOX GAME!!!!!!!**
 
 ---
 
-# contributing notes
+## contributing
 
-the `.github/workflows` part should NOT be changed or else they break the development workflow, and just in general might break some already fragile webhook code. if you do, your PR will be rejected very fast, and you don't want that!
+we don't bite with contributions! a good PR is something like a UI tweak, balance change, or bug fix. a bad PR is rewriting the RNG algorithm for no apparent reason.
 
-refer to `CONTRIBUTING.md` for further instructions!
+> [!WARNING]
+> **do not touch `.github/workflows`**! even if it's a package tweak or fix. we maintain it ourselves and it may break the dev workflow and your PR will get rejected fast.
+
+refer to `CONTRIBUTING.md` and especially `meta/TESTING.md` before diving in!
 
 > [!NOTE]
-> this repository is a bit of a mess, im sorry if contributing is horrible, im trying to keep as much things organized as possible
+> the repo is a bit of a mess, and if so, sorry! organizational contributions are genuinely appreciated as a first PR if you would want!
+
+---
+
+## testing locally
+
+1. clone the repo (clones nightly since it is the main development branch) and cd into it:
+   ```bash
+   git clone --branch nightly --single-branch https://github.com/authsrng-game/auths-RNG.git
+   cd auths-RNG
+   ```
+
+2. create a branch:
+   ```bash
+   git checkout -b <branch-name>
+   ```
+
+3. make your changes! no frameworks, no installs, just HTML/CSS/JS because boring = good. then open `index.html` or spin up a dev server to test
+
+4. push when ready:
+   ```bash
+   git add .
+   git commit -m "describe your changes"
+   git push origin <branch-name>
+   ```
+
+---
+
+## versioning
+
+the repo starts at `v9.0`, but the game has existed since `1.0` (originally on w3spaces and neocities). archives from `v5.5` onward (when auth's RNG went open source) can be found on the [Wayback Machine](https://archive.org) at `authsrng.neocities.org` or `authsrng.w3spaces.com`. personal archives by auth are [here](https://archive.org/details/@skunko_lee).
+
+if you thought the git log held all of auth's RNG development history... no it didn't
+
+---
+
+### project stats
+
+![Alt](https://repobeats.axiom.co/api/embed/a7ebda6a1487f174893bd20f62a46523bf7fdbd7.svg "Repobeats analytics image")
+
+<a href="https://github.com/authsrng-game/auths-RNG/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=authsrng-game/auths-RNG" />
+</a>
+
+made with [contrib.rocks](https://contrib.rocks).
+
+---
+
+<3
