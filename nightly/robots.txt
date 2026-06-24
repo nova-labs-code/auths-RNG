@@ -1,0 +1,35 @@
+User-agent: Googlebot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: DuckAssistBot
+Allow: /
+
+User-agent: Yandex
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: Sogou web spider
+Allow: /
+
+User-agent: Shenma
+Allow: /
+
+User-agent: ia_archiver
+Allow: /
+
+User-agent: archive.org_bot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: AlexandriaOrgBot
+Allow: /
+
+User-agent: *
+Disallow: /
