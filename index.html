@@ -161,8 +161,8 @@
 						fetch('https://api.github.com/repos/authsrng-game..//commits/main').then((r) =>
 							r.status === 403 ? { rate: 1 } : r.json()
 						),
-						fetch('https://api.github.com/repos/authsrng-game..//commits/nightly').then(
-							(r) => (r.status === 403 ? { rate: 1 } : r.json())
+						fetch('https://api.github.com/repos/authsrng-game..//commits/nightly').then((r) =>
+							r.status === 403 ? { rate: 1 } : r.json()
 						),
 						fetch('https://api.github.com/repos/authsrng-game..//releases').then((r) =>
 							r.status === 403 ? { rate: 1 } : r.json()
@@ -1731,9 +1731,7 @@ Last release date on nightly: ${nightlyRDate}`;
 			(async () => {
 				const SEEN_KEY = 'seenReleaseTag';
 				try {
-					const res = await fetch(
-						'https://api.github.com/repos/authsrng-game..//releases/latest'
-					);
+					const res = await fetch('https://api.github.com/repos/authsrng-game..//releases/latest');
 					if (!res.ok) return;
 					const data = await res.json();
 					const tag = data.tag_name;
