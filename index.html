@@ -4,7 +4,7 @@
 
 	<head>
 		<meta charset="UTF-8" />
-		<!-- <link rel="stylesheet" href="/assets/scripts/styles/styles.css" /> -->
+		<!-- <link rel="stylesheet" href="/assets/scripts/styles/styles.css" /> --
 		<link rel="stylesheet" href="./assets/scripts/styles/overrides.css" />
 		<meta
 			name="viewport"
@@ -129,7 +129,7 @@
 		</div>
 
 		<script>
-			if (window.location.hostname !== '/auths-RNG') {
+			if (window.location.hostname !== '../') {
 				document.getElementById('unstable-banner').style.display = 'none';
 			} else {
 				document.getElementById('unstable-banner').addEventListener('click', function () {
@@ -154,17 +154,17 @@
 		></div>
 		<script>
 			(async () => {
-				if (location.hostname !== '/auths-RNG') return;
+				if (location.hostname !== '../') return;
 				let el = document.getElementById('nightly-info');
 				try {
 					let [mainC, nightlyC, releases] = await Promise.all([
-						fetch('https://api.github.com/repos/authsrng-game/auths-RNG/commits/main').then((r) =>
+						fetch('https://api.github.com/repos/authsrng-game..//commits/main').then((r) =>
 							r.status === 403 ? { rate: 1 } : r.json()
 						),
-						fetch('https://api.github.com/repos/authsrng-game/auths-RNG/commits/nightly').then(
+						fetch('https://api.github.com/repos/authsrng-game..//commits/nightly').then(
 							(r) => (r.status === 403 ? { rate: 1 } : r.json())
 						),
-						fetch('https://api.github.com/repos/authsrng-game/auths-RNG/releases').then((r) =>
+						fetch('https://api.github.com/repos/authsrng-game..//releases').then((r) =>
 							r.status === 403 ? { rate: 1 } : r.json()
 						),
 					]);
@@ -202,7 +202,7 @@ Last release date on nightly: ${nightlyRDate}`;
 			const _sid = Math.random().toString(36).slice(2);
 			const _hb = () => fetch('https://authsrng.xyz/api/ccu?sid=' + _sid, { method: 'POST' });
 
-			if (location.hostname !== '/auths-RNG') {
+			if (location.hostname !== '../') {
 				_hb();
 				setInterval(_hb, 60_000);
 			}
@@ -253,7 +253,7 @@ Last release date on nightly: ${nightlyRDate}`;
 			<h1>welcome to auth's RNG!</h1>
 			<p class="header-msg" id="randomMessage"></p>
 			<div class="header-links">
-				<a href="https://github.com/authsrng-game/auths-RNG/wiki" class="header-link">wiki</a>
+				<a href="https://github.com/authsrng-game..//wiki" class="header-link">wiki</a>
 				<a href="blog/blog.html" class="header-link">blog</a>
 			</div>
 		</div>
@@ -829,13 +829,13 @@ Last release date on nightly: ${nightlyRDate}`;
 					<a class="lazy" href="./assets/frontend/credits.html">credits</a>
 
 					<a class="lazy" href="http://authsrng.web.fc2.com/">lite version</a>
-					<a class="lazy" href="https://github.com/authsrng-game/auths-RNG/wiki">wiki</a>
+					<a class="lazy" href="https://github.com/authsrng-game..//wiki">wiki</a>
 
 					<br /><br />
 
 					<p>join us on...</p>
 					<div class="image-column">
-						<a href="https://github.com/authsrng-game/auths-RNG" class="image-link">
+						<a href="https://github.com/authsrng-game../" class="image-link">
 							<span class="link-text">github</span>
 						</a>
 						<a href="https://discord.gg/mTDw8jJYqX" class="image-link">
@@ -871,7 +871,7 @@ Last release date on nightly: ${nightlyRDate}`;
 						<a href="https://authguy.nekoweb.org" class="image-link">
 							<span class="link-text">about me</span>
 						</a>
-						<a href="https:///auths-RNG" class="image-link">
+						<a href="https://../" class="image-link">
 							<span class="link-text">stable build</span>
 						</a>
 						<a href="https://git.authsrng.xyz" class="image-link">
@@ -1732,7 +1732,7 @@ Last release date on nightly: ${nightlyRDate}`;
 				const SEEN_KEY = 'seenReleaseTag';
 				try {
 					const res = await fetch(
-						'https://api.github.com/repos/authsrng-game/auths-RNG/releases/latest'
+						'https://api.github.com/repos/authsrng-game..//releases/latest'
 					);
 					if (!res.ok) return;
 					const data = await res.json();
